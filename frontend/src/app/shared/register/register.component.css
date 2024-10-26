@@ -1,0 +1,163 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f0f2f5;
+}
+
+.background-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('/assets/bg_login.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+}
+
+.login-box {
+    background-color: rgba(255, 255, 255, 0.7); /* White background with 70% opacity */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    backdrop-filter: blur(10px); /* Apply blur effect */
+    -webkit-backdrop-filter: blur(10px); /* Support for Safari */
+}
+
+.logo {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+h2 {
+    font-size: 1.3rem;
+    margin-bottom: 42px;
+    color: #0056b3;
+    margin-top: 21px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    font-size: 1rem;
+}
+
+.captcha-box {
+    display: flex;
+    align-items: center;
+}
+
+.captcha-image {
+    margin-left: 10px;
+    border: 1px solid #ccc;
+}
+
+.refresh-captcha {
+    background-color: transparent;
+    border: none;
+    font-size: 1.2rem;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.login-button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 34px;
+}
+
+.login-button:hover {
+    background-color: #0056b3;
+}
+
+.version {
+    margin-top: 10px;
+    color: #888;
+    font-size: 0.8rem;
+}
+
+/* Error message box */
+.error-message-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fffbcc;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.error-message-box span {
+    flex-grow: 1;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #721c24;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+    padding: 0 5px;
+}
+
+.close-btn:hover {
+    color: #d9534f;
+}
+
+@media (max-width: 576px) {
+    .login-box {
+        padding: 15px;
+    }
+
+    h2 {
+        font-size: 1.1rem;
+    }
+
+    input {
+        padding: 8px;
+    }
+
+    .login-button {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+
+    .logo {
+        width: 60px;
+    }
+
+    .captcha-image {
+        width: 80px;
+    }
+}
