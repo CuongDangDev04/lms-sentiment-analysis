@@ -23,17 +23,17 @@
               "src/styles.css",
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-              "src/assets/lib/animate/animate.min.css",
-              "src/assets/lib/owlcarousel/assets/owl.carousel.min.css",
-              "src/assets/css/bootstrap.min.css",
-              "src/assets/css/style.css"
+              "src/assets/student/lib/animate/animate.min.css",
+              "src/assets/student/lib/owlcarousel/assets/owl.carousel.min.css",
+              "src/assets/student/css/bootstrap.min.css",
+              "src/assets/student/css/style.css"
             ],
             "scripts": [
-              "src/assets/js/main.js",
-              "src/assets/lib/wow/wow.min.js",
-              "src/assets/lib/easing/easing.min.js",
-              "src/assets/lib/waypoints/waypoints.min.js",
-              "src/assets/lib/owlcarousel/owl.carousel.min.js"
+              "src/assets/student/js/main.js",
+              "src/assets/student/lib/wow/wow.min.js",
+              "src/assets/student/lib/easing/easing.min.js",
+              "src/assets/student/lib/waypoints/waypoints.min.js",
+              "src/assets/student/lib/owlcarousel/owl.carousel.min.js"
             ]
           },
           "configurations": {
@@ -88,17 +88,17 @@
               "src/styles.css",
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-              "src/assets/lib/animate/animate.min.css",
-              "src/assets/lib/owlcarousel/assets/owl.carousel.min.css",
-              "src/assets/css/bootstrap.min.css",
-              "src/assets/css/style.css"
+              "src/assets/student/lib/animate/animate.min.css",
+              "src/assets/student/lib/owlcarousel/assets/owl.carousel.min.css",
+              "src/assets/student/css/bootstrap.min.css",
+              "src/assets/student/css/style.css"
             ],
             "scripts": [
-              "src/assets/js/main.js",
-              "src/assets/lib/wow/wow.min.js",
-              "src/assets/lib/easing/easing.min.js",
-              "src/assets/lib/waypoints/waypoints.min.js",
-              "src/assets/lib/owlcarousel/owl.carousel.min.js"
+              "src/assets/student/js/main.js",
+              "src/assets/student/lib/wow/wow.min.js",
+              "src/assets/student/lib/easing/easing.min.js",
+              "src/assets/student/lib/waypoints/waypoints.min.js",
+              "src/assets/student/lib/owlcarousel/owl.carousel.min.js"
             ]
           }
         }

@@ -1,6 +1,9 @@
 /********** Template CSS **********/
 :root {
-  --primary: #06bbcc;
+  /* --primary: #06bbcc;
+  --light: #f0fbfc;
+  --dark: #181d38; */
+  --primary: #00529c;
   --light: #f0fbfc;
   --dark: #181d38;
 }
@@ -66,7 +69,7 @@
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
   vertical-align: middle;
-  margin-left: 8px;
+  /* margin-left: 8px; */
 }
 
 .navbar-light .navbar-nav .nav-link {
@@ -119,6 +122,7 @@
   }
 
   .navbar .dropdown-menu.fade-down {
+    right: 30%;
     top: 100%;
     transform: rotateX(-75deg);
     transform-origin: 0% 0%;

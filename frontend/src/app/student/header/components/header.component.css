@@ -1,0 +1,7 @@
+.nav-item-active {
+  color: var(--primary); /* Màu chữ cho trang Home */
+}
+
+.nav-item-inactive {
+  color: #000; /* Màu chữ cho các trang khác */
+}
