@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
-import { HomeComponent } from './student/home/home.component';
-import { HeaderComponent } from './student/header/header.component';
-import { FooterComponent } from './student/footer/footer.component';
-import { AboutUsComponent } from './student/about-us/about-us.component';
+
+import { AboutUsComponent } from './student/about-us/components/about-us.component';
+import { HeaderComponent } from './student/header/components/header.component';
+import { FooterComponent } from './student/footer/components/footer.component';
+import { HomeComponent } from './student/home/components/home.component';
 
 @Component({
   selector: 'app-root',
