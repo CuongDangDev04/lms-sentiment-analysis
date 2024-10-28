@@ -14,22 +14,11 @@ export class HeaderStudentComponent implements OnInit {
   isAboutPage: boolean = false;
   isCoursesPage: boolean = false;
   isContactPage: boolean = false;
-
+  currentPage!: string;
   constructor(private router: Router) {}
 
-  // ngOnInit() {
-  //   console.log(this.router.url);
-
-  //   console.log('/student');
-  //   this.router.events.subscribe(() => {
-  //     this.isHomePage =
-  //       this.router.url === '/student' || this.router.url === '/student/home';
-  //     this.isAboutPage = this.router.url === '/student/about';
-  //   });
-  //   console.log(this.isHomePage);
-  // }
   ngOnInit() {
-    this.checkCurrentPage(); 
+    this.checkCurrentPage();
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.checkCurrentPage();
@@ -41,8 +30,13 @@ export class HeaderStudentComponent implements OnInit {
     this.isHomePage =
       this.router.url === '/student' || this.router.url === '/student/home';
     this.isAboutPage = this.router.url === '/student/about';
-  
+    this.isCoursesPage = this.router.url === '/student/courses';
+    this.isContactPage = this.router.url === '/student/contact';
+    this.currentPage = this.router.url.replace('/student/', '').toUpperCase();
+    if (this.isAboutPage) this.currentPage = 'ABOUT US';
     console.log('isHomePage:', this.isHomePage);
     console.log('isAboutPage:', this.isAboutPage);
+    console.log('isCoursesPage:', this.isCoursesPage);
+    console.log('isContactPage:', this.isContactPage);
   }
 }
