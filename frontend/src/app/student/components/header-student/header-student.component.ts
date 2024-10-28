@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-header-student',
@@ -17,10 +17,32 @@ export class HeaderStudentComponent implements OnInit {
 
   constructor(private router: Router) {}
 
+  // ngOnInit() {
+  //   console.log(this.router.url);
+
+  //   console.log('/student');
+  //   this.router.events.subscribe(() => {
+  //     this.isHomePage =
+  //       this.router.url === '/student' || this.router.url === '/student/home';
+  //     this.isAboutPage = this.router.url === '/student/about';
+  //   });
+  //   console.log(this.isHomePage);
+  // }
   ngOnInit() {
-    this.router.events.subscribe(() => {
-      this.isHomePage = this.router.url === '' || this.router.url === 'home';
-      this.isAboutPage = this.router.url === 'about';
+    this.checkCurrentPage(); 
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.checkCurrentPage();
+      }
     });
+  }
+
+  private checkCurrentPage(): void {
+    this.isHomePage =
+      this.router.url === '/student' || this.router.url === '/student/home';
+    this.isAboutPage = this.router.url === '/student/about';
+  
+    console.log('isHomePage:', this.isHomePage);
+    console.log('isAboutPage:', this.isAboutPage);
   }
 }

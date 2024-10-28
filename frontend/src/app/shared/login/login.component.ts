@@ -29,21 +29,23 @@ export class LoginComponent {
     this.errorMessage = '';
 
     // Gọi API đăng nhập
-    this.http.post('http://localhost:5000/api/auth/login', {
-      username: this.username,
-      password: this.password,
-    })
-    .subscribe(
-      (response: any) => {
-        console.log('Login successful:', response);
-        localStorage.setItem('token', response.token); // Giả sử response chứa token
-        // this.router.navigate(['/home']);
-      },
-      (error) => {
-        console.error('Login failed:', error);
-        this.errorMessage = 'Đăng nhập không thành công! Kiểm tra lại thông tin.'; // Hiển thị thông báo lỗi
-      }
-    );
+    this.http
+      .post('http://localhost:5000/api/auth/login', {
+        username: this.username,
+        password: this.password,
+      })
+      .subscribe(
+        (response: any) => {
+          console.log('Login successful:', response);
+          localStorage.setItem('token', response.token); // Giả sử response chứa token
+          // this.router.navigate(['/home']);
+        },
+        (error) => {
+          console.error('Login failed:', error);
+          this.errorMessage =
+            'Đăng nhập không thành công! Kiểm tra lại thông tin.'; // Hiển thị thông báo lỗi
+        }
+      );
   }
 }
 
@@ -90,7 +92,7 @@ export class LoginComponent {
 
 //     this.recaptchaV3Service.execute('login').subscribe({
 //       next: (token: string) => {
-//         this.captchaToken = token; 
+//         this.captchaToken = token;
 //         this.login();
 //       },
 //       error: () => {
