@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { SidebarAdminComponent } from "./sidebar-admin/sidebar-admin.component";
-import { HeaderAdminComponent } from "./header-admin/header-admin.component";
+import { SidebarAdminComponent } from "./components/sidebar-admin/sidebar-admin.component";
+import { HeaderAdminComponent } from "./components/header-admin/header-admin.component";
 
 @Component({
   selector: 'app-admin',

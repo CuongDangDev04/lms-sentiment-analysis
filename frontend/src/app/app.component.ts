@@ -3,8 +3,8 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { LectureComponent } from "./lecture/lecture.component";
 import { StudentComponent } from './student/student.component';
 import { HeaderStudentComponent } from "./student/components/header-student/header-student.component";
-import { HeaderAdminComponent } from "./admin/header-admin/header-admin.component";
-import { SidebarAdminComponent } from "./admin/sidebar-admin/sidebar-admin.component";
+import { HeaderAdminComponent } from "./admin/components/header-admin/header-admin.component";
+import { SidebarAdminComponent } from "./admin/components/sidebar-admin/sidebar-admin.component";
 
 @Component({
   selector: 'app-root',
