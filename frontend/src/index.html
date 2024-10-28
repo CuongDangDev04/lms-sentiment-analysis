@@ -6,24 +6,47 @@
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <!-- student -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap"
       rel="stylesheet"
     />
+    <!-- lecture -->
+    <link
+      rel="icon"
+      href="assets/img/kaiadmin/favicon.ico"
+      type="image/x-icon"
+    />
+    <script src="assets/lecture_admin/js/plugin/webfont/webfont.min.js"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: [
+            "Font Awesome 5 Solid",
+            "Font Awesome 5 Regular",
+            "Font Awesome 5 Brands",
+            "simple-line-icons",
+          ],
+          urls: ["assets/lecture_admin/css/fonts.min.css"],
+        },
+        active: function () {
+          sessionStorage.fonts = true;
+        },
+      });
+    </script>
+    <!-- capcha -->
+    <!-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> -->
   </head>
+
   <body>
     <app-root></app-root>
-    <!-- <h1>Nguyen Dai Nam</h1> -->
-
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/assets/student/lib/wow/wow.min.js"></script>
-    <script src="/assets/student/lib/easing/easing.min.js"></script>
-    <script src="/assets/student/lib/waypoints/waypoints.min.js"></script>
-    <script src="/assets/student/lib/owlcarousel/owl.carousel.min.js"></script>
-
-    <script src="/assets/student/js/main.js"></script>
+    <!-- <script src="assets/student/js/main.js"></script>
+  <script src="assets/student/lib/wow/wow.min.js"></script>
+  <script src="assets/student/lib/easing/easing.min.js"></script>
+  <script src="assets/student/lib/waypoints/waypoints.min.js"></script>
+  <script src="assets/student/lib/owlcarousel/owl.carousel.min.js"></script> -->
   </body>
 </html>
