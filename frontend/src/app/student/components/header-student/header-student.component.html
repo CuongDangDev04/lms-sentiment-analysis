@@ -1,0 +1,146 @@
+<!-- Navbar Start -->
+<nav
+  class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0"
+>
+  <a
+    href="index.html"
+    class="navbar-brand d-flex align-items-center px-4 px-lg-5"
+  >
+    <img src="../../../../assets/student/img/sv_logo_dashboard.png" alt="" />
+  </a>
+  <button
+    type="button"
+    class="navbar-toggler me-4"
+    data-bs-toggle="collapse"
+    data-bs-target="#navbarCollapse"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <!-- <div class="collapse navbar-collapse" id="navbarCollapse">
+    <div class="navbar-nav ms-auto p-4 p-lg-0">
+      <a [routerLink]="['/']" class="nav-item nav-link active">Home</a>
+      <a [routerLink]="['/about-us']" class="nav-item nav-link">About</a>
+      <a href="courses.html" class="nav-item nav-link">Courses</a>
+      <div class="nav-item dropdown">
+        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+          >Pages</a
+        >
+        <div class="dropdown-menu fade-down m-0">
+          <a href="team.html" class="dropdown-item">Our Team</a>
+          <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+          <a href="404.html" class="dropdown-item">404 Page</a>
+        </div>
+      </div>
+      <a href="contact.html" class="nav-item nav-link">Contact</a>
+    </div>
+    <div class="nav-item dropdown">
+      <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+        <i class="fa fa-user text-primary"></i>
+      </a>
+      <div class="dropdown-menu fade-down m-0">
+        <a href="#" class="dropdown-item">Sign In</a>
+        <a href="#" class="dropdown-item">Sign Up</a>
+      </div>
+    </div>
+  </div> -->
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <div class="navbar-nav ms-auto p-4 p-lg-0">
+      <a
+        [routerLink]="['student']"
+        class="nav-item nav-link"
+        [ngClass]="{
+          active: isHomePage
+        }"
+        >Home</a
+      >
+      <a
+        [routerLink]="['about']"
+        class="nav-item nav-link"
+        [ngClass]="{
+          active: isAboutPage
+        }"
+        >About</a
+      >
+      <a
+        href="courses.html"
+        class="nav-item nav-link"
+        [ngClass]="{
+          active: isCoursesPage
+        }"
+        >Courses</a
+      >
+     
+      <a
+        href="contact.html"
+        class="nav-item nav-link"
+        [ngClass]="{
+          active: isContactPage
+        }"
+        >Contact</a
+      >
+    </div>
+    <div class="nav-item dropdown">
+      <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+        <i class="fa fa-user text-primary"></i>
+      </a>
+      <div class="dropdown-menu fade-down m-0">
+        <a href="#" class="dropdown-item">Sign In</a>
+        <a href="#" class="dropdown-item">Sign Up</a>
+      </div>
+    </div>
+  </div>
+</nav>
+<!-- Navbar End -->
+<ng-container *ngIf="isHomePage; else otherHeader">
+  <!-- Banner Section -->
+  <section class="bg-primary text-light py-5">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <h1 class="display-4">Welcome to Our E-learning Platform</h1>
+          <p class="lead">
+            Unlock limitless learning opportunities from experts around the
+            world. Join us and expand your knowledge today!
+          </p>
+          <a href="#courses" class="btn btn-lg btn-light text-primary mt-3"
+            >Explore Courses</a
+          >
+        </div>
+        <div class="col-md-6 text-center">
+          <img
+            src="../../../../assets/student/img/carousel-1.jpg"
+            alt="Elearning Image"
+            class="img-fluid rounded"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+</ng-container>
+
+<ng-template #otherHeader>
+  <!-- Header Start -->
+  <div class="container-fluid bg-primary py-5 mb-5 page-header">
+    <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-10 text-center">
+          <h1 class="display-3 text-white animated slideInDown">About Us</h1>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+              <li class="breadcrumb-item">
+                <a class="text-white" href="#">Home</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a class="text-white" href="#">Pages</a>
+              </li>
+              <li class="breadcrumb-item text-white active" aria-current="page">
+                About
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Header End -->
+</ng-template>

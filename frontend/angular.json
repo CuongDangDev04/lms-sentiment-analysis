@@ -25,10 +25,41 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/assets/lecture_admin/css/bootstrap.min.css",
+              "src/assets/lecture_admin/css/plugins.min.css",
+              "src/assets/lecture_admin/css/kaiadmin.min.css",
+              "src/assets/lecture_admin/css/demo.css",
+
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+              "src/assets/student/lib/animate/animate.min.css",
+              "src/assets/student/lib/owlcarousel/assets/owl.carousel.min.css",
+              "src/assets/student/css/bootstrap.min.css",
+              "src/assets/student/css/style.css"
             ],
             "scripts": [
-              
+              "src/assets/lecture_admin/js/core/jquery-3.7.1.min.js",
+              "src/assets/lecture_admin/js/core/popper.min.js",
+              "src/assets/lecture_admin/js/core/bootstrap.min.js",
+              "src/assets/lecture_admin/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js",
+              "src/assets/lecture_admin/js/plugin/chart.js/chart.min.js",
+              "src/assets/lecture_admin/js/plugin/bootstrap-notify/bootstrap-notify.min.js",
+              "src/assets/lecture_admin/js/plugin/jquery.sparkline/jquery.sparkline.min.js",
+              "src/assets/lecture_admin/js/plugin/chart-circle/circles.min.js",
+              "src/assets/lecture_admin/js/plugin/datatables/datatables.min.js",
+              "src/assets/lecture_admin/js/plugin/jsvectormap/jsvectormap.min.js",
+              "src/assets/lecture_admin/js/plugin/jsvectormap/world.js",
+              "src/assets/lecture_admin/js/plugin/sweetalert/sweetalert.min.js",
+              "src/assets/lecture_admin/js/kaiadmin.min.js",
+              "src/assets/lecture_admin/js/setting-demo.js",
+              "src/assets/lecture_admin/js/demo.js",
+
+              "src/assets/student/js/main.js",
+              "src/assets/student/lib/wow/wow.min.js",
+              "src/assets/student/lib/easing/easing.min.js",
+              "src/assets/student/lib/waypoints/waypoints.min.js",
+              "src/assets/student/lib/owlcarousel/owl.carousel.min.js"
             ]
           },
           "configurations": {
