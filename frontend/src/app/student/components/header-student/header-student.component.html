@@ -81,7 +81,12 @@
       >
     </div>
     <div class="nav-item dropdown">
-      <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+      <a
+        href="#"
+        [routerLink]="['dashboard']"
+        class="nav-link dropdown-toggle"
+        data-bs-toggle="dropdown"
+      >
         <i class="fa fa-user text-primary"></i>
       </a>
       <div class="dropdown-menu fade-down m-0">
@@ -121,7 +126,7 @@
 
 <ng-template #otherHeader>
   <!-- Header Start -->
-  <div class="container-fluid bg-primary py-5 mb-5 page-header">
+  <!-- <div class="container-fluid bg-primary py-5 mb-5 page-header">
     <div class="container py-5">
       <div class="row justify-content-center">
         <div class="col-lg-10 text-center">
@@ -137,13 +142,13 @@
                 <a class="text-white" href="#">Pages</a>
               </li>
               <li class="breadcrumb-item text-white active" aria-current="page">
-                About
+                {{ currentPage }}
               </li>
             </ol>
           </nav>
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <!-- Header End -->
 </ng-template>

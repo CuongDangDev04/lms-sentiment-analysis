@@ -5,6 +5,7 @@ import { AboutStudentComponent } from './components/about-student/about-student.
 
 import { CourseStudentComponent } from './components/course-student/course-student.component';
 import { ContactStudentComponent } from './components/contact-student/contact-student.component';
+import { DashboardStudentComponent } from './components/dashboard-student/dashboard-student.component';
 
 export const studentRoutes: Routes = [
   {
@@ -26,6 +27,10 @@ export const studentRoutes: Routes = [
       {
         path: 'contact',
         component: ContactStudentComponent,
+      },
+      {
+        path: 'dashboard',
+        component: DashboardStudentComponent,
       },
     ],
   },
