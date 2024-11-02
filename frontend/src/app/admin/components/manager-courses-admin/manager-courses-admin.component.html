@@ -1,0 +1,53 @@
+
+
+   <div class="course-management">
+    <h2>Quản lý Khóa học</h2>
+    
+    <form class="course-form" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="courseName">Tên khóa học</label>
+        <input id="courseName" type="text" [(ngModel)]="course.name" name="name" required />
+      </div>
+  
+      <div class="form-group">
+        <label for="courseDescription">Mô tả khóa học</label>
+        <textarea id="courseDescription" [(ngModel)]="course.description" name="description"></textarea>
+      </div>
+  
+      <div class="form-group">
+        <label for="instructor">Giảng viên phụ trách</label>
+        <select id="instructor" [(ngModel)]="course.instructorId" name="instructorId" required>
+          <option *ngFor="let instructor of instructors" [value]="instructor.id">
+            {{ instructor.name }}
+          </option>
+        </select>
+      </div>
+  
+      <button type="submit" class="btn-save">{{ isEditing ? 'Cập Nhật' : 'Thêm Khóa Học' }}</button>
+      <button type="button" class="btn-reset" (click)="resetForm()">Đặt Lại</button>
+    </form>
+  
+    <h3>Danh sách Khóa học</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Tên Khóa học</th>
+          <th>Mô tả</th>
+          <th>Giảng viên phụ trách</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let course of courses">
+          <td>{{ course.name }}</td>
+          <td>{{ course.description }}</td>
+          <td>{{ course.instructorName }}</td>
+          <td>
+            <button class="btn-edit" (click)="editCourse(course)">Chỉnh sửa</button>
+            <button class="btn-delete" (click)="deleteCourse(course.id)">Xóa</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

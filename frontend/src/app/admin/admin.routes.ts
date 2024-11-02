@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { AdminComponent } from './admin.component';
 import { SidebarAdminComponent } from './components/sidebar-admin/sidebar-admin.component';
-import { HeaderAdminComponent } from './components/header-admin/header-admin.component';
+import { ManagerCoursesAdminComponent } from './components/manager-courses-admin/manager-courses-admin.component';
 
 export const adminRoutes: Routes = [
     {
@@ -9,8 +9,7 @@ export const adminRoutes: Routes = [
         component: AdminComponent,
         children: [
             {
-                path:"header", component:HeaderAdminComponent
-            },
+                path:"quanlykhoahoc", component:ManagerCoursesAdminComponent            },
             {
                 path:"sidebar", component: SidebarAdminComponent
             }
