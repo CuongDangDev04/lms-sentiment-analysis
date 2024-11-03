@@ -36,6 +36,7 @@ export class ManagerCoursesAdminComponent {
     const instructorName = this.getInstructorName(this.course.instructorId);
     
     if (this.isEditing && this.course.id !== undefined) {
+      console.log("Cường Béo");
       const index = this.courses.findIndex(c => c.id === this.course.id);
       if (index !== -1) {
         this.courses[index] = {
@@ -43,6 +44,7 @@ export class ManagerCoursesAdminComponent {
           instructorId: this.course.instructorId,
           instructorName: instructorName,
         } as Course;
+       console.log(instructorName); 
       }
     } else {
       const newCourse: Course = {
@@ -53,6 +55,7 @@ export class ManagerCoursesAdminComponent {
         instructorName: instructorName,
       };
       this.courses = [...this.courses, newCourse];
+      console.log(this.courses);
     }
   
     this.resetForm();
@@ -74,7 +77,9 @@ export class ManagerCoursesAdminComponent {
   }
 
   getInstructorName(instructorId: number | undefined): string {
-    const instructor = this.instructors.find(i => i.id === instructorId);
+    const instructor = this.instructors.find(i => i.id == instructorId);
+    console.log(instructor?.name)
     return instructor ? instructor.name : '';
+  
   }
 }

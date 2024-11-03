@@ -1,11 +1,12 @@
 .course-management {
-    max-width: 800px;
     margin: 20px auto;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #f9f9f9;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-right: 0;
+    max-width: 83%;
   }
   
   .course-management h2 {
@@ -145,4 +146,6 @@
   .btn-delete:hover {
     background-color: #c82333;
   }
-  
+  .course-management{
+    
+  }
