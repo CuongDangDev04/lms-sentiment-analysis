@@ -1,140 +1,146 @@
-<div class="container-xxl py-5">
-  <div class="container">
-    <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-      <h6 class="section-title bg-white text-center text-primary px-3">
-        Courses
-      </h6>
-      <h1 class="mb-5">Courses</h1>
+<div class="container mb-4">
+  <!-- Khung lọc khóa học -->
+  <div class="row g-3 align-items-end filter-container mt-4">
+    <!-- Bộ lọc Danh mục -->
+    <div class="col-md-4">
+      <label for="categoryFilter" class="form-label fw-bold">Danh mục</label>
+      <select
+        id="categoryFilter"
+        class="form-select shadow-sm"
+        [(ngModel)]="selectedCategory"
+        (change)="applyFilter()"
+      >
+        <option value="all">Tất cả</option>
+        <option
+          *ngFor="
+            let category of [
+              'communication',
+              'presentation',
+              'project_management',
+              'design',
+              'marketing',
+              'personal_development',
+              'data_analysis',
+              'programming'
+            ]
+          "
+          [value]="category"
+        >
+          {{ category | titlecase }}
+        </option>
+      </select>
     </div>
 
-    <!-- Khung tìm kiếm -->
-    <div class="row mb-4">
-      <div class="col-md-6 mx-auto">
+    <!-- Bộ lọc Tìm kiếm -->
+    <div class="col-md-8">
+      <label for="searchTerm" class="form-label fw-bold">Tìm kiếm</label>
+      <div class="input-group shadow-sm">
         <input
           type="text"
+          id="searchTerm"
           class="form-control"
-          placeholder="Search courses..."
           [(ngModel)]="searchTerm"
-          (input)="filterCoursesBySearch()"
+          placeholder="Tìm kiếm khóa học"
+          (input)="applyFilter()"
         />
+        <button class="btn btn-primary" type="button" (click)="applyFilter()">
+          <i class="fa fa-search"></i>
+          <!-- Icon search -->
+        </button>
       </div>
     </div>
+  </div>
 
-    <!-- Menu loại khóa học -->
-    <div class="mb-4">
-      <ul class="list-inline text-center">
-        <li class="list-inline-item">
-          <a (click)="filterCourses('all')" class="btn btn-outline-primary"
-            >Tất cả</a
-          >
-        </li>
-        <li class="list-inline-item">
-          <a
-            (click)="filterCourses('communication')"
-            class="btn btn-outline-primary"
-            >Kỹ Năng Giao Tiếp</a
-          >
-        </li>
-        <li class="list-inline-item">
-          <a
-            (click)="filterCourses('presentation')"
-            class="btn btn-outline-primary"
-            >Kỹ Năng Thuyết Trình</a
-          >
-        </li>
-      </ul>
-    </div>
-
-    <div class="row g-4 justify-content-center">
+  <!-- Danh sách khóa học -->
+  <div class="row g-4 justify-content-center mt-4">
+    <div
+      class="col-lg-4 col-md-6"
+      *ngFor="let course of paginatedCourses; let i = index"
+    >
       <div
-        class="col-lg-4 col-md-6"
-        *ngFor="let course of paginatedCourses; let i = index"
+        class="course-item bg-light wow fadeInUp"
+        [attr.data-wow-delay]="0.1 + i * 0.2 + 's'"
       >
-        <div
-          class="course-item bg-light wow fadeInUp"
-          [attr.data-wow-delay]="0.1 + i * 0.2 + 's'"
-        >
-          <div class="position-relative overflow-hidden">
-            <img
-              class="img-fluid"
-              [src]="course.imageUrl"
-              alt="{{ course.name }}"
-            />
-            <div
-              class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4"
+        <div class="position-relative overflow-hidden">
+          <img
+            class="img-fluid"
+            [src]="course.imageUrl"
+            alt="{{ course.name }}"
+          />
+          <div
+            class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4"
+          >
+            <a
+              href="#"
+              class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end"
+              style="border-radius: 30px 0 0 30px"
+              >Read More</a
             >
-              <a
-                href="#"
-                class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end"
-                style="border-radius: 30px 0 0 30px"
-                >Read More</a
-              >
-              <a
-                href="#"
-                class="flex-shrink-0 btn btn-sm btn-primary px-3"
-                style="border-radius: 0 30px 30px 0"
-                >Join Now</a
-              >
-            </div>
+            <a
+              href="#"
+              class="flex-shrink-0 btn btn-sm btn-primary px-3"
+              style="border-radius: 0 30px 30px 0"
+              >Join Now</a
+            >
           </div>
-          <div class="text-center p-4 pb-0">
-            <div class="mb-3">
-              <small class="fa fa-star text-primary"></small>
-              <small class="fa fa-star text-primary"></small>
-              <small class="fa fa-star text-primary"></small>
-              <small class="fa fa-star text-primary"></small>
-              <small class="fa fa-star text-primary"></small>
-              <small>(123)</small>
-            </div>
-            <h5 class="mb-4">{{ course.name }}</h5>
+        </div>
+        <div class="text-center p-4 pb-0">
+          <div class="mb-3">
+            <small class="fa fa-star text-primary"></small>
+            <small class="fa fa-star text-primary"></small>
+            <small class="fa fa-star text-primary"></small>
+            <small class="fa fa-star text-primary"></small>
+            <small class="fa fa-star text-primary"></small>
+            <small>(123)</small>
           </div>
-          <div class="d-flex border-top">
-            <small class="flex-fill text-center border-end py-2">
-              <i class="fa fa-user-tie text-primary me-2"></i
-              >{{ course.instructorName }}
-            </small>
-            <small class="flex-fill text-center border-end py-2">
-              <i class="fa fa-clock text-primary me-2"></i>{{ course.duration }}
-            </small>
-            <small class="flex-fill text-center py-2">
-              <i class="fa fa-user text-primary me-2"></i
-              >{{ course.studentsCount }} Students
-            </small>
-          </div>
+          <h5 class="mb-4">{{ course.name }}</h5>
+        </div>
+        <div class="d-flex border-top">
+          <small class="flex-fill text-center border-end py-2">
+            <i class="fa fa-user-tie text-primary me-2"></i
+            >{{ course.instructorName }}
+          </small>
+          <small class="flex-fill text-center border-end py-2">
+            <i class="fa fa-clock text-primary me-2"></i>{{ course.duration }}
+          </small>
+          <small class="flex-fill text-center py-2">
+            <i class="fa fa-user text-primary me-2"></i
+            >{{ course.studentsCount }} Students
+          </small>
         </div>
       </div>
     </div>
   </div>
-</div>
-<!-- Phân trang -->
-<div class="d-flex justify-content-center mt-4">
-  <button
-    class="btn btn-outline-primary me-2"
-    (click)="prevPage()"
-    [disabled]="currentPage === 1"
-  >
-    Trước
-  </button>
 
-  <!-- Sử dụng totalPagesArray để hiển thị các nút trang -->
-  <ng-container *ngFor="let page of totalPagesArray">
+  <!-- Phân trang -->
+  <div class="pagination mt-4 d-flex justify-content-center">
     <button
-      (click)="goToPage(page)"
-      [ngClass]="{
-        'btn-primary': page === currentPage,
-        'btn-outline-primary': page !== currentPage
-      }"
-      class="btn mx-1"
+      class="btn btn-primary me-2"
+      (click)="prevPage()"
+      [disabled]="currentPage === 1"
     >
-      {{ page }}
+      <i class="fa fa-arrow-left"></i> Previous
     </button>
-  </ng-container>
 
-  <button
-    class="btn btn-outline-primary ms-2"
-    (click)="nextPage()"
-    [disabled]="currentPage === totalPages"
-  >
-    Sau
-  </button>
+    <div class="page-numbers">
+      <button
+        *ngFor="let page of totalPagesArray"
+        (click)="goToPage(page)"
+        [ngClass]="{
+          'btn btn-outline-primary me-1': true,
+          'active-page': page === currentPage
+        }"
+      >
+        {{ page }}
+      </button>
+    </div>
+
+    <button
+      class="btn btn-primary ms-2"
+      (click)="nextPage()"
+      [disabled]="currentPage === totalPages"
+    >
+      Next <i class="fa fa-arrow-right"></i>
+    </button>
+  </div>
 </div>
