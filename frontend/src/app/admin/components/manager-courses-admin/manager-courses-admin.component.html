@@ -34,7 +34,7 @@
           <th>Tên Khóa học</th>
           <th>Mô tả</th>
           <th>Giảng viên phụ trách</th>
-          <th>Hành động</th>
+          <th>Thao tác</th>
         </tr>
       </thead>
       <tbody>
@@ -43,8 +43,24 @@
           <td>{{ course.description }}</td>
           <td>{{ course.instructorName }}</td>
           <td>
-            <button class="btn-edit" (click)="editCourse(course)">Chỉnh sửa</button>
-            <button class="btn-delete" (click)="deleteCourse(course.id)">Xóa</button>
+              <button (click)="editCourse(course)"
+                type="button"
+                data-bs-toggle="tooltip"
+                title=""
+                class="btn btn-link btn-primary btn-lg"
+                data-original-title="Edit Task"
+              >
+                <i class="fa fa-edit"></i>
+              </button>
+              <button (click)="deleteCourse(course.id)"
+                type="button"
+                data-bs-toggle="tooltip"
+                title=""
+                class="btn btn-link btn-danger"
+                data-original-title="Remove"
+              >
+                <i class="fa fa-times"></i>
+              </button>
           </td>
         </tr>
       </tbody>
