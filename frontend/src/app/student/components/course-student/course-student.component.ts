@@ -1,18 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgModule, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-interface Course {
-  id: number;
-  name: string;
-  description: string;
-  instructorId: number;
-  instructorName: string;
-  price: number;
-  duration: string;
-  imageUrl: string;
-  studentsCount: number;
-  category: string;
-}
+import { Course } from '../../interfaces/course';
 
 @Component({
   selector: 'app-course-student',

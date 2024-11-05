@@ -14,6 +14,7 @@ export class HeaderStudentComponent implements OnInit {
   isAboutPage: boolean = false;
   isCoursesPage: boolean = false;
   isContactPage: boolean = false;
+  isDashboardPage: boolean = false;
   currentPage!: string;
   constructor(private router: Router) {}
 
@@ -32,6 +33,7 @@ export class HeaderStudentComponent implements OnInit {
     this.isAboutPage = this.router.url === '/student/about';
     this.isCoursesPage = this.router.url === '/student/courses';
     this.isContactPage = this.router.url === '/student/contact';
+    this.isDashboardPage = this.router.url === '/student/dashboard';
     this.currentPage = this.router.url.replace('/student/', '').toUpperCase();
     if (this.isAboutPage) this.currentPage = 'ABOUT US';
     console.log('isHomePage:', this.isHomePage);

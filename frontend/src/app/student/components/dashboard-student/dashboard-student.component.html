@@ -32,34 +32,47 @@
   <div class="content">
     <!-- Phần Học Tập -->
     <div class="section study">
-      <h3>Học Tập (6)</h3>
+      <h3>Học Tập ({{ totalCourses }})</h3>
       <div class="courses">
-        <div class="course">
+        <div
+          class="course"
+          *ngFor="let course of courses; let i = index"
+          [class.hidden]="i >= 3"
+        >
           <img
-            src="../../../../assets/student/img/course-1.jpg"
-            alt="C cho người mới bắt đầu"
-            class="img-fluid"
+            [src]="course.imageUrl"
+            [alt]="course.name"
+            class="img-fluid course-image"
           />
-          <h4>C cho người mới bắt đầu</h4>
-        </div>
-        <div class="course">
-          <img
-            src="../../../../assets/student/img/course-1.jpg"
-            alt="C cho người mới bắt đầu"
-            class="img-fluid"
-          />
-          <h4>JavaScript cơ bản</h4>
-        </div>
-        <div class="course">
-          <img
-            src="../../../../assets/student/img/course-1.jpg"
-            alt="C cho người mới bắt đầu"
-            class="img-fluid"
-          />
-          <h4>Phần mềm máy tính</h4>
+          <h4>{{ course.name }}</h4>
         </div>
       </div>
+      <button
+        id="loadMore"
+        class="btn btn-primary mt-3"
+        onclick="loadMoreCourses()"
+      >
+        Xem thêm
+      </button>
     </div>
+    <script>
+      let displayedCourses = 3; // Số khóa học hiển thị ban đầu
+
+      function loadMoreCourses() {
+        const courses = document.querySelectorAll(".course");
+        for (
+          let i = displayedCourses;
+          i < displayedCourses + 3 && i < courses.length;
+          i++
+        ) {
+          courses[i].classList.remove("hidden"); // Hiển thị 3 khóa học tiếp theo
+        }
+        displayedCourses += 3; // Tăng số lượng khóa học đã hiển thị
+        if (displayedCourses >= courses.length) {
+          document.getElementById("loadMore").style.display = "none"; // Ẩn nút "Xem thêm" nếu không còn khóa học nào
+        }
+      }
+    </script>
     <!-- Phần Cuộc Thi -->
     <div class="section exam">
       <h3>Cuộc Thi (0)</h3>
