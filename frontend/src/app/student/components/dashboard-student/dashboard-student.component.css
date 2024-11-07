@@ -27,6 +27,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  z-index: 2;
 }
 
 .course {
@@ -34,6 +35,7 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow: hidden;
+  z-index: 1;
 }
 
 .hidden {
@@ -43,6 +45,7 @@
 .course-image {
   width: 100%; /* Đảm bảo hình ảnh chiếm toàn bộ chiều rộng */
   height: auto; /* Giữ tỷ lệ hình ảnh */
+  z-index: 1;
 }
 
 .progress-bar {
@@ -87,6 +90,7 @@
   display: flex;
   gap: 20px;
   overflow-x: auto;
+  z-index: 2;
 }
 
 .course {
@@ -123,7 +127,67 @@
 .rating i {
   color: #ffb400;
 }
+/* #nextCourses {
+  position: absolute;
+  left: 96.2%;
+  top: 16%;
+}
+#previousCourses {
+  position: absolute;
+  left: 20%;
+  top: 16%;
+} */
+#previousCourses,
+#nextCourses {
+  position: absolute;
+  top: 18%;
+  transform: translateY(-50%);
+  background-color: rgba(128, 128, 128, 0.5) !important;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  z-index: 0;
+}
 
+#previousCourses {
+  left: 20.4%;
+}
+
+#nextCourses {
+  right: 2%;
+}
+
+#previousCourses:hover,
+#nextCourses:hover {
+  background-color: rgba(
+    128,
+    128,
+    128,
+    1
+  ) !important; /* Thay đổi màu nền khi hover */
+  transform: translateY(-50%) scale(1.1); /* Phóng to khi hover */
+  z-index: 10;
+}
+
+#previousCourses:active,
+#nextCourses:active {
+  transform: translateY(-50%) scale(0.9); /* Hiệu ứng khi click */
+}
+
+.fas.fa-arrow-left,
+.fas.fa-arrow-right {
+  font-size: 24px; /* Kích thước icon */
+  pointer-events: none; /* Tắt sự kiện click cho icon */
+}
 .levels {
   display: flex;
   gap: 10px;

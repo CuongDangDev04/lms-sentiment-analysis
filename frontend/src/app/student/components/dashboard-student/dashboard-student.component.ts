@@ -306,11 +306,8 @@ export class DashboardStudentComponent implements OnInit {
   ];
 
   current_courses() {
-    // Lấy các khóa học dựa trên giá trị của this.index
     const startIndex = this.index;
     const endIndex = Math.min(this.courses.length, startIndex + 3); // Đảm bảo không vượt quá độ dài của mảng courses
-
-    // Lấy tối đa 3 khóa học từ danh sách courses, bắt đầu từ startIndex
     this.currentCourses = this.courses.slice(startIndex, endIndex);
   }
   nextCourses() {
