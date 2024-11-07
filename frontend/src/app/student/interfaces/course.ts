@@ -4,7 +4,6 @@ export interface Course {
   description: string;
   instructorId: number;
   instructorName: string;
-  price: number;
   duration: string;
   imageUrl: string;
   studentsCount: number;

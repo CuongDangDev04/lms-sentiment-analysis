@@ -24,7 +24,7 @@ export class DashboardStudentComponent implements OnInit {
       description: 'Khóa học về kỹ năng giao tiếp cho người mới.',
       instructorId: 1,
       instructorName: 'John Doe',
-      price: 149.0,
+      //price: 149.0,
       duration: '1.49 Hrs',
       imageUrl: '../../../../assets/student/img/course-1.jpg',
       studentsCount: 30,
@@ -36,7 +36,7 @@ export class DashboardStudentComponent implements OnInit {
       description: 'Khóa học nâng cao về kỹ năng thuyết trình.',
       instructorId: 2,
       instructorName: 'Jane Smith',
-      price: 199.0,
+      //price: 199.0,
       duration: '2.5 Hrs',
       imageUrl: '../../../../assets/student/img/course-2.jpg',
       studentsCount: 45,
@@ -48,7 +48,7 @@ export class DashboardStudentComponent implements OnInit {
       description: 'Khóa học nâng cao về kỹ năng giao tiếp.',
       instructorId: 3,
       instructorName: 'Alice Johnson',
-      price: 129.0,
+      //price: 129.0,
       duration: '1.75 Hrs',
       imageUrl: '../../../../assets/student/img/course-3.jpg',
       studentsCount: 25,
@@ -61,7 +61,7 @@ export class DashboardStudentComponent implements OnInit {
         'Khóa học giới thiệu về quản lý dự án và các công cụ cơ bản.',
       instructorId: 4,
       instructorName: 'David Brown',
-      price: 249.0,
+      //price: 249.0,
       duration: '3 Hrs',
       imageUrl: '../../../../assets/student/img/course-3.jpg',
       studentsCount: 50,
@@ -73,7 +73,7 @@ export class DashboardStudentComponent implements OnInit {
       description: 'Học các nguyên lý cơ bản của thiết kế UX/UI.',
       instructorId: 5,
       instructorName: 'Emily Davis',
-      price: 159.0,
+      //price: 159.0,
       duration: '2 Hrs',
       imageUrl: '../../../../assets/student/img/course-2.jpg',
       studentsCount: 60,
@@ -85,7 +85,7 @@ export class DashboardStudentComponent implements OnInit {
       description: 'Khóa học căn bản về marketing kỹ thuật số.',
       instructorId: 6,
       instructorName: 'Michael Scott',
-      price: 139.0,
+      //price: 139.0,
       duration: '1.5 Hrs',
       imageUrl: '../../../../assets/student/img/course-1.jpg',
       studentsCount: 35,
@@ -97,7 +97,7 @@ export class DashboardStudentComponent implements OnInit {
       description: 'Học cách quản lý thời gian và ưu tiên công việc.',
       instructorId: 7,
       instructorName: 'Sarah Lee',
-      price: 99.0,
+      //price: 99.0,
       duration: '1 Hr',
       imageUrl: '../../../../assets/student/img/course-1.jpg',
       studentsCount: 40,
@@ -109,7 +109,7 @@ export class DashboardStudentComponent implements OnInit {
       description: 'Cách đàm phán và thuyết phục trong công việc.',
       instructorId: 8,
       instructorName: 'Chris Martin',
-      price: 189.0,
+      //price: 189.0,
       duration: '2.25 Hrs',
       imageUrl: '../../../../assets/student/img/course-2.jpg',
       studentsCount: 55,
@@ -121,7 +121,7 @@ export class DashboardStudentComponent implements OnInit {
       description: 'Giới thiệu cơ bản về phân tích dữ liệu.',
       instructorId: 9,
       instructorName: 'Alex Turner',
-      price: 179.0,
+      //price: 179.0,
       duration: '3 Hrs',
       imageUrl: '../../../../assets/student/img/course-3.jpg',
       studentsCount: 65,
@@ -133,7 +133,7 @@ export class DashboardStudentComponent implements OnInit {
       description: 'Học lập trình web từ cơ bản đến nâng cao với JavaScript.',
       instructorId: 10,
       instructorName: 'Olivia Wang',
-      price: 219.0,
+      //price: 219.0,
       duration: '4 Hrs',
       imageUrl: '../../../../assets/student/img/course-3.jpg',
       studentsCount: 80,
@@ -145,7 +145,7 @@ export class DashboardStudentComponent implements OnInit {
       description: 'Khóa học Python cơ bản cho người mới bắt đầu.',
       instructorId: 11,
       instructorName: 'Liam Nguyen',
-      price: 199.0,
+      //price: 199.0,
       duration: '2 Hrs',
       imageUrl: '../../../../assets/student/img/course-2.jpg',
       studentsCount: 50,
@@ -157,7 +157,7 @@ export class DashboardStudentComponent implements OnInit {
       description: 'Học cách giải quyết vấn đề hiệu quả.',
       instructorId: 12,
       instructorName: 'Sophia Tran',
-      price: 99.0,
+      //price: 99.0,
       duration: '1.25 Hrs',
       imageUrl: '../../../../assets/student/img/course-1.jpg',
       studentsCount: 45,
@@ -169,7 +169,7 @@ export class DashboardStudentComponent implements OnInit {
       description: 'Giới thiệu về các nguyên lý thiết kế đồ họa cơ bản.',
       instructorId: 13,
       instructorName: 'Noah Lee',
-      price: 149.0,
+      //price: 149.0,
       duration: '1.5 Hrs',
       imageUrl: '../../../../assets/student/img/course-1.jpg',
       studentsCount: 70,
@@ -181,7 +181,7 @@ export class DashboardStudentComponent implements OnInit {
       description: 'Cơ bản về phân tích tài chính cho doanh nghiệp.',
       instructorId: 14,
       instructorName: 'Emma Kim',
-      price: 259.0,
+      //price: 259.0,
       duration: '3.5 Hrs',
       imageUrl: '../../../../assets/student/img/course-2.jpg',
       studentsCount: 55,
@@ -193,7 +193,7 @@ export class DashboardStudentComponent implements OnInit {
       description: 'Khóa học giúp cải thiện kỹ năng bán hàng.',
       instructorId: 15,
       instructorName: 'Ethan Park',
-      price: 179.0,
+      //price: 179.0,
       duration: '2.5 Hrs',
       imageUrl: '../../../../assets/student/img/course-3.jpg',
       studentsCount: 60,
@@ -205,7 +205,7 @@ export class DashboardStudentComponent implements OnInit {
       description: 'Khóa học về kỹ năng giao tiếp cho người mới.',
       instructorId: 1,
       instructorName: 'John Doe',
-      price: 149.0,
+      //price: 149.0,
       duration: '1.49 Hrs',
       imageUrl: '../../../../assets/student/img/course-1.jpg',
       studentsCount: 30,
@@ -217,7 +217,7 @@ export class DashboardStudentComponent implements OnInit {
       description: 'Khóa học nâng cao về kỹ năng thuyết trình.',
       instructorId: 2,
       instructorName: 'Jane Smith',
-      price: 199.0,
+      //price: 199.0,
       duration: '2.5 Hrs',
       imageUrl: '../../../../assets/student/img/course-2.jpg',
       studentsCount: 45,
@@ -229,7 +229,7 @@ export class DashboardStudentComponent implements OnInit {
       description: 'Khóa học nâng cao về kỹ năng giao tiếp.',
       instructorId: 3,
       instructorName: 'Alice Johnson',
-      price: 129.0,
+      //price: 129.0,
       duration: '1.75 Hrs',
       imageUrl: '../../../../assets/student/img/course-3.jpg',
       studentsCount: 25,
@@ -242,7 +242,7 @@ export class DashboardStudentComponent implements OnInit {
         'Khóa học giới thiệu về quản lý dự án và các công cụ cơ bản.',
       instructorId: 4,
       instructorName: 'David Brown',
-      price: 249.0,
+      //price: 249.0,
       duration: '3 Hrs',
       imageUrl: '../../../../assets/student/img/course-3.jpg',
       studentsCount: 50,
@@ -254,7 +254,7 @@ export class DashboardStudentComponent implements OnInit {
       description: 'Học các nguyên lý cơ bản của thiết kế UX/UI.',
       instructorId: 5,
       instructorName: 'Emily Davis',
-      price: 159.0,
+      //price: 159.0,
       duration: '2 Hrs',
       imageUrl: '../../../../assets/student/img/course-2.jpg',
       studentsCount: 60,
@@ -266,7 +266,31 @@ export class DashboardStudentComponent implements OnInit {
       description: 'Khóa học căn bản về marketing kỹ thuật số.',
       instructorId: 6,
       instructorName: 'Michael Scott',
-      price: 139.0,
+      //price: 139.0,
+      duration: '1.5 Hrs',
+      imageUrl: '../../../../assets/student/img/course-1.jpg',
+      studentsCount: 35,
+      category: 'marketing',
+    },
+    {
+      id: 22,
+      name: 'ahahahahahhaahha',
+      description: 'Khóa học bủ bủ lmao.',
+      instructorId: 6,
+      instructorName: 'Michael Scott',
+      //price: 139.0,
+      duration: '1.5 Hrs',
+      imageUrl: '../../../../assets/student/img/course-1.jpg',
+      studentsCount: 35,
+      category: 'marketing',
+    },
+    {
+      id: 23,
+      name: 'ehehehehehehehhehehe',
+      description: 'Khóa học bủ bủ lmao.',
+      instructorId: 6,
+      instructorName: 'Michael Scott',
+      //price: 139.0,
       duration: '1.5 Hrs',
       imageUrl: '../../../../assets/student/img/course-1.jpg',
       studentsCount: 35,
@@ -274,7 +298,37 @@ export class DashboardStudentComponent implements OnInit {
     },
   ];
   totalCourses: number = this.courses.length; // Tổng số khóa học
+  index = 0;
+  currentCourses: Course[] = [
+    this.courses[0 + this.index],
+    this.courses[1 + this.index],
+    this.courses[2 + this.index],
+  ];
 
+  current_courses() {
+    // Lấy các khóa học dựa trên giá trị của this.index
+    const startIndex = this.index;
+    const endIndex = Math.min(this.courses.length, startIndex + 3); // Đảm bảo không vượt quá độ dài của mảng courses
+
+    // Lấy tối đa 3 khóa học từ danh sách courses, bắt đầu từ startIndex
+    this.currentCourses = this.courses.slice(startIndex, endIndex);
+  }
+  nextCourses() {
+    if (this.index + 3 < this.totalCourses) {
+      this.index += 3;
+      console.log(this.index);
+      this.current_courses();
+      console.log(this.currentCourses);
+    }
+  }
+  previousCourses() {
+    if (this.index >= 3) {
+      this.index -= 3;
+      console.log(this.index);
+      this.current_courses();
+      console.log(this.currentCourses);
+    }
+  }
   ngOnInit(): void {
     this.circumference = 2 * Math.PI * this.radius;
     this.updateProgress();

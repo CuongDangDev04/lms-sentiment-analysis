@@ -31,14 +31,10 @@
   <!-- Phần Nội dung Học tập, Cuộc thi, Luyện tập -->
   <div class="content">
     <!-- Phần Học Tập -->
-    <div class="section study">
+    <!-- <div class="section study">
       <h3>Học Tập ({{ totalCourses }})</h3>
       <div class="courses">
-        <div
-          class="course"
-          *ngFor="let course of courses; let i = index"
-          [class.hidden]="i >= 3"
-        >
+        <div class="course" *ngFor="let course of currentCourses">
           <img
             [src]="course.imageUrl"
             [alt]="course.name"
@@ -47,32 +43,64 @@
           <h4>{{ course.name }}</h4>
         </div>
       </div>
+
       <button
-        id="loadMore"
+        id="previousCourses"
         class="btn btn-primary mt-3"
-        onclick="loadMoreCourses()"
+        (click)="previousCourses()"
       >
-        Xem thêm
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <button
+        id="nextCourses"
+        class="btn btn-primary mt-3"
+        (click)="nextCourses()"
+      >
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </div> -->
+
+    <div class="section study">
+      <h3>Học Tập ({{ totalCourses }})</h3>
+      <div class="courses">
+        <div class="course" *ngFor="let course of currentCourses">
+          <img
+            [src]="course.imageUrl"
+            [alt]="course.name"
+            class="img-fluid course-image"
+          />
+          <div class="course-content">
+            <h4>{{ course.name }}</h4>
+            <div class="course-details">
+              <div class="rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+              <div class="students"><i class="fas fa-user"></i> 12.000</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button
+        id="previousCourses"
+        class="btn btn-primary mt-3"
+        (click)="previousCourses()"
+      >
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <button
+        id="nextCourses"
+        class="btn btn-primary mt-3"
+        (click)="nextCourses()"
+      >
+        <i class="fas fa-arrow-right"></i>
       </button>
     </div>
-    <script>
-      let displayedCourses = 3; // Số khóa học hiển thị ban đầu
 
-      function loadMoreCourses() {
-        const courses = document.querySelectorAll(".course");
-        for (
-          let i = displayedCourses;
-          i < displayedCourses + 3 && i < courses.length;
-          i++
-        ) {
-          courses[i].classList.remove("hidden"); // Hiển thị 3 khóa học tiếp theo
-        }
-        displayedCourses += 3; // Tăng số lượng khóa học đã hiển thị
-        if (displayedCourses >= courses.length) {
-          document.getElementById("loadMore").style.display = "none"; // Ẩn nút "Xem thêm" nếu không còn khóa học nào
-        }
-      }
-    </script>
     <!-- Phần Cuộc Thi -->
     <div class="section exam">
       <h3>Cuộc Thi (0)</h3>
