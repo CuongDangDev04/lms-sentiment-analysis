@@ -125,9 +125,10 @@
 </ng-container>
 
 <ng-template #otherHeader>
-  <!-- Header Start -->
-  <ng-container *ngIf="isDashboardPage; else commonHeader"></ng-container>
-  <!-- Header End -->
+  <ng-container *ngIf="isDashboardPage; else detailPage"></ng-container>
+</ng-template>
+<ng-template #detailPage>
+  <ng-container *ngIf="isDetailPage; else commonHeader"></ng-container>
 </ng-template>
 <ng-template #commonHeader>
   <div class="container-fluid bg-primary py-5 mb-5 page-header">

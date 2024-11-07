@@ -1,0 +1,36 @@
+.container-title {
+  background-color: var(--primary);
+  color: #fff;
+}
+.information {
+  max-width: 60%;
+}
+.information div {
+  background-color: rgba(211, 211, 211, 0.5);
+}
+.img-course {
+  width: 30%;
+}
+.img-course img {
+  width: 80%;
+}
+.container-content {
+  display: flex;
+}
+
+.content {
+  flex: 1;
+}
+
+.box-sticky {
+  position: fixed;
+  right: 20px;
+  top: 100px;
+  width: 200px;
+  display: none; /* Ẩn mặc định */
+}
+
+/* Khi showStickyBox là true, box-sticky sẽ hiện */
+.box-sticky.show {
+  display: block;
+}
