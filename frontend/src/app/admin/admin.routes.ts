@@ -1,7 +1,9 @@
 import { Routes } from '@angular/router';
 import { AdminComponent } from './admin.component';
 import { ManagerCoursesAdminComponent } from './components/manager-courses-admin/manager-courses-admin.component';
-import { ManagerUsersAdminComponent } from './manager-users-admin/manager-users-admin.component';
+import { ManagerUsersAdminComponent } from './components/manager-users-admin/manager-users-admin.component';
+import { DashboardAdminComponent } from './components/dashboard-admin/dashboard-admin.component';
+import { FeedbackManagerAdminComponent } from './components/feedback-manager-admin/feedback-manager-admin.component';
 
 export const adminRoutes: Routes = [
     {
@@ -10,9 +12,16 @@ export const adminRoutes: Routes = [
         children: [
             
             {
-                path:"quanlykhoahoc", component:ManagerCoursesAdminComponent            },
+                path:"quanlykhoahoc", component:ManagerCoursesAdminComponent            
+            },
             {
                 path:"quanlynguoidung", component: ManagerUsersAdminComponent
+            },
+            {
+                path:'dashboard', component: DashboardAdminComponent
+            },
+            {
+                path:'feedbackmanger', component:FeedbackManagerAdminComponent
             }
         ]
     }

@@ -1,0 +1,77 @@
+<div class="feedback-manager">
+    <div class="header">
+      <h1>Quản Lý Phản Hồi và Phân Tích Tình Cảm</h1>
+    </div>
+  
+    <!-- Bộ lọc -->
+    <div class="filter-section">
+      <div class="filter-group">
+        <label for="course">Chọn khóa học:</label>
+        <select id="course" [(ngModel)]="selectedCourse" (change)="filterFeedback()">
+          <option value="">Tất cả khóa học</option>
+          <option *ngFor="let course of courses" [ngValue]="course">{{ course.name }}</option>
+        </select>
+      </div>
+  
+      <div class="filter-group">
+        <label for="student">Chọn sinh viên:</label>
+        <select id="student" [(ngModel)]="selectedStudent" (change)="filterFeedback()">
+          <option value="">Tất cả sinh viên</option>
+          <option *ngFor="let student of students" [ngValue]="student">{{ student.name }}</option>
+        </select>
+      </div>
+  
+      <div class="filter-group">
+        <label for="emotion">Chọn cảm xúc:</label>
+        <select id="emotion" [(ngModel)]="selectedEmotion" (change)="filterFeedback()">
+          <option value="">Tất cả cảm xúc</option>
+          <option value="positive">Tích cực</option>
+          <option value="neutral">Trung lập</option>
+          <option value="negative">Tiêu cực</option>
+        </select>
+      </div>
+    </div>
+    <div class="charts-section">
+        <div class="chart-container">
+          <canvas id="barChart"></canvas>
+        </div>
+        <div class="chart-container">
+          <canvas id="pieChart"></canvas>
+        </div>
+        <div class="chart-container">
+          <canvas id="lineChart"></canvas>
+        </div>
+      </div>
+<!-- Giả sử bạn đang dùng courses trong dropdown chọn khóa học -->
+<select [(ngModel)]="selectedCourse">
+    <option *ngFor="let course of courses" [value]="course">{{ course.name }}</option>
+  </select>
+  
+  <!-- Bảng dữ liệu phản hồi -->
+  <table>
+    <thead>
+      <tr>
+        <th>Student Name</th>
+        <th>Course Name</th>
+        <th>Emotion</th>
+        <th>Comment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let feedback of pagedFeedback">
+        <td>{{ feedback.studentName }}</td>
+        <td>{{ feedback.courseName }}</td>
+        <td>{{ feedback.emotion }}</td>
+        <td>{{ feedback.comment }}</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <!-- Điều khiển phân trang -->
+  <div class="pagination">
+    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+  </div>
+  
+  

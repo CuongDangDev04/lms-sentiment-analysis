@@ -93,13 +93,22 @@ export class ManagerUsersAdminComponent {
         const index = this.users.findIndex(user => user.id === this.newUser.id);
         if (index !== -1) {
             this.users[index] = { ...this.newUser };
+            Swal.fire({
+                icon: 'success',
+                title: 'Cập nhật thành công!',
+                text: `Người dùng ${this.newUser.name} đã được cập nhật.`,
+                confirmButtonText: 'OK',
+                customClass: {
+                    confirmButton: 'btn btn-success'
+                }
+            });
         }
     } else {
         // Thêm người dùng mới
         const newId = this.users.length > 0 ? Math.max(...this.users.map(user => user.id)) + 1 : 1;
         this.users.push({ ...this.newUser, id: newId });
 
-        // Hiển thị thông báo thành công
+        // Hiển thị thông báo thành công khi thêm người dùng
         Swal.fire({
             icon: 'success',
             title: 'Thêm thành công!',
@@ -111,7 +120,8 @@ export class ManagerUsersAdminComponent {
         });
     }
     this.resetForm();
-}
+  }
+
   editUser(user: User) {
     this.newUser = { ...user };
     this.isEditing = true;
