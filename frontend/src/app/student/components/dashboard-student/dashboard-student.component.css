@@ -1,0 +1,475 @@
+.dashboard-container {
+  display: flex;
+  gap: 20px;
+}
+
+.user-info {
+  width: 25%;
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.user-profile {
+  margin-bottom: 20px;
+}
+
+.profile-picture {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 5px solid #ddd;
+  cursor: pointer;
+}
+/* ============================= */
+.courses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  z-index: 2;
+}
+
+.course {
+  width: calc(33.33% - 20px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.hidden {
+  display: none;
+}
+/* =============================== */
+.course-image {
+  width: 100%; /* Đảm bảo hình ảnh chiếm toàn bộ chiều rộng */
+  height: auto; /* Giữ tỷ lệ hình ảnh */
+  z-index: 1;
+}
+
+.progress-bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 10px 0;
+}
+
+.bar {
+  flex-grow: 1;
+  background: #ddd;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: #4caf50;
+}
+
+.extra-sections button {
+  display: block;
+  width: 100%;
+  margin: 5px 0;
+  padding: 10px;
+  background: #eee;
+  border: none;
+  border-radius: 4px;
+}
+
+.content {
+  width: 75%;
+}
+
+.section.study {
+  padding: 20px;
+}
+
+.courses {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  z-index: 2;
+}
+
+.course {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 250px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.course img {
+  width: 100%;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.course-content {
+  padding: 15px;
+}
+
+.course h4 {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.course-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.rating i {
+  color: #ffb400;
+}
+/* #nextCourses {
+  position: absolute;
+  left: 96.2%;
+  top: 16%;
+}
+#previousCourses {
+  position: absolute;
+  left: 20%;
+  top: 16%;
+} */
+#previousCourses,
+#nextCourses {
+  position: absolute;
+  top: 18%;
+  transform: translateY(-50%);
+  background-color: rgba(128, 128, 128, 0.5) !important;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  z-index: 0;
+}
+
+#previousCourses {
+  left: 20.4%;
+}
+
+#nextCourses {
+  right: 2%;
+}
+
+#previousCourses:hover,
+#nextCourses:hover {
+  background-color: rgba(
+    128,
+    128,
+    128,
+    1
+  ) !important; /* Thay đổi màu nền khi hover */
+  transform: translateY(-50%) scale(1.1); /* Phóng to khi hover */
+  z-index: 10;
+}
+
+#previousCourses:active,
+#nextCourses:active {
+  transform: translateY(-50%) scale(0.9); /* Hiệu ứng khi click */
+}
+
+.fas.fa-arrow-left,
+.fas.fa-arrow-right {
+  font-size: 24px; /* Kích thước icon */
+  pointer-events: none; /* Tắt sự kiện click cho icon */
+}
+.levels {
+  display: flex;
+  gap: 10px;
+  justify-content: space-around;
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+.level {
+  text-align: center;
+  padding: 15px;
+  border-radius: 8px;
+  width: 100%;
+  transition: transform 0.2s ease;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.easy {
+  background: #d0f5d6;
+  border-top: 4px solid #28a745;
+}
+
+.medium {
+  background: #ffe6b3;
+  border-top: 4px solid #ffc107;
+}
+
+.hard {
+  background: #f8d7da;
+  border-top: 4px solid #dc3545;
+}
+.practice {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.level:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.level-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.level-label {
+  font-weight: bold;
+  color: #333;
+}
+
+.level-score {
+  font-size: 20px;
+  font-weight: bold;
+  color: #666;
+}
+
+.no-exercises {
+  text-align: center;
+  color: #555;
+  font-size: 14px;
+}
+
+.no-exercises a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.no-exercises a:hover {
+  text-decoration: underline;
+}
+
+.card {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  font-size: 1.2rem;
+  padding: 10px 20px;
+}
+
+.discussion-box {
+  background-color: #f1f5f9;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.icon {
+  width: 30px;
+  margin-bottom: 5px;
+}
+.progress-circle-container {
+  text-align: center;
+  max-width: 150px;
+  margin: auto;
+}
+.title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.progress-circle {
+  transform: rotate(-90deg);
+}
+.progress-circle-bg {
+  fill: none;
+  stroke: #e7e8ea;
+}
+.progress-circle-fg {
+  fill: none;
+  stroke: #4caf50;
+  transition: stroke-dashoffset 0.5s ease;
+}
+.progress-text {
+  font-size: 1.2rem;
+  color: #007bff;
+  font-weight: bold;
+  margin-top: 10px;
+}
+.card-body {
+  height: 100%;
+}
+
+/* ============================= */
+/* Đảm bảo phần tử điều chỉnh linh hoạt trên màn hình nhỏ */
+.dashboard-container {
+  display: flex;
+  flex-wrap: wrap; /* Cho phép các phần tử "uốn cong" khi không đủ không gian */
+  gap: 20px;
+}
+
+.user-info {
+  width: 100%;
+  max-width: 300px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.content {
+  width: 100%;
+  max-width: calc(
+    100% - 340px
+  ); /* Điều chỉnh kích thước phần nội dung khi phần người dùng co lại */
+}
+
+/* Các phần khác như sections, courses, và progress sẽ co giãn linh hoạt */
+.courses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.course {
+  width: calc(33.33% - 20px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.levels {
+  display: flex;
+  gap: 10px;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+.level {
+  text-align: center;
+  padding: 15px;
+  border-radius: 8px;
+  width: 100%;
+  transition: transform 0.2s ease;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================= */
+/* Media Queries cho các màn hình nhỏ hơn */
+@media (max-width: 768px) {
+  .dashboard-container {
+    flex-direction: column; /* Chuyển từ layout ngang sang dọc */
+  }
+
+  .user-info {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .content {
+    width: 100%;
+  }
+
+  .courses {
+    flex-direction: column;
+  }
+
+  .course {
+    width: 100%;
+    margin-bottom: 20px; /* Thêm khoảng cách giữa các khóa học */
+  }
+
+  .levels {
+    flex-direction: column;
+  }
+
+  .level {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .progress-circle-container {
+    width: 80px;
+    height: 80px;
+  }
+
+  .progress-text {
+    font-size: 1rem;
+  }
+
+  .card-body {
+    padding: 15px;
+  }
+
+  .discussion-box {
+    padding: 10px;
+    text-align: left;
+  }
+}
+
+@media (max-width: 576px) {
+  .user-info {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .profile-picture {
+    width: 80px;
+    height: 80px;
+  }
+
+  .extra-sections button {
+    width: 100%;
+    padding: 8px;
+  }
+
+  .course h4 {
+    font-size: 1rem;
+  }
+
+  .course-details {
+    font-size: 0.8rem;
+  }
+
+  .progress-circle-container {
+    width: 60px;
+    height: 60px;
+  }
+
+  .progress-text {
+    font-size: 0.9rem;
+  }
+
+  .card-body {
+    padding: 10px;
+  }
+
+  .discussion-box {
+    padding: 8px;
+  }
+}

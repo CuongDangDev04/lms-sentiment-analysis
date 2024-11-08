@@ -1,0 +1,81 @@
+.filter-container {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.filter-container .form-label {
+  font-size: 1.1rem;
+  color: #343a40;
+}
+
+.input-group .form-control {
+  border-radius: 0.25rem 0 0 0.25rem;
+}
+
+.input-group .btn-primary {
+  border-radius: 0 0.25rem 0.25rem 0;
+}
+
+.shadow-sm {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.course-list {
+  padding: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+.btn-edit,
+.btn-delete {
+  padding: 5px 10px;
+  margin: 5px;
+  cursor: pointer;
+}
+.page-numbers {
+  display: flex;
+}
+.pagination .page-numbers .btn {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.pagination .page-numbers .active-page {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+.pagination .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination .btn:hover:not(:disabled),
+.pagination .page-numbers .btn.active-page {
+  background-color: #0056b3;
+  color: #fff;
+  border-color: #0056b3;
+}

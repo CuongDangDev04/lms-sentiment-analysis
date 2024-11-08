@@ -4,8 +4,7 @@ import { adminRoutes } from './admin/admin.routes';
 import { instructorsRoutes } from './instructors/instructors.routes';
 
 export const routes: Routes = [
-    ...instructorsRoutes,
-    ...studentRoutes,
-    ...adminRoutes
-
+  ...instructorsRoutes,
+  ...studentRoutes,
+  ...adminRoutes,
 ];

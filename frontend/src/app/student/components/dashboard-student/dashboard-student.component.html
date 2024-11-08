@@ -1,0 +1,232 @@
+<div class="dashboard-container">
+  <!-- Phần Thông tin người dùng -->
+  <div class="user-info">
+    <div class="user-profile">
+      <img
+        [src]="profilePicture"
+        alt="User Profile"
+        class="profile-picture"
+        (click)="triggerFileInput()"
+      />
+      <input
+        type="file"
+        #fileInput
+        (change)="onFileSelected($event)"
+        style="display: none"
+      />
+      <h2>DaiNam159</h2>
+    </div>
+    <div class="user-details">
+      <p><i class="fas fa-envelope"></i> dainam0974622403</p>
+      <p><i class="fas fa-phone"></i> Số điện thoại</p>
+      <p><i class="fas fa-calendar"></i> 17/09/2020</p>
+    </div>
+    <div class="extra-sections">
+      <button>Kinh Nghiệm +</button>
+      <button>Học Vấn +</button>
+      <button>Mạng Xã Hội +</button>
+    </div>
+  </div>
+
+  <!-- Phần Nội dung Học tập, Cuộc thi, Luyện tập -->
+  <div class="content">
+    <!-- Phần Học Tập -->
+    <!-- <div class="section study">
+      <h3>Học Tập ({{ totalCourses }})</h3>
+      <div class="courses">
+        <div class="course" *ngFor="let course of currentCourses">
+          <img
+            [src]="course.imageUrl"
+            [alt]="course.name"
+            class="img-fluid course-image"
+          />
+          <h4>{{ course.name }}</h4>
+        </div>
+      </div>
+
+      <button
+        id="previousCourses"
+        class="btn btn-primary mt-3"
+        (click)="previousCourses()"
+      >
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <button
+        id="nextCourses"
+        class="btn btn-primary mt-3"
+        (click)="nextCourses()"
+      >
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </div> -->
+
+    <div class="section study">
+      <h3>Học Tập ({{ totalCourses }})</h3>
+      <div class="courses">
+        <div class="course" *ngFor="let course of currentCourses">
+          <img
+            [src]="course.imageUrl"
+            [alt]="course.name"
+            class="img-fluid course-image"
+          />
+          <div class="course-content">
+            <h4>{{ course.name }}</h4>
+            <div class="course-details">
+              <div class="rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+              <div class="students"><i class="fas fa-user"></i> 12.000</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button
+        id="previousCourses"
+        class="btn btn-primary mt-3"
+        (click)="previousCourses()"
+      >
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <button
+        id="nextCourses"
+        class="btn btn-primary mt-3"
+        (click)="nextCourses()"
+      >
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+
+    <!-- Phần Cuộc Thi -->
+    <div class="section exam">
+      <h3>Cuộc Thi (0)</h3>
+      <p>Bạn chưa tham gia cuộc thi nào, ấn vào đây để tham gia ngay.</p>
+    </div>
+    <!-- Phần Luyện Tập -->
+    <div class="section practice">
+      <h3>Luyện Tập</h3>
+      <div class="levels">
+        <div class="level easy">
+          <span class="level-icon">🟢</span>
+          <p class="level-label">Dễ</p>
+          <p class="level-score">0</p>
+        </div>
+        <div class="level medium">
+          <span class="level-icon">🟠</span>
+          <p class="level-label">Trung bình</p>
+          <p class="level-score">0</p>
+        </div>
+        <div class="level hard">
+          <span class="level-icon">🔴</span>
+          <p class="level-label">Khó</p>
+          <p class="level-score">0</p>
+        </div>
+      </div>
+      <p class="no-exercises">
+        Bạn chưa làm bài tập nào, <a href="#">ấn vào đây</a> để làm ngay.
+      </p>
+    </div>
+    <div class="container my-4 mx-0 px-3">
+      <div class="row d-flex justify-content-around">
+        <!-- Phần Thảo Luận -->
+        <div class="col-md-6 px-0">
+          <div class="card">
+            <div class="card-header text-uppercase font-weight-bold">
+              Thảo Luận
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-6 mb-3">
+                  <div class="discussion-box">
+                    <img
+                      src="../../../../assets/student/img/topic.png"
+                      alt="Chủ đề"
+                      class="icon"
+                    />
+                    <p>Chủ đề</p>
+                    <span>0</span>
+                  </div>
+                </div>
+                <div class="col-6 mb-3">
+                  <div class="discussion-box">
+                    <img
+                      src="../../../../assets/student/img/vote.png"
+                      alt="Đánh giá"
+                      class="icon"
+                    />
+                    <p>Đánh giá</p>
+                    <span>0</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="discussion-box">
+                    <img
+                      src="../../../../assets/student/img/like.png"
+                      alt="Lượt thích"
+                      class="icon"
+                    />
+                    <p>Lượt thích</p>
+                    <span>0</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="discussion-box">
+                    <img
+                      src="../../../../assets/student/img/comment.png"
+                      alt="Bình luận"
+                      class="icon"
+                    />
+                    <p>Bình luận</p>
+                    <span>0</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- tiến độ học tập -->
+        <div class="col-md-6">
+          <div class="card shadow-sm progress-card">
+            <div class="card-body">
+              <h5 class="title text-center">Tiến độ học tập</h5>
+              <div class="progress-circle-container text-center">
+                <svg
+                  class="progress-circle"
+                  width="120"
+                  height="120"
+                  viewBox="0 0 120 120"
+                >
+                  <circle
+                    class="progress-circle-bg"
+                    cx="60"
+                    cy="60"
+                    r="54"
+                    stroke-width="12"
+                  ></circle>
+                  <circle
+                    class="progress-circle-fg"
+                    cx="60"
+                    cy="60"
+                    r="54"
+                    stroke-width="12"
+                    [attr.stroke-dasharray]="circumference"
+                    [attr.stroke-dashoffset]="
+                      circumference - (progressPercentage / 100) * circumference
+                    "
+                  ></circle>
+                </svg>
+                <div class="progress-text mt-3">
+                  {{ progressCurrent }}/{{ progressTotal }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
