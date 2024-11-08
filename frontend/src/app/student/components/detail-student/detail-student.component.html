@@ -1,4 +1,4 @@
-<div class="container container-title py-5 my-5">
+<div class="container container-title py-5 mx-0">
   <div class="row">
     <div class="col-md-6">
       <div class="container">
@@ -15,10 +15,11 @@
         </div>
         <div class="row controller">
           <div class="col-md-2">
-            <button class="btn btn-primary">Register</button>
+            <button class="btn btn-primary register-button">Register</button>
           </div>
+          <div class="col-sm-1"></div>
           <div class="col-md-2">
-            <button class="btn btn-primary">Trial</button>
+            <button class="btn btn-primary trial-button">Trial</button>
           </div>
         </div>
         <div
@@ -83,252 +84,150 @@
     </div>
   </div>
 </div>
+<div class="container container-menu" [ngClass]="{ 'fixed-menu': isMenuFixed }">
+  <div class="row">
+    <ul class="menu-list">
+      <li><a href="#Introduce">Introduce</a></li>
+      <li><a href="#Syllabus">Syllabus</a></li>
+      <li><a href="#Reviews">Reviews</a></li>
+      <li><a href="#Certificate">Certificate</a></li>
+      <li><a href="#Comments">Comments</a></li>
+    </ul>
+  </div>
+</div>
 <div class="container container-content">
   <div class="row">
     <div class="content col-md-8">
-      <p>Đoạn nội dung kéo dài để có thể cuộn trang.</p>
+      <p>Đoạn nội dung kéo dài để có thể cuộn trang</p>
       <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Id pariatur
-        magni odio voluptatibus repellat deleniti rerum, illo obcaecati
-        vouptate, cumque, inventore expedita eaque eligendi vero ratione
-        similique amet quis? Deserunt! Lorem ipsum dolor sit amet, consectetur
-        adipisicing elit. Accusamus perspiciatis nesciunt quaerat commodi
-        ducimus. Qui error nulla ratione architecto ex ipsam. Mollitia esse
-        deserunt sint corrupti eligendi molestiae ullam eius!Lorem ipsum dolor
-        sit, amet consectetur adipisicing elit. Id pariatur magni odio
-        voluptatibus repellat deleniti rerum, illo obcaecati voluptate, cumque,
-        inventore expedita eaque eligendi vero ratione similique amet quis?
-        Deserunt! Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Accusamus perspiciatis nesciunt quaerat commodi ducimus. Qui error nulla
-        ratione architecto ex ipsam. Mollitia esse deserunt sint corrupti
-        eligendi molestiae ullam eius!Lorem ipsum dolor sit, amet consectetur
-        adipisicing elit. Id pariatur magni odio voluptatibus repellat deleniti
-        rerum, illo obcaecati voluptate, cumque, inventore expedita eaque
-        eligendi vero ratione similique amet quis? Deserunt! Lorem ipsum dolor
-        sit amet, consectetur adipisicing elit. Accusamus perspiciatis nesciunt
-        quaerat commodi ducimus. Qui error nulla ratione architecto ex ipsam.
-        Mollitia esse deserunt sint corrupti eligendi molestiae ullam eius!Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Id pariatur magni
-        odio voluptatibus repellat deleniti rerum, illo obcaecati voluptate,
-        cumque, inventore expedita eaque eligendi vero ratione similique amet
-        quis? Deserunt! Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Accusamus perspiciatis nesciunt quaerat commodi ducimus. Qui error
-        nulla ratione architecto ex ipsam. Mollitia esse deserunt sint corrupti
-        eligendi molestiae ullam eius!Lorem ipsum dolor sit, amet consectetur
-        adipisicing elit. Id pariatur magni odio voluptatibus repellat deleniti
-        rerum, illo obcaecati voluptate, cumque, inventore expedita eaque
-        eligendi vero ratione similique amet quis? Deserunt! Lorem ipsum dolor
-        sit amet, consectetur adipisicing elit. Accusamus perspiciatis nesciunt
-        quaerat commodi ducimus. Qui error nulla ratione architecto ex ipsam.
-        Mollitia esse deserunt sint corrupti eligendi molestiae ullam eius!Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Id pariatur magni
-        odio voluptatibus repellat deleniti rerum, illo obcaecati voluptate,
-        cumque, inventore expedita eaque eligendi vero ratione similique amet
-        quis? Deserunt! Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Accusamus perspiciatis nesciunt quaerat commodi ducimus. Qui error
-        nulla ratione architecto ex ipsam. Mollitia esse deserunt sint corrupti
-        eligendi molestiae ullam eius!Lorem ipsum dolor sit, amet consectetur
-        adipisicing elit. Id pariatur magni odio voluptatibus repellat deleniti
-        rerum, illo obcaecati voluptate, cumque, inventore expedita eaque
-        eligendi vero ratione similique amet quis? Deserunt! Lorem ipsum dolor
-        sit amet, consectetur adipisicing elit. Accusamus perspiciatis nesciunt
-        quaerat commodi ducimus. Qui error nulla ratione architecto ex ipsam.
-        Mollitia esse deserunt sint corrupti eligendi molestiae ullam eius!Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Id pariatur magni
-        odio voluptatibus repellat deleniti rerum, illo obcaecati voluptate,
-        cumque, inventore expedita eaque eligendi vero ratione similique amet
-        quis? Deserunt! Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Accusamus perspiciatis nesciunt quaerat commodi ducimus. Qui error
-        nulla ratione architecto ex ipsam. Mollitia esse deserunt sint corrupti
-        eligendi molestiae ullam eius!Lorem ipsum dolor sit, amet consectetur
-        adipisicing elit. Id pariatur magni odio voluptatibus repellat deleniti
-        rerum, illo obcaecati voluptate, cumque, inventore expedita eaque
-        eligendi vero ratione similique amet quis? Deserunt! Lorem ipsum dolor
-        sit amet, consectetur adipisicing elit. Accusamus perspiciatis nesciunt
-        quaerat commodi ducimus. Qui error nulla ratione architecto ex ipsam.
-        Mollitia esse deserunt sint corrupti eligendi molestiae ullam eius!Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Id pariatur magni
-        odio voluptatibus repellat deleniti rerum, illo obcaecati voluptate,
-        cumque, inventore expedita eaque eligendi vero ratione similique amet
-        quis? Deserunt! Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Accusamus perspiciatis nesciunt quaerat commodi ducimus. Qui error
-        nulla ratione architecto ex ipsam. Mollitia esse deserunt sint corrupti
-        eligendi molestiae ullam eius!Lorem ipsum dolor sit, amet consectetur
-        adipisicing elit. Id pariatur magni odio voluptatibus repellat deleniti
-        rerum, illo obcaecati voluptate, cumque, inventore expedita eaque
-        eligendi vero ratione similique amet quis? Deserunt! Lorem ipsum dolor
-        sit amet, consectetur adipisicing elit. Accusamus perspiciatis nesciunt
-        quaerat commodi ducimus. Qui error nulla ratione architecto ex ipsam.
-        Mollitia esse deserunt sint corrupti eligendi molestiae ullam eius!Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Id pariatur magni
-        odio voluptatibus repellat deleniti rerum, illo obcaecati voluptate,
-        cumque, inventore expedita eaque eligendi vero ratione similique amet
-        quis? Deserunt! Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Accusamus perspiciatis nesciunt quaerat commodi ducimus. Qui error
-        nulla ratione architecto ex ipsam. Mollitia esse deserunt sint corrupti
-        eligendi molestiae ullam eius!Lorem ipsum dolor sit, amet consectetur
-        adipisicing elit. Id pariatur magni odio voluptatibus repellat deleniti
-        rerum, illo obcaecati voluptate, cumque, inventore expedita eaque
-        eligendi vero ratione similique amet quis? Deserunt! Lorem ipsum dolor
-        sit amet, consectetur adipisicing elit. Accusamus perspiciatis nesciunt
-        quaerat commodi ducimus. Qui error nulla ratione architecto ex ipsam.
-        Mollitia esse deserunt sint corrupti eligendi molestiae ullam eius!Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Id pariatur magni
-        odio voluptatibus repellat deleniti rerum, illo obcaecati voluptate,
-        cumque, inventore expedita eaque eligendi vero ratione similique amet
-        quis? Deserunt! Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Accusamus perspiciatis nesciunt quaerat commodi ducimus. Qui error
-        nulla ratione architecto ex ipsam. Mollitia esse deserunt sint corrupti
-        eligendi molestiae ullam eius!Lorem ipsum dolor sit, amet consectetur
-        adipisicing elit. Id pariatur magni odio voluptatibus repellat deleniti
-        rerum, illo obcaecati voluptate, cumque, inventore expedita eaque
-        eligendi vero ratione similique amet quis? Deserunt! Lorem ipsum dolor
-        sit amet, consectetur adipisicing elit. Accusamus perspiciatis nesciunt
-        quaerat commodi ducimus. Qui error nulla ratione architecto ex ipsam.
-        Mollitia esse deserunt sint corrupti eligendi molestiae ullam eius!Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Id pariatur magni
-        odio voluptatibus repellat deleniti rerum, illo obcaecati voluptate,
-        cumque, inventore expedita eaque eligendi vero ratione similique amet
-        quis? Deserunt! Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Accusamus perspiciatis nesciunt quaerat commodi ducimus. Qui error
-        nulla ratione architecto ex ipsam. Mollitia esse deserunt sint corrupti
-        eligendi molestiae ullam eius!Lorem ipsum dolor sit, amet consectetur
-        adipisicing elit. Id pariatur magni odio voluptatibus repellat deleniti
-        rerum, illo obcaecati voluptate, cumque, inventore expedita eaque
-        eligendi vero ratione similique amet quis? Deserunt! Lorem ipsum dolor
-        sit amet, consectetur adipisicing elit. Accusamus perspiciatis nesciunt
-        quaerat commodi ducimus. Qui error nulla ratione architecto ex ipsam.
-        Mollitia esse deserunt sint corrupti eligendi molestiae ullam eius!Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Id pariatur magni
-        odio voluptatibus repellat deleniti rerum, illo obcaecati voluptate,
-        cumque, inventore expedita eaque eligendi vero ratione similique amet
-        quis? Deserunt! Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Accusamus perspiciatis nesciunt quaerat commodi ducimus. Qui error
-        nulla ratione architecto ex ipsam. Mollitia esse deserunt sint corrupti
-        eligendi molestiae ullam eius!Lorem ipsum dolor sit, amet consectetur
-        adipisicing elit. Id pariatur magni odio voluptatibus repellat deleniti
-        rerum, illo obcaecati voluptate, cumque, inventore expedita eaque
-        eligendi vero ratione similique amet quis? Deserunt! Lorem ipsum dolor
-        sit amet, consectetur adipisicing elit. Accusamus perspiciatis nesciunt
-        quaerat commodi ducimus. Qui error nulla ratione architecto ex ipsam.
-        Mollitia esse deserunt sint corrupti eligendi molestiae ullam eius!Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Id pariatur magni
-        odio voluptatibus repellat deleniti rerum, illo obcaecati voluptate,
-        cumque, inventore expedita eaque eligendi vero ratione similique amet
-        quis? Deserunt! Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Accusamus perspiciatis nesciunt quaerat commodi ducimus. Qui error
-        nulla ratione architecto ex ipsam. Mollitia esse deserunt sint corrupti
-        eligendi molestiae ullam eius!Lorem ipsum dolor sit, amet consectetur
-        adipisicing elit. Id pariatur magni odio voluptatibus repellat deleniti
-        rerum, illo obcaecati voluptate, cumque, inventore expedita eaque
-        eligendi vero ratione similique amet quis? Deserunt! Lorem ipsum dolor
-        sit amet, consectetur adipisicing elit. Accusamus perspiciatis nesciunt
-        quaerat commodi ducimus. Qui error nulla ratione architecto ex ipsam.
-        Mollitia esse deserunt sint corrupti eligendi molestiae ullam eius!Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Id pariatur magni
-        odio voluptatibus repellat deleniti rerum, illo obcaecati voluptate,
-        cumque, inventore expedita eaque eligendi vero ratione similique amet
-        quis? Deserunt! Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Accusamus perspiciatis nesciunt quaerat commodi ducimus. Qui error
-        nulla ratione architecto ex ipsam. Mollitia esse deserunt sint corrupti
-        eligendi molestiae ullam eius!Lorem ipsum dolor sit, amet consectetur
-        adipisicing elit. Id pariatur magni odio voluptatibus repellat deleniti
-        rerum, illo obcaecati voluptate, cumque, inventore expedita eaque
-        eligendi vero ratione similique amet quis? Deserunt! Lorem ipsum dolor
-        sit amet, consectetur adipisicing elit. Accusamus perspiciatis nesciunt
-        quaerat commodi ducimus. Qui error nulla ratione architecto ex ipsam.
-        Mollitia esse deserunt sint corrupti eligendi molestiae ullam eius!Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Id pariatur magni
-        odio voluptatibus repellat deleniti rerum, illo obcaecati voluptate,
-        cumque, inventore expedita eaque eligendi vero ratione similique amet
-        quis? Deserunt! Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Accusamus perspiciatis nesciunt quaerat commodi ducimus. Qui error
-        nulla ratione architecto ex ipsam. Mollitia esse deserunt sint corrupti
-        eligendi molestiae ullam eius!Lorem ipsum dolor sit, amet consectetur
-        adipisicing elit. Id pariatur magni odio voluptatibus repellat deleniti
-        rerum, illo obcaecati voluptate, cumque, inventore expedita eaque
-        eligendi vero ratione similique amet quis? Deserunt! Lorem ipsum dolor
-        sit amet, consectetur adipisicing elit. Accusamus perspiciatis nesciunt
-        quaerat commodi ducimus. Qui error nulla ratione architecto ex ipsam.
-        Mollitia esse deserunt sint corrupti eligendi molestiae ullam eius!Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Id pariatur magni
-        odio voluptatibus repellat deleniti rerum, illo obcaecati voluptate,
-        cumque, inventore expedita eaque eligendi vero ratione similique amet
-        quis? Deserunt! Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Accusamus perspiciatis nesciunt quaerat commodi ducimus. Qui error
-        nulla ratione architecto ex ipsam. Mollitia esse deserunt sint corrupti
-        eligendi molestiae ullam eius!Lorem ipsum dolor sit, amet consectetur
-        adipisicing elit. Id pariatur magni odio voluptatibus repellat deleniti
-        rerum, illo obcaecati voluptate, cumque, inventore expedita eaque
-        eligendi vero ratione similique amet quis? Deserunt! Lorem ipsum dolor
-        sit amet, consectetur adipisicing elit. Accusamus perspiciatis nesciunt
-        quaerat commodi ducimus. Qui error nulla ratione architecto ex ipsam.
-        Mollitia esse deserunt sint corrupti eligendi molestiae ullam eius!Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Id pariatur magni
-        odio voluptatibus repellat deleniti rerum, illo obcaecati voluptate,
-        cumque, inventore expedita eaque eligendi vero ratione similique amet
-        quis? Deserunt! Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Accusamus perspiciatis nesciunt quaerat commodi ducimus. Qui error
-        nulla ratione architecto ex ipsam. Mollitia esse deserunt sint corrupti
-        eligendi molestiae ullam eius!Lorem ipsum dolor sit, amet consectetur
-        adipisicing elit. Id pariatur magni odio voluptatibus repellat deleniti
-        rerum, illo obcaecati voluptate, cumque, inventore expedita eaque
-        eligendi vero ratione similique amet quis? Deserunt! Lorem ipsum dolor
-        sit amet, consectetur adipisicing elit. Accusamus perspiciatis nesciunt
-        quaerat commodi ducimus. Qui error nulla ratione architecto ex ipsam.
-        Mollitia esse deserunt sint corrupti eligendi molestiae ullam eius!Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Id pariatur magni
-        odio voluptatibus repellat deleniti rerum, illo obcaecati voluptate,
-        cumque, inventore expedita eaque eligendi vero ratione similique amet
-        quis? Deserunt! Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Accusamus perspiciatis nesciunt quaerat commodi ducimus. Qui error
-        nulla ratione architecto ex ipsam. Mollitia esse deserunt sint corrupti
-        eligendi molestiae ullam eius!Lorem ipsum dolor sit, amet consectetur
-        adipisicing elit. Id pariatur magni odio voluptatibus repellat deleniti
-        rerum, illo obcaecati voluptate, cumque, inventore expedita eaque
-        eligendi vero ratione similique amet quis? Deserunt! Lorem ipsum dolor
-        sit amet, consectetur adipisicing elit. Accusamus perspiciatis nesciunt
-        quaerat commodi ducimus. Qui error nulla ratione architecto ex ipsam.
-        Mollitia esse deserunt sint corrupti eligendi molestiae ullam eius!Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Id pariatur magni
-        odio voluptatibus repellat deleniti rerum, illo obcaecati voluptate,
-        cumque, inventore expedita eaque eligendi vero ratione similique amet
-        quis? Deserunt! Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Accusamus perspiciatis nesciunt quaerat commodi ducimus. Qui error
-        nulla ratione architecto ex ipsam. Mollitia esse deserunt sint corrupti
-        eligendi molestiae ullam eius!Lorem ipsum dolor sit, amet consectetur
-        adipisicing elit. Id pariatur magni odio voluptatibus repellat deleniti
-        rerum, illo obcaecati voluptate, cumque, inventore expedita eaque
-        eligendi vero ratione similique amet quis? Deserunt! Lorem ipsum dolor
-        sit amet, consectetur adipisicing elit. Accusamus perspiciatis nesciunt
-        quaerat commodi ducimus. Qui error nulla ratione architecto ex ipsam.
-        Mollitia esse deserunt sint corrupti eligendi molestiae ullam eius!Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Id pariatur magni
-        odio voluptatibus repellat deleniti rerum, illo obcaecati voluptate,
-        cumque, inventore expedita eaque eligendi vero ratione similique amet
-        quis? Deserunt! Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Accusamus perspiciatis nesciunt quaerat commodi ducimus. Qui error
-        nulla ratione architecto ex ipsam. Mollitia esse deserunt sint corrupti
-        eligendi molestiae ullam eius!Lorem ipsum dolor sit, amet consectetur
-        adipisicing elit. Id pariatur magni odio voluptatibus repellat deleniti
-        rerum, illo obcaecati voluptate, cumque, inventore expedita eaque
-        eligendi vero ratione similique amet quis? Deserunt! Lorem ipsum dolor
-        sit amet, consectetur adipisicing elit. Accusamus perspiciatis nesciunt
-        quaerat commodi ducimus. Qui error nulla ratione architecto ex ipsam.
-        Mollitia esse deserunt sint corrupti eligendi molestiae ullam eius!Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Id pariatur magni
-        odio voluptatibus repellat deleniti rerum, illo obcaecati voluptate,
-        cumque, inventore expedita eaque eligendi vero ratione similique amet
-        quis? Deserunt! Lorem ipsum dolor sit amet, consectetur adipisicing
-        elit. Accusamus perspiciatis nesciunt quaerat commodi ducimus. Qui error
-        nulla ratione architecto ex ipsam. Mollitia esse deserunt sint corrupti
-        eligendi molestiae ullam eius!
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique ut
+        illum exercitationem delectus cumque laborum asperiores sed aspernatur.
+        Totam nulla animi optio voluptatum voluptates, ad accusantium dolor
+        fugit veritatis maiores.Lorem ipsum dolor sit amet consectetur
+        adipisicing elit. Similique ut illum exercitationem delectus cumque
+        laborum asperiores sed aspernatur. Totam nulla animi optio voluptatum
+        voluptates, ad accusantium dolor fugit veritatis maiores.Lorem ipsum
+        dolor sit amet consectetur adipisicing elit. Similique ut illum
+        exercitationem delectus cumque laborum asperiores sed aspernatur. Totam
+        nulla animi optio voluptatum voluptates, ad accusantium dolor fugit
+        veritatis maiores.Lorem ipsum dolor sit amet consectetur adipisicing
+        elit. Similique ut illum exercitationem delectus cumque laborum
+        asperiores sed aspernatur. Totam nulla animi optio voluptatum
+        voluptates, ad accusantium dolor fugit veritatis maiores.Lorem ipsum
+        dolor sit amet consectetur adipisicing elit. Similique ut illum
+        exercitationem delectus cumque laborum asperiores sed aspernatur. Totam
+        nulla animi optio voluptatum voluptates, ad accusantium dolor fugit
+        veritatis maiores.Lorem ipsum dolor sit amet consectetur adipisicing
+        elit. Similique ut illum exercitationem delectus cumque laborum
+        asperiores sed aspernatur. Totam nulla animi optio voluptatum
+        voluptates, ad accusantium dolor fugit veritatis maiores.Lorem ipsum
+        dolor sit amet consectetur adipisicing elit. Similique ut illum
+        exercitationem delectus cumque laborum asperiores sed aspernatur. Totam
+        nulla animi optio voluptatum voluptates, ad accusantium dolor fugit
+        veritatis maiores.Lorem ipsum dolor sit amet consectetur adipisicing
+        elit. Similique ut illum exercitationem delectus cumque laborum
+        asperiores sed aspernatur. Totam nulla animi optio voluptatum
+        voluptates, ad accusantium dolor fugit veritatis maiores.Lorem ipsum
+        dolor sit amet consectetur adipisicing elit. Similique ut illum
+        exercitationem delectus cumque laborum asperiores sed aspernatur. Totam
+        nulla animi optio voluptatum voluptates, ad accusantium dolor fugit
+        veritatis maiores.Lorem ipsum dolor sit amet consectetur adipisicing
+        elit. Similique ut illum exercitationem delectus cumque laborum
+        asperiores sed aspernatur. Totam nulla animi optio voluptatum
+        voluptates, ad accusantium dolor fugit veritatis maiores.Lorem ipsum
+        dolor sit amet consectetur adipisicing elit. Similique ut illum
+        exercitationem delectus cumque laborum asperiores sed aspernatur. Totam
+        nulla animi optio voluptatum voluptates, ad accusantium dolor fugit
+        veritatis maiores.Lorem ipsum dolor sit amet consectetur adipisicing
+        elit. Similique ut illum exercitationem delectus cumque laborum
+        asperiores sed aspernatur. Totam nulla animi optio voluptatum
+        voluptates, ad accusantium dolor fugit veritatis maiores.Lorem ipsum
+        dolor sit amet consectetur adipisicing elit. Similique ut illum
+        exercitationem delectus cumque laborum asperiores sed aspernatur. Totam
+        nulla animi optio voluptatum voluptates, ad accusantium dolor fugit
+        veritatis maiores.Lorem ipsum dolor sit amet consectetur adipisicing
+        elit. Similique ut illum exercitationem delectus cumque laborum
+        asperiores sed aspernatur. Totam nulla animi optio voluptatum
+        voluptates, ad accusantium dolor fugit veritatis maiores.Lorem ipsum
+        dolor sit amet consectetur adipisicing elit. Similique ut illum
+        exercitationem delectus cumque laborum asperiores sed aspernatur. Totam
+        nulla animi optio voluptatum voluptates, ad accusantium dolor fugit
+        veritatis maiores.Lorem ipsum dolor sit amet consectetur adipisicing
+        elit. Similique ut illum exercitationem delectus cumque laborum
+        asperiores sed aspernatur. Totam nulla animi optio voluptatum
+        voluptates, ad accusantium dolor fugit veritatis maiores.Lorem ipsum
+        dolor sit amet consectetur adipisicing elit. Similique ut illum
+        exercitationem delectus cumque laborum asperiores sed aspernatur. Totam
+        nulla animi optio voluptatum voluptates, ad accusantium dolor fugit
+        veritatis maiores.Lorem ipsum dolor sit amet consectetur adipisicing
+        elit. Similique ut illum exercitationem delectus cumque laborum
+        asperiores sed aspernatur. Totam nulla animi optio voluptatum
+        voluptates, ad accusantium dolor fugit veritatis maiores.
       </p>
     </div>
     <div class="col-md-4"></div>
   </div>
   <div class="box-sticky" [ngClass]="{ show: showStickyBox }">
-    <!-- Hộp sẽ dính ở vị trí này khi cuộn -->
-    <p>Thông tin khóa học sẽ xuất hiện ở đây khi cuộn trang xuống</p>
+    <div class="container py-2">
+      <div class="row sticky-title">
+        <p>Khóa học này bao gồm:</p>
+      </div>
+      <div class="row sticky-information">
+        <div
+          class="w-auto h-[30px] py-1 px-3 rounded-[4px] bg-[#19395E] flex gap-2 items-center text-sm"
+        >
+          <img
+            src="../../../../assets/student/img/watch-circle-time.png"
+            width="14"
+            height="14"
+            alt="watch-circle-time"
+          />29 giờ
+        </div>
+        <div
+          class="w-auto h-[30px] py-1 px-3 rounded-[4px] bg-[#19395E] flex gap-2 items-center text-sm"
+        >
+          <img
+            src="../../../../assets/student/img/bullet-list--points.png"
+            width="14"
+            height="14"
+            alt="bullet-list--points"
+          />107 bài giảng
+        </div>
+        <div
+          class="w-auto h-[30px] py-1 px-3 rounded-[4px] bg-[#19395E] flex gap-2 items-center text-sm"
+        >
+          <img
+            src="../../../../assets/student/img/user-multiple-group.png"
+            width="14"
+            height="14"
+            alt="user-multiple-group"
+          />13 học viên
+        </div>
+        <div
+          class="w-auto h-[30px] py-1 px-3 rounded-[4px] bg-[#19395E] flex gap-2 items-center text-sm"
+        >
+          <img
+            src="../../../../assets/student/img/receipt-check.png"
+            width="14"
+            height="14"
+            alt="receipt-check"
+          />Chứng chỉ
+        </div>
+        <div
+          class="w-auto h-[30px] py-1 px-3 rounded-[4px] bg-[#19395E] flex gap-2 items-center text-sm"
+        >
+          <img
+            src="../../../../assets/student/img/star-1.png"
+            width="14"
+            height="14"
+            alt="star-1"
+          />0.0 (0 đánh giá)
+        </div>
+      </div>
+      <div class="row sticky-controller">
+        <button class="btn btn-primary register-button">Register</button>
+        <button class="btn btn-primary trial-button">Trial</button>
+      </div>
+    </div>
   </div>
 </div>
