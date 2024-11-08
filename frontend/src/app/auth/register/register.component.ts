@@ -32,7 +32,7 @@ export class RegisterComponent {
       username: this.username,
       fullname: this.fullname,
       password: this.password,
-      role: 'sinhvien'
+      role: 'admin'
     };
 
     this.http.post('http://localhost:5000/api/auth/register', body).subscribe(

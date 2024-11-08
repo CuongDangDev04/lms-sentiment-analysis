@@ -1,3 +1,4 @@
+
 const User = require('../models/user'); 
 const bcrypt = require('bcryptjs'); 
 const jwt = require('jsonwebtoken'); 
@@ -24,7 +25,6 @@ exports.register = async (req, res) => {
         res.status(500).json({ error: 'User registration failed!' });
     }
 };
-
 exports.login = async (req, res) => {
     const { username, password } = req.body;
 
@@ -40,9 +40,19 @@ exports.login = async (req, res) => {
         if (!isMatch) return res.status(400).json({ message: 'Invalid password!' });
 
         const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.status(200).json({ message: 'Login successful!', token, user: { id: user.id, username: user.username, fullname: user.fullname, role: user.role } });
+        res.status(200).json({ 
+            message: 'Login successful!', 
+            token, 
+            user: { 
+                id: user.id, 
+                username: user.username, 
+                fullname: user.fullname, 
+                role: user.role // Đảm bảo vai trò của người dùng được trả về
+            } 
+        });
     } catch (error) {
         console.error('Login error:', error);
         res.status(500).json({ error: 'Login failed!' });
     }
 };
+
