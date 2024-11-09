@@ -44,6 +44,9 @@ export const adminRoutes: Routes = [
         data: { roles: [Role.Admin] },
         children: [
             {
+                path: '' , redirectTo: 'dashboard', pathMatch: 'full'
+            },
+            {
                 path: "quanlykhoahoc", component: ManagerCoursesAdminComponent            
             },
             {
