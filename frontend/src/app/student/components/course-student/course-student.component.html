@@ -86,12 +86,23 @@
         </div>
         <div class="text-center p-4 pb-0">
           <div class="mb-3">
-            <small class="fa fa-star text-primary"></small>
-            <small class="fa fa-star text-primary"></small>
-            <small class="fa fa-star text-primary"></small>
-            <small class="fa fa-star text-primary"></small>
-            <small class="fa fa-star text-primary"></small>
-            <small>(123)</small>
+            <ng-container *ngFor="let star of getFullStars(course.rating)">
+              <small class="fa fa-star text-primary"></small>
+              <!-- Sao đầy đủ -->
+            </ng-container>
+
+            <!-- Hiển thị sao nửa nếu có -->
+            <ng-container *ngIf="getHalfStar(course.rating)">
+              <small class="fa fa-star-half-alt text-primary"></small>
+              <!-- Sao nửa -->
+            </ng-container>
+
+            <!-- Hiển thị sao rỗng -->
+            <ng-container *ngFor="let star of getEmptyStars(course.rating)">
+              <small class="fa fa-star"></small>
+              <!-- Sao rỗng -->
+            </ng-container>
+            <small>({{ course.rating | number : "1.1-1" }} sao)</small>
           </div>
           <h5 class="mb-4">{{ course.name }}</h5>
         </div>

@@ -34,7 +34,7 @@ export const studentRoutes: Routes = [
         component: DashboardStudentComponent,
       },
       {
-        path: 'detail',
+        path: 'courses/:id',
         component: DetailStudentComponent,
       },
     ],

@@ -1,5 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
+import { CourseService } from '../../services/course.service';
+import { ActivatedRoute } from '@angular/router';
+import { Course } from '../../interfaces/course';
 
 @Component({
   selector: 'app-detail-student',
@@ -9,9 +12,29 @@ import { Component, HostListener, OnInit } from '@angular/core';
   styleUrl: './detail-student.component.css',
 })
 export class DetailStudentComponent implements OnInit {
+  courseId: string | null = null;
+  courseDetail: any;
+
+  constructor(
+    private route: ActivatedRoute,
+    private courseService: CourseService
+  ) {}
+
   showStickyBox = false;
   isMenuFixed = false;
-  ngOnInit(): void {}
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe((params) => {
+      this.courseId = params.get('id');
+      if (this.courseId) {
+        // Gọi dịch vụ để lấy chi tiết khóa học
+        this.courseDetail = this.courseService.getCourseById(
+          Number(this.courseId)
+        );
+      }
+    });
+    console.log(this.courseDetail);
+  }
 
   @HostListener('window:scroll', [])
   onWindowScroll() {

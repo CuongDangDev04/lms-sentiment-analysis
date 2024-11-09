@@ -71,15 +71,28 @@
           />
           <div class="course-content">
             <h4>{{ course.name }}</h4>
+            <!-- Hiển thị mô tả khóa học -->
             <div class="course-details">
-              <div class="rating">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
+              <div class="instructor">
+                <!-- Hiển thị tên giảng viên -->
+                <i class="fas fa-user-tie text-primary pe-1"></i>
+                <span>{{ course.instructorName }}</span>
               </div>
-              <div class="students"><i class="fas fa-user"></i> 12.000</div>
+              <div class="rating">
+                <!-- Hiển thị sao đánh giá -->
+                <ng-container *ngFor="let star of getFullStars(course.rating)">
+                  <i class="fas fa-star text-primary"></i>
+                </ng-container>
+                <ng-container *ngIf="getHalfStar(course.rating)">
+                  <i class="fas fa-star-half-alt text-primary"></i>
+                </ng-container>
+                <ng-container *ngFor="let star of getEmptyStars(course.rating)">
+                  <i class="fas fa-star-o text-primary"></i>
+                </ng-container>
+              </div>
+              <div class="students">
+                <i class="fas fa-user"></i> {{ course.studentsCount }} Students
+              </div>
             </div>
           </div>
         </div>
