@@ -17,7 +17,9 @@ export class AuthService {
   login(username: string, password: string): Observable<any> {
     return this.http.post('http://localhost:5000/api/auth/login', { username, password }).pipe(
       map((response: any) => {
+        // Lưu token và user info vào localStorage
         localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify({ role: response.user.role }));  // Lưu thông tin user
         this.user = { role: response.user.role };  // Gán giá trị role từ response vào user
         return response;
       })
@@ -26,9 +28,10 @@ export class AuthService {
 
   loadUserFromLocalStorage() {
     const token = localStorage.getItem('token');
-    if (token) {
-      // Giả sử bạn có thể decode token để lấy thông tin người dùng
-      this.user = { role: Role.Student };  // Sử dụng Enum Role
+    const user = localStorage.getItem('user');
+    if (token && user) {
+      this.user = JSON.parse(user);  // Lấy thông tin user từ localStorage
+      // Có thể thêm logic kiểm tra tính hợp lệ của token ở đây
     }
   }
 
@@ -42,6 +45,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     this.user = null;
   }
 }
