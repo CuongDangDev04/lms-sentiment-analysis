@@ -838,6 +838,9 @@ export class CourseService {
   getAllReview(): Review[] {
     return this.reviews;
   }
+  getReviewById(id: number): Review[] | undefined {
+    return this.reviews.filter((review) => review.courseId === id);
+  }
   getAllCourse(): Course[] {
     return this.courses;
   }

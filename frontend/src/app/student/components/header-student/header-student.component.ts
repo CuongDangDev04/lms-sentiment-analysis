@@ -35,7 +35,9 @@ export class HeaderStudentComponent implements OnInit {
     this.isCoursesPage = this.router.url === '/student/courses';
     this.isContactPage = this.router.url === '/student/contact';
     this.isDashboardPage = this.router.url === '/student/dashboard';
-    this.isDetailPage = this.router.url === '/student/detail';
+    this.isDetailPage =
+      this.router.url.includes('/student/courses/') &&
+      !this.router.url.endsWith('/courses');
     this.currentPage = this.router.url.replace('/student/', '').toUpperCase();
     if (this.isAboutPage) this.currentPage = 'ABOUT US';
     console.log('isHomePage:', this.isHomePage);

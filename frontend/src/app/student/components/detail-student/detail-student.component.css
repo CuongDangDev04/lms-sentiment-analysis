@@ -4,9 +4,12 @@
   max-width: 100%;
   padding: 0 8rem;
 }
-
+.container-title .title > p {
+  font-size: 2rem !important;
+  font-weight: bold;
+}
 .information {
-  max-width: 60%;
+  max-width: 70%;
 }
 .information div {
   background-color: rgba(211, 211, 211, 0.5);
@@ -16,7 +19,7 @@
   display: flex;
 }
 .img-course img {
-  width: 80%;
+  width: 100%;
   object-fit: contain;
 }
 .container-content {
@@ -124,4 +127,163 @@
   position: fixed;
   top: 0;
   width: 100%;
+}
+.container-content {
+  display: flex;
+  flex-direction: column;
+}
+.menu-list > li {
+  cursor: pointer;
+}
+/* Đặt màu nền và padding cho các phần */
+
+h2,
+h3 {
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+h2.text-center {
+  font-size: 2.5rem;
+  color: #007bff;
+}
+
+h3.text-success {
+  font-size: 1.5rem;
+  color: #28a745;
+}
+
+.lead {
+  font-size: 1.25rem;
+  color: #6c757d;
+}
+
+ul.list-group {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul.list-group li {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease;
+}
+
+ul.list-group li:hover {
+  background-color: #e2e6ea;
+}
+
+.list-group-item {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.list-group-item strong {
+  color: #343a40;
+}
+
+/* Các phần bình luận */
+.comment {
+  background-color: #f0f8ff;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.comment p {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.comment strong {
+  color: #007bff;
+}
+
+/* Đảm bảo rằng các phần có đủ padding và cách điệu đẹp mắt */
+#Introduce,
+#Syllabus,
+#Reviews,
+#Certificate,
+#Comments {
+  margin-bottom: 40px;
+}
+
+/* Thiết lập responsive cho các cột */
+@media (max-width: 767px) {
+  h2.text-center {
+    font-size: 2rem;
+  }
+  h3.text-success {
+    font-size: 1.25rem;
+  }
+  .container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+}
+/* Chỉnh sửa kiểu cho phần Comment */
+#Comments .comment {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#Comments .comment-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+#Comments .avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+#Comments strong {
+  font-size: 16px;
+  color: #333;
+}
+
+#Comments .comment-form {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#Comments .avatar-input {
+  margin-right: 10px;
+}
+
+#Comments .comment-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical;
+}
+
+#Comments #submitComment {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  margin-left: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#Comments #submitComment:hover {
+  background-color: #0056b3;
 }
