@@ -16,16 +16,12 @@
             "outputPath": "dist/frontend",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "src/styles.css",
+
               "src/assets/lecture_admin/css/bootstrap.min.css",
               "src/assets/lecture_admin/css/plugins.min.css",
               "src/assets/lecture_admin/css/kaiadmin.min.css",
@@ -39,6 +35,7 @@
               "src/assets/student/css/style.css"
             ],
             "scripts": [
+
               "src/assets/lecture_admin/js/core/jquery-3.7.1.min.js",
               "src/assets/lecture_admin/js/core/popper.min.js",
               "src/assets/lecture_admin/js/core/bootstrap.min.js",
@@ -107,19 +104,25 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+              "src/assets/student/lib/animate/animate.min.css",
+              "src/assets/student/lib/owlcarousel/assets/owl.carousel.min.css",
+              "src/assets/student/css/bootstrap.min.css",
+              "src/assets/student/css/style.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/student/js/main.js",
+              "src/assets/student/lib/wow/wow.min.js",
+              "src/assets/student/lib/easing/easing.min.js",
+              "src/assets/student/lib/waypoints/waypoints.min.js",
+              "src/assets/student/lib/owlcarousel/owl.carousel.min.js"
+            ]
           }
         }
       }

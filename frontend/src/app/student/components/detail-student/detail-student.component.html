@@ -1,0 +1,440 @@
+<div class="container container-title py-5 mx-0">
+  <div class="row" *ngIf="courseDetail">
+    <div class="col-md-6">
+      <div class="container">
+        <div class="row title">
+          <p>
+            {{ courseDetail.name }}
+          </p>
+        </div>
+        <div class="row instructor">
+          <p>
+            <span>Intructor: </span
+            ><span>{{ courseDetail.instructorName }}</span>
+          </p>
+        </div>
+        <div class="row description">
+          <p>
+            {{ courseDetail.description }}
+          </p>
+        </div>
+        <div class="row controller">
+          <div class="col-md-3">
+            <button class="btn btn-primary register-button">Register</button>
+          </div>
+
+          <div class="col-md-2">
+            <button class="btn btn-primary trial-button">Trial</button>
+          </div>
+        </div>
+        <div
+          class="row information min-h-[68px] max-w-[440px] flex flex-wrap gap-2 my-5"
+        >
+          <div
+            class="w-auto h-[30px] py-1 px-3 rounded-[4px] bg-[#19395E] flex gap-2 items-center text-sm"
+          >
+            <img
+              src="../../../../assets/student/img/watch-circle-time.png"
+              width="14"
+              height="14"
+              alt="watch-circle-time"
+            />&nbsp;&nbsp;{{ courseDetail.duration }} giờ
+          </div>
+          <div
+            class="w-auto h-[30px] py-1 px-3 rounded-[4px] bg-[#19395E] flex gap-2 items-center text-sm"
+          >
+            <img
+              src="../../../../assets/student/img/bullet-list--points.png"
+              width="14"
+              height="14"
+              alt="bullet-list--points"
+            />&nbsp;&nbsp;{{ courseDetail.number_of_lessons }} bài giảng
+          </div>
+          <div
+            class="w-auto h-[30px] py-1 px-3 rounded-[4px] bg-[#19395E] flex gap-2 items-center text-sm"
+          >
+            <img
+              src="../../../../assets/student/img/user-multiple-group.png"
+              width="14"
+              height="14"
+              alt="user-multiple-group"
+            />&nbsp;&nbsp;{{ courseDetail.number_of_students }} học viên
+          </div>
+          <div
+            class="w-auto h-[30px] py-1 px-3 rounded-[4px] bg-[#19395E] flex gap-2 items-center text-sm"
+            *ngIf="courseDetail.certificate"
+          >
+            <img
+              src="../../../../assets/student/img/receipt-check.png"
+              width="14"
+              height="14"
+              alt="receipt-check"
+            />&nbsp;&nbsp; Chứng chỉ
+          </div>
+          <div
+            class="w-auto h-[30px] py-1 px-3 rounded-[4px] bg-[#19395E] flex gap-2 items-center text-sm"
+          >
+            <img
+              src="../../../../assets/student/img/star-1.png"
+              width="14"
+              height="14"
+              alt="star-1"
+            />&nbsp;&nbsp;{{ courseDetail.rating }} ({{ totalComment }}
+            đánh giá)
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-4 img-course">
+      <img [src]="courseDetail.imageUrl" alt="" />
+    </div>
+  </div>
+</div>
+<div
+  class="container container-menu mw-100"
+  [ngClass]="{ 'fixed-menu': isMenuFixed }"
+>
+  <div class="row">
+    <ul class="menu-list">
+      <li><a (click)="scrollTo('Introduce')">Introduce</a></li>
+      <li><a (click)="scrollTo('Syllabus')">Syllabus</a></li>
+      <li><a (click)="scrollTo('Comments')">Comments</a></li>
+    </ul>
+  </div>
+</div>
+<div class="container container-content">
+  <div class="container py-5" id="Introduce">
+    <div class="row">
+      <div class="col-md-10">
+        <h2 class="text-center text-primary mb-4">Giới thiệu khóa học</h2>
+        <p class="lead text-muted">
+          Khóa học lập trình Angular này được thiết kế cho các bạn muốn học lập
+          trình web và xây dựng ứng dụng web hiện đại. Trong khóa học này, bạn
+          sẽ học cách sử dụng Angular để tạo ra các ứng dụng web mạnh mẽ, dễ bảo
+          trì và dễ mở rộng.
+        </p>
+        <h3 class="text-success">Mục tiêu khóa học:</h3>
+        <ul class="list-group mb-4">
+          <li class="list-group-item">
+            Hiểu được cấu trúc cơ bản của một ứng dụng Angular.
+          </li>
+          <li class="list-group-item">
+            Học cách tạo ra các component, service, và module trong Angular.
+          </li>
+          <li class="list-group-item">
+            Quản lý dữ liệu bằng Reactive Forms và Template-driven Forms.
+          </li>
+          <li class="list-group-item">
+            Sử dụng RxJS để quản lý bất đồng bộ và xử lý sự kiện.
+          </li>
+          <li class="list-group-item">
+            Tìm hiểu về routing và navigation trong ứng dụng Angular.
+          </li>
+          <li class="list-group-item">
+            Ứng dụng best practices và tổ chức mã nguồn theo chuẩn mực của
+            Angular.
+          </li>
+          <li class="list-group-item">
+            Thực hành xây dựng ứng dụng thực tế, ví dụ như quản lý sản phẩm,
+            đăng ký người dùng, hoặc xây dựng một trang blog.
+          </li>
+        </ul>
+        <h3 class="text-success">Phương pháp học:</h3>
+        <p>
+          Phương pháp giảng dạy của chúng tôi bao gồm các bài giảng lý thuyết
+          kết hợp với thực hành. Mỗi module đều có bài tập thực hành sau mỗi
+          buổi học để giúp bạn củng cố kiến thức. Các ví dụ trong khóa học được
+          lấy từ các tình huống thực tế, giúp bạn dễ dàng áp dụng vào công việc
+          sau này.
+        </p>
+        <h3 class="text-success">Đối tượng tham gia:</h3>
+        <p>
+          Khóa học này dành cho các bạn lập trình viên mới bắt đầu, hoặc những
+          ai muốn học và làm quen với Angular. Nếu bạn đã có kinh nghiệm với
+          HTML, CSS và JavaScript, bạn sẽ cảm thấy dễ dàng hơn khi tham gia khóa
+          học này.
+        </p>
+        <h3 class="text-success">Lợi ích khi hoàn thành khóa học:</h3>
+        <ul class="list-group mb-4">
+          <li class="list-group-item">
+            Khả năng xây dựng ứng dụng Angular từ đầu đến cuối.
+          </li>
+          <li class="list-group-item">
+            Chứng chỉ hoàn thành khóa học sẽ giúp bạn có thêm lợi thế trong công
+            việc.
+          </li>
+          <li class="list-group-item">
+            Trở thành chuyên gia về Angular và có thể ứng dụng nó vào các dự án
+            thực tế.
+          </li>
+        </ul>
+        <p>
+          Khóa học được thiết kế với thời lượng 2 tháng, chia thành các buổi học
+          lý thuyết và thực hành. Mỗi buổi học sẽ kéo dài khoảng 2 giờ. Sau khi
+          hoàn thành, bạn sẽ có đầy đủ kiến thức để tự tin phát triển ứng dụng
+          Angular chuyên nghiệp.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container py-5" id="Syllabus">
+    <div class="row">
+      <div class="col-md-10">
+        <h2 class="text-center text-primary mb-4">Chương trình học</h2>
+        <p class="lead text-muted mb-4">
+          Khóa học này bao gồm các bài giảng từ cơ bản đến nâng cao, giúp bạn
+          hiểu và sử dụng thành thạo Angular trong việc xây dựng ứng dụng web.
+          Chương trình học được chia thành các module với các chủ đề chi tiết
+          như sau:
+        </p>
+        <ul class="list-group">
+          <li class="list-group-item">
+            <strong>Giới thiệu về Angular:</strong>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                Tổng quan về Angular và các tính năng chính của framework này.
+              </li>
+              <li class="list-group-item">
+                Giới thiệu về môi trường phát triển Angular (CLI, cấu trúc dự
+                án, v.v.).
+              </li>
+              <li class="list-group-item">
+                Thiết lập và cài đặt Angular trên máy tính.
+              </li>
+            </ul>
+          </li>
+          <li class="list-group-item">
+            <strong>Cấu trúc dự án Angular:</strong>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                Cấu trúc thư mục của dự án Angular và vai trò của từng phần
+                trong ứng dụng.
+              </li>
+              <li class="list-group-item">
+                Cách tạo module, component và service trong Angular.
+              </li>
+              <li class="list-group-item">
+                Cấu trúc của một ứng dụng Angular cơ bản.
+              </li>
+            </ul>
+          </li>
+          <li class="list-group-item">
+            <strong>Hướng dẫn tạo các component:</strong>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                Khái niệm về component trong Angular.
+              </li>
+              <li class="list-group-item">
+                Cách tạo và sử dụng component trong Angular.
+              </li>
+              <li class="list-group-item">
+                Cách chia nhỏ ứng dụng thành các component con để tái sử dụng mã
+                nguồn hiệu quả.
+              </li>
+              <li class="list-group-item">
+                Công cụ và kỹ thuật binding dữ liệu giữa component và view.
+              </li>
+            </ul>
+          </li>
+          <li class="list-group-item">
+            <strong>Quản lý dữ liệu với Services và RxJS:</strong>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                Các dịch vụ (Services) trong Angular và cách tạo dịch vụ để quản
+                lý dữ liệu.
+              </li>
+              <li class="list-group-item">
+                Cách sử dụng Dependency Injection (DI) trong Angular để cung cấp
+                dịch vụ.
+              </li>
+              <li class="list-group-item">
+                Giới thiệu về RxJS: Các Observable và Operators trong Angular.
+              </li>
+              <li class="list-group-item">
+                Cách quản lý bất đồng bộ và các sự kiện với RxJS.
+              </li>
+            </ul>
+          </li>
+          <li class="list-group-item">
+            <strong>Test và Debug ứng dụng Angular:</strong>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                Cách viết và chạy unit test cho các component và service trong
+                Angular.
+              </li>
+              <li class="list-group-item">
+                Debug ứng dụng Angular bằng các công cụ như Angular DevTools và
+                Chrome DevTools.
+              </li>
+              <li class="list-group-item">
+                Best practices trong việc kiểm tra và bảo trì ứng dụng Angular.
+              </li>
+            </ul>
+          </li>
+          <li class="list-group-item">
+            <strong>Quản lý Routing và Navigation:</strong>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                Cách sử dụng Angular Router để quản lý các tuyến đường trong ứng
+                dụng.
+              </li>
+              <li class="list-group-item">
+                Quản lý các tham số động và bảo vệ tuyến đường bằng Guards.
+              </li>
+              <li class="list-group-item">
+                Cách điều hướng giữa các trang và quản lý trạng thái trong ứng
+                dụng.
+              </li>
+            </ul>
+          </li>
+          <li class="list-group-item">
+            <strong>Ứng dụng thực tế:</strong>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                Xây dựng ứng dụng quản lý danh bạ người dùng với Angular.
+              </li>
+              <li class="list-group-item">
+                Ứng dụng CRUD (Create, Read, Update, Delete) với Angular và
+                backend API.
+              </li>
+              <li class="list-group-item">
+                Quản lý người dùng, đăng nhập và xác thực bằng Firebase hoặc
+                JWT.
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <p class="mt-4">
+          Mỗi chủ đề trong chương trình học đều có bài tập thực hành và các ví
+          dụ cụ thể để bạn dễ dàng hiểu và ứng dụng vào công việc. Sau khi hoàn
+          thành khóa học, bạn sẽ có đủ khả năng để xây dựng các ứng dụng web
+          mạnh mẽ với Angular.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="box-sticky" [ngClass]="{ show: showStickyBox }">
+    <div class="container py-2">
+      <div class="row sticky-title">
+        <p>Khóa học này bao gồm:</p>
+      </div>
+      <div class="row sticky-information">
+        <div
+          class="w-auto h-[30px] py-1 px-3 rounded-[4px] bg-[#19395E] flex gap-2 items-center text-sm"
+        >
+          <img
+            src="../../../../assets/student/img/watch-circle-time.png"
+            width="14"
+            height="14"
+            alt="watch-circle-time"
+          />29 giờ
+        </div>
+        <div
+          class="w-auto h-[30px] py-1 px-3 rounded-[4px] bg-[#19395E] flex gap-2 items-center text-sm"
+        >
+          <img
+            src="../../../../assets/student/img/bullet-list--points.png"
+            width="14"
+            height="14"
+            alt="bullet-list--points"
+          />107 bài giảng
+        </div>
+        <div
+          class="w-auto h-[30px] py-1 px-3 rounded-[4px] bg-[#19395E] flex gap-2 items-center text-sm"
+        >
+          <img
+            src="../../../../assets/student/img/user-multiple-group.png"
+            width="14"
+            height="14"
+            alt="user-multiple-group"
+          />13 học viên
+        </div>
+        <div
+          class="w-auto h-[30px] py-1 px-3 rounded-[4px] bg-[#19395E] flex gap-2 items-center text-sm"
+        >
+          <img
+            src="../../../../assets/student/img/receipt-check.png"
+            width="14"
+            height="14"
+            alt="receipt-check"
+          />Chứng chỉ
+        </div>
+        <div
+          class="w-auto h-[30px] py-1 px-3 rounded-[4px] bg-[#19395E] flex gap-2 items-center text-sm"
+        >
+          <img
+            src="../../../../assets/student/img/star-1.png"
+            width="14"
+            height="14"
+            alt="star-1"
+          />0.0 (0 đánh giá)
+        </div>
+      </div>
+      <div class="row sticky-controller">
+        <button class="btn btn-primary register-button">Register</button>
+        <button class="btn btn-primary trial-button">Trial</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <!-- Phần Comments -->
+  <div class="row" id="Comments">
+    <div class="col-lg-10">
+      <!-- Form nhập đánh giá mới -->
+      <div class="new-comment">
+        <h3>Thêm bình luận của bạn</h3>
+        <div class="comment-form">
+          <div class="avatar-input">
+            <img
+              src="../../../../assets/student/img/team-1.jpg"
+              alt="User Avatar"
+              class="avatar"
+            />
+          </div>
+          <textarea
+            id="commentText"
+            placeholder="Nhập bình luận của bạn..."
+            rows="4"
+            class="comment-input"
+          ></textarea>
+          <button id="submitComment" class="btn btn-primary">
+            Gửi bình luận
+          </button>
+        </div>
+      </div>
+      <h2>Bình luận của học viên</h2>
+
+      <!-- Bình luận hiện tại -->
+      <div class="comment">
+        <div class="comment-header">
+          <img
+            src="../../../../assets/student/img/team-2.jpg"
+            alt="Avatar"
+            class="avatar"
+          />
+          <strong>Học viên A:</strong>
+        </div>
+        <p>Khóa học rất hữu ích! Tôi đã học được nhiều điều mới mẻ.</p>
+      </div>
+
+      <div class="comment">
+        <div class="comment-header">
+          <img
+            src="../../../../assets/student/img/team-3.jpg"
+            alt="Avatar"
+            class="avatar"
+          />
+          <strong>Học viên B:</strong>
+        </div>
+        <p>
+          Giảng viên giải thích rất chi tiết, tôi cảm thấy tự tin hơn khi làm
+          việc với Angular.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
