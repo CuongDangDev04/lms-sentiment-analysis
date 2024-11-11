@@ -174,7 +174,7 @@ export class ManagerCoursesAdminComponent {
   }
 
   getInstructorName(instructorId: number | undefined): string {
-    const instructor = this.instructors.find(i => i.id === instructorId);
+    const instructor = this.instructors.find(i => i.id == instructorId);
     return instructor ? instructor.name : '';
   }
 }

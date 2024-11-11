@@ -1,176 +1,213 @@
 .user-management {
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 83%;
-    margin-right: 0;
-  }
-  
-  .user-management h2 {
-    text-align: center;
-    color: #333;
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  .user-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
-  
-  .form-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .form-group label {
-    width: 25%;
-    font-weight: bold;
-    color: #555;
-  }
-  
-  .form-group input[type="text"],
-  .form-group input[type="email"],
-  .form-group input[type="password"],
-  .form-group select {
-    width: 75%;
-    padding: 10px;
-    font-size: 16px;
-    color: #333;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    outline: none;
-    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .form-group input:focus,
-  .form-group select:focus {
-    background-color: #fff;
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
-  }
-  
-  .user-form button {
-    padding: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .btn-save {
-    background-color: #28a745;
-    color: #fff;
-    margin-right: 10px;
-  }
-  
-  .btn-save:hover {
-    background-color: #218838;
-  }
-  
-  .btn-reset {
-    background-color: #6c757d;
-    color: #fff;
-  }
-  
-  .btn-reset:hover {
-    background-color: #5a6268;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  table thead tr {
-    background-color: #007bff;
-    color: #fff;
-    font-size: 16px;
-  }
-  
-  table th,
-  table td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: left;
-  }
-  
-  table tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  
-  table tbody tr:hover {
-    background-color: #e9ecef;
-  }
-  
-  .btn-edit {
-    padding: 5px 10px;
-    background-color: #ffc107;
-    color: #333;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .btn-edit:hover {
-    background-color: #e0a800;
-  }
-  
-  .btn-delete {
-    padding: 5px 10px;
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .btn-delete:hover {
-    background-color: #c82333;
-  }
-  .dropdown-toggle {
-    background-color: #007bff;
-    color: black;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-  }
-  
-  .dropdown-toggle:hover {
-    background-color: #0056b3;
-  }
-  
-  .dropdown-menu {
-    background-color: #f8f9fa;
-    border: 1px solid #cef889;
-  }
-  
-  .dropdown-item {
-    color: #343a40;
-  }
-  
-  .dropdown-item:hover {
-    background-color: #007bff;
-    color: white;
-  }
-  .invalid {
-    border: 1px solid red;
-  }
-  
-  .invalid::placeholder {
-    color: red;
-    font-style: italic;
-  }
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 83%;
+  margin-right: 0;
+}
+
+.user-management h2 {
+  text-align: center;
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.filter-search {
+  display: flex;
+  gap: 20px; /* Khoảng cách giữa hai div */
+  justify-content: space-between; /* Cân đối khoảng cách giữa hai div */
+  margin-bottom: 20px; /* Khoảng cách dưới giữa phần tìm kiếm và các phần khác */
+}
+
+.filter-search .form-group {
+  flex: 1; /* Chiếm đều không gian */
+}
+
+.filter-search .form-group label {
+  font-weight: bold;
+  color: #555;
+  display: block; /* Đảm bảo nhãn sẽ không bị chồng lên input */
+  margin-bottom: 5px;
+}
+
+.filter-search .form-group input {
+  width: 100%; /* Chiếm toàn bộ chiều rộng của form-group */
+  padding: 10px;
+  font-size: 16px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  outline: none;
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.filter-search .form-group input:focus {
+  background-color: #fff;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+.user-management h2 {
+  text-align: center;
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.user-form .form-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-form .form-group label {
+  width: 25%;
+  font-weight: bold;
+  color: #555;
+}
+
+.user-form .form-group input,
+.user-form .form-group select {
+  width: 75%;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.user-form button {
+  padding: 12px 20px; /* Điều chỉnh padding cho button */
+  font-size: 16px; /* Kích thước chữ */
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: auto; /* Để button có kích thước tự động căn chỉnh theo nội dung */
+  min-width: 100%; /* Đảm bảo button không quá nhỏ */
+  max-width: 200px; /* Đảm bảo button không quá lớn */
+  margin-right: 10px; /* Khoảng cách giữa 2 button */
+}
+
+.btn-save {
+  background-color: #28a745;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.btn-save:hover {
+  background-color: #218838;
+}
+
+.btn-reset {
+  background-color: #6c757d;
+  color: #fff;
+  margin-bottom: 20px;
+
+}
+
+.btn-reset:hover {
+  background-color: #5a6268;
+}
+
+.user-form button:last-child {
+  margin-right: 0; /* Loại bỏ margin bên phải của button reset */
+}
+
+/* Cải thiện bảng */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table thead tr {
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+}
+
+table th,
+table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+table tbody tr:hover {
+  background-color: #e9ecef;
+}
+
+/* Định dạng các nút trong bảng */
+.btn-edit,
+.btn-delete {
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-edit {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.btn-edit:hover {
+  background-color: #e0a800;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn-delete:hover {
+  background-color: #c82333;
+}
+
+/* Dropdown */
+.dropdown-toggle {
+  background-color: #007bff;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.dropdown-toggle:hover {
+  background-color: #0056b3;
+}
+
+.dropdown-menu {
+  background-color: #f8f9fa;
+  border: 1px solid #cef889;
+}
+
+.dropdown-item {
+  color: #343a40;
+}
+
+.dropdown-item:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Định dạng lỗi cho các trường nhập */
+.invalid {
+  border: 1px solid red;
+}
+
+.invalid::placeholder {
+  color: red;
+  font-style: italic;
+}

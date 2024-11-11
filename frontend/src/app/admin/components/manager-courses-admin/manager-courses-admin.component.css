@@ -119,31 +119,3 @@
     background-color: #e9ecef;
   }
   
-  .btn-edit {
-    padding: 5px 10px;
-    background-color: #ffc107;
-    color: #333;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .btn-edit:hover {
-    background-color: #e0a800;
-  }
-  
-  .btn-delete {
-    padding: 5px 10px;
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .btn-delete:hover {
-    background-color: #c82333;
-  }
-  

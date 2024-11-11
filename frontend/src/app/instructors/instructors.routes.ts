@@ -24,6 +24,7 @@ import { HeaderInstructorsComponent } from './components/header-instructors/head
 import { SidebarInstructorsComponent } from './components/sidebar-instructors/sidebar-instructors.component';
 import { AuthGuard } from '../auth/auth.guard';
 import { Role } from '../models/roles';
+import { ManagerStudentInstructorComponent } from './components/manager-student-instructor/manager-student-instructor.component';
 
 export const instructorsRoutes: Routes = [
     {
@@ -37,6 +38,9 @@ export const instructorsRoutes: Routes = [
             },
             {
                 path: "sidebar", component: SidebarInstructorsComponent
+            },
+            {
+                path:'quanlysinhvien', component:ManagerStudentInstructorComponent
             }
         ]
     }

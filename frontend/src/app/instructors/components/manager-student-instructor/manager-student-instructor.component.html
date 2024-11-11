@@ -1,0 +1,71 @@
+<div class="student-management">
+    <h2>Quản lý Sinh Viên</h2>
+    
+    <!-- Bộ lọc và tìm kiếm -->
+    <div class="filter-search">
+      <div class="form-group">
+        <label for="searchName">Tìm kiếm theo tên</label>
+        <input id="searchName" type="text" placeholder="Nhập tên sinh viên..." [(ngModel)]="searchName" />
+      </div>
+  
+      <div class="form-group">
+        <label for="searchEmail">Tìm kiếm theo email</label>
+        <input id="searchEmail" type="text" placeholder="Nhập email..." [(ngModel)]="searchEmail" />
+      </div>
+    </div>
+  
+    <!-- Danh sách sinh viên -->
+    <h3>Danh sách Sinh Viên</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Tên Sinh Viên</th>
+          <th>Email</th>
+          <th>Phản hồi</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let student of getFilteredStudents()">
+          <td>{{ student.name }}</td>
+          <td>{{ student.email }}</td>
+          <td>{{ student.feedback }}</td>
+          <td>
+            
+              <button
+              (click)="viewStudentDetails(student)"
+                type="button"
+                data-bs-toggle="tooltip"
+                title=""
+                class="btn btn-link btn-primary btn-lg"
+                data-original-title="Edit Task"
+              >
+              <i class="fa-solid fa-eye"></i>
+              </button>
+              <button 
+              (click)="deleteStudent(student)"
+                type="button"
+                data-bs-toggle="tooltip"
+                title=""
+                class="btn btn-link btn-danger"
+                data-original-title="Remove"
+              >
+                <i class="fa fa-times"></i>
+              </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Modal hiển thị thông tin chi tiết sinh viên -->
+    <div *ngIf="selectedStudent" class="modal">
+      <div class="modal-content">
+        <span class="close" (click)="closeModal()">&times;</span>
+        <h4>Thông tin chi tiết</h4>
+        <p><strong>Tên:</strong> {{ selectedStudent.name }}</p>
+        <p><strong>Email:</strong> {{ selectedStudent.email }}</p>
+        <p><strong>Phản hồi:</strong> {{ selectedStudent.feedback }}</p>
+      </div>
+    </div>
+  </div>
+  

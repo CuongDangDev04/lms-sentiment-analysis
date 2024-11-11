@@ -1,20 +1,7 @@
 <div class="user-management">
   <h2>Quản lý Người Dùng</h2>
   
-  <!-- Bộ lọc và tìm kiếm -->
-  <div class="filter-search">
-    <div class="form-group">
-      <label for="searchName">Tìm kiếm theo tên</label>
-      <input id="searchName" type="text" [(ngModel)]="searchName" placeholder="Nhập tên người dùng..." />
-    </div>
-
-    <div class="form-group">
-      <label for="searchEmail">Tìm kiếm theo email</label>
-      <input id="searchEmail" type="text" [(ngModel)]="searchEmail" placeholder="Nhập email..." />
-    </div>
-
-    
-  </div>
+ 
 
   <!-- Form thêm/chỉnh sửa người dùng -->
   <form class="user-form" (ngSubmit)="addUser()">
@@ -42,12 +29,23 @@
 
   <!-- Danh sách người dùng -->
   <h3>Danh sách Người Dùng</h3>
+   <!-- Bộ lọc và tìm kiếm -->
+   <div class="filter-search">
+    <div class="form-group">
+      <label for="searchName">Tìm kiếm theo tên</label>
+      <input id="searchName" type="text" [(ngModel)]="searchName" placeholder="Nhập tên người dùng..." />
+    </div>
+
+    <div class="form-group">
+      <label for="searchEmail">Tìm kiếm theo email</label>
+      <input id="searchEmail" type="text" [(ngModel)]="searchEmail" placeholder="Nhập email..." />
+    </div>
+  </div>
   <table class="table">
     <thead>
       <tr>
         <th>Tên Người Dùng</th>
         <th>
-          
           <div class="dropdown d-inline">
             <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
               {{ filterRole ? (filterRole === 'sinhvien' ? 'SINH VIÊN' : 'GIẢNG VIÊN') : 'VAI TRÒ' }}
@@ -75,16 +73,10 @@
         <td>{{ user.role === 'sinhvien' ? 'Sinh viên' : 'Giảng viên' }}</td>
         <td>{{ user.email }}</td>
         <td>
-          <button (click)="editUser(user)"
-            type="button"
-            class="btn btn-link btn-primary btn-lg"
-            title="Chỉnh Sửa">
+          <button (click)="editUser(user)" type="button" class="btn btn-link btn-primary btn-lg" title="Chỉnh Sửa">
             <i class="fa fa-edit"></i>
           </button>
-          <button (click)="deleteUser(user.id)"
-            type="button"
-            class="btn btn-link btn-danger"
-            title="Xóa">
+          <button (click)="deleteUser(user.id)" type="button" class="btn btn-link btn-danger" title="Xóa">
             <i class="fa fa-times"></i>
           </button>
         </td>
