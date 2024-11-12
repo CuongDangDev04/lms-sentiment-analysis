@@ -4,13 +4,15 @@ import { adminRoutes } from './admin/admin.routes';
 import { instructorsRoutes } from './instructors/instructors.routes';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { NotFoundComponent } from './shared/not-found/not-found.component';
 
 export const routes: Routes = [
     ...instructorsRoutes,
     ...studentRoutes,
     ...adminRoutes,
-    {path:'register', component:RegisterComponent},
-    {path:'login', component:LoginComponent},
-    { path: '', redirectTo: '/login',  pathMatch: 'full'}
+    { path: 'register', component: RegisterComponent },
+    { path: 'login', component: LoginComponent },
+    { path: '', redirectTo: '/login', pathMatch: 'full' },
+    { path: '**', component: NotFoundComponent }
 ];
 

@@ -1,64 +1,17 @@
-// import { Component } from '@angular/core';
-// import { FormsModule } from '@angular/forms';
-// import { HttpClient, HttpClientModule } from '@angular/common/http';
-// import { Router } from '@angular/router';
-// import { NgIf } from '@angular/common';
-
-// @Component({
-//   selector: 'app-login',
-//   standalone: true,
-//   imports: [FormsModule, HttpClientModule, NgIf],
-//   templateUrl: './login.component.html',
-//   styleUrls: ['./login.component.css'],
-// })
-// export class LoginComponent {
-//   username: string = ''; // Khai báo biến cho username
-//   password: string = ''; // Khai báo biến cho password
-//   errorMessage: string = ''; // Khai báo biến cho thông báo lỗi
-
-//   constructor(private http: HttpClient, private router: Router) {}
-
-//   onSubmit() {
-//     // Kiểm tra nếu người dùng chưa nhập đủ thông tin
-//     if (!this.username || !this.password) {
-//       this.errorMessage = 'Vui lòng nhập đầy đủ thông tin';
-//       return;
-//     }
-
-//     // Xóa thông báo lỗi trước khi gọi API
-//     this.errorMessage = '';
-
-//     // Gọi API đăng nhập
-//     this.http.post('http://localhost:5000/api/auth/login', {
-//       username: this.username,
-//       password: this.password,
-//     })
-//     .subscribe(
-//       (response: any) => {
-//         console.log('Login successful:', response);
-//         localStorage.setItem('token', response.token); // Giả sử response chứa token
-//         // this.router.navigate(['/home']);
-//       },
-//       (error) => {
-//         console.error('Login failed:', error);
-//         this.errorMessage = 'Đăng nhập không thành công! Kiểm tra lại thông tin.'; // Hiển thị thông báo lỗi
-//       }
-//     );
-//   }
-// }
 // src/app/components/login/login.component.ts
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { AuthService } from '../../auth/auth.service';
 import { Role } from '../../models/roles';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, HttpClientModule, NgIf],
+  imports: [FormsModule, HttpClientModule, NgIf,RouterLink],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
@@ -74,30 +27,40 @@ export class LoginComponent {
       this.errorMessage = 'Vui lòng nhập đầy đủ thông tin';
       return;
     }
-
+  
     this.errorMessage = '';
-
+  
     this.authService.login(this.username, this.password).subscribe(
       (response: any) => {
         console.log('Login successful:', response);
         console.log('User role:', response.user.role); // Đảm bảo vai trò được log đúng
-        switch (response.user.role) {
-          case Role.Admin:
-            console.log('Navigating to /admin');
-            this.router.navigate(['/admin']);
-            break;
-          case Role.Instructor:
-            console.log('Navigating to /instructors');
-            this.router.navigate(['/instructors']);
-            break;
-          case Role.Student:
-            console.log('Navigating to /student');
-            this.router.navigate(['/student']);
-            break;
-          default:
-            console.log('Navigating to /');
-            this.router.navigate(['/']);
-        }
+  
+        // Hiển thị thông báo đăng nhập thành công
+        Swal.fire({
+          title: 'Đăng nhập thành công!',
+          text: `Chào mừng ${response.user.fullname}, bạn đã đăng nhập thành công.`,
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          // Điều hướng người dùng đến trang tương ứng dựa trên vai trò
+          switch (response.user.role) {
+            case Role.Admin:
+              console.log('Navigating to /admin');
+              this.router.navigate(['/admin']);
+              break;
+            case Role.Instructor:
+              console.log('Navigating to /instructors');
+              this.router.navigate(['/instructors']);
+              break;
+            case Role.Student:
+              console.log('Navigating to /student');
+              this.router.navigate(['/student']);
+              break;
+            default:
+              console.log('Navigating to /');
+              this.router.navigate(['/']);
+          }
+        });
       },
       (error) => {
         console.error('Login failed:', error);
@@ -105,4 +68,5 @@ export class LoginComponent {
       }
     );
   }
+  
 }
