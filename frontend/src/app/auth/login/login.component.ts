@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { AuthService } from '../../auth/auth.service';
-import { Role } from '../../models/roles';
+import { Role } from '../interfaces/roles';
 import Swal from 'sweetalert2';
 
 @Component({

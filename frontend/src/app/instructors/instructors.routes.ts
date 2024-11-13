@@ -23,7 +23,7 @@ import { InstructorsComponent } from './instructors.component';
 import { HeaderInstructorsComponent } from './components/header-instructors/header-instructors.component';
 import { SidebarInstructorsComponent } from './components/sidebar-instructors/sidebar-instructors.component';
 import { AuthGuard } from '../auth/auth.guard';
-import { Role } from '../models/roles';
+import { Role } from '../auth/interfaces/roles';
 import { ManagerStudentInstructorComponent } from './components/manager-student-instructor/manager-student-instructor.component';
 
 export const instructorsRoutes: Routes = [

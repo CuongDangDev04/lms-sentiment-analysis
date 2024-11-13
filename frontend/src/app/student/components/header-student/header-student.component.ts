@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-header-student',
@@ -17,8 +18,11 @@ export class HeaderStudentComponent implements OnInit {
   isDashboardPage: boolean = false;
   isDetailPage: boolean = false;
   currentPage!: string;
-  constructor(private router: Router) {}
-
+  constructor(private router: Router, private authService: AuthService ) {}
+  logOut(){
+    this.authService.logout;
+    this.router.navigate(['/login'])
+  }
   ngOnInit() {
     this.checkCurrentPage();
     this.router.events.subscribe((event) => {

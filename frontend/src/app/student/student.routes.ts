@@ -9,7 +9,7 @@ import { ContactStudentComponent } from './components/contact-student/contact-st
 import { DashboardStudentComponent } from './components/dashboard-student/dashboard-student.component';
 import { DetailStudentComponent } from './components/detail-student/detail-student.component';
 import { AuthGuard } from '../auth/auth.guard';
-import { Role } from '../models/roles';
+import { Role } from '../auth/interfaces/roles';
 
 export const studentRoutes: Routes = [
 

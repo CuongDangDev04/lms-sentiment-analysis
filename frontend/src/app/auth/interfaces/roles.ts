@@ -1,4 +1,4 @@
-// src/app/models/roles.ts
+// src/app/interfaces/roles.ts
 export enum Role {
   Admin = 'admin',
   Instructor = 'instructor',

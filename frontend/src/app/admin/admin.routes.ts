@@ -6,7 +6,7 @@ import { ManagerUsersAdminComponent } from './components/manager-users-admin/man
 import { DashboardAdminComponent } from './components/dashboard-admin/dashboard-admin.component';
 import { FeedbackManagerAdminComponent } from './components/feedback-manager-admin/feedback-manager-admin.component';
 import { AuthGuard } from '../auth/auth.guard';
-import { Role } from '../models/roles';
+import { Role } from '../auth/interfaces/roles';
 
 export const adminRoutes: Routes = [
     {
