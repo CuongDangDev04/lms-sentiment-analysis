@@ -1,34 +1,54 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class Course extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/db')
+
+const Course = sequelize.define('Course', {
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  instructorId: {
+    type: DataTypes.INTEGER,
+    allowNull: true
+  },
+  instructorName: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  number_of_lessons: {
+    type: DataTypes.INTEGER,
+    allowNull: true
+  },
+  number_of_students: {
+    type: DataTypes.INTEGER,
+    allowNull: true
+  },
+  certificate: {
+    type: DataTypes.BOOLEAN,
+    allowNull: true
+  },
+  rating: {
+    type: DataTypes.FLOAT,
+    allowNull: true
+  },
+  duration: {
+    type: DataTypes.INTEGER,
+    allowNull: true
+  },
+  imageUrl: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  studentsCount: {
+    type: DataTypes.INTEGER,
+    allowNull: true
+  },
+  category: {
+    type: DataTypes.STRING,
+    allowNull: true
   }
-  Course.init({
-    name: DataTypes.STRING,
-    description: DataTypes.STRING,
-    instructorId: DataTypes.INTEGER,
-    instructorName: DataTypes.STRING,
-    number_of_lessons: DataTypes.INTEGER,
-    number_of_students: DataTypes.INTEGER,
-    certificate: DataTypes.BOOLEAN,
-    rating: DataTypes.FLOAT,
-    duration: DataTypes.INTEGER,
-    imageUrl: DataTypes.STRING,
-    studentsCount: DataTypes.INTEGER,
-    category: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Course',
-  });
-  return Course;
-};
+});
+ module.exports = Course;
