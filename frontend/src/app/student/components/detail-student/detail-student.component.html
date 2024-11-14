@@ -409,32 +409,24 @@
       <h2>Bình luận của học viên</h2>
 
       <!-- Bình luận hiện tại -->
-      <div class="comment">
+      <div class="comment" *ngFor="let student of visibleComments">
         <div class="comment-header">
-          <img
-            src="../../../../assets/student/img/team-2.jpg"
-            alt="Avatar"
-            class="avatar"
-          />
-          <strong>Học viên A:</strong>
+          <img [src]="student.avt" alt="Avatar" class="avatar" />
+          <strong>{{ student.name }}</strong>
         </div>
-        <p>Khóa học rất hữu ích! Tôi đã học được nhiều điều mới mẻ.</p>
+        <div *ngFor="let review of student.reviews">
+          <p>{{ review.comment }}</p>
+        </div>
       </div>
 
-      <div class="comment">
-        <div class="comment-header">
-          <img
-            src="../../../../assets/student/img/team-3.jpg"
-            alt="Avatar"
-            class="avatar"
-          />
-          <strong>Học viên B:</strong>
-        </div>
-        <p>
-          Giảng viên giải thích rất chi tiết, tôi cảm thấy tự tin hơn khi làm
-          việc với Angular.
-        </p>
-      </div>
+      <!-- Nút xem thêm nếu còn bình luận để load -->
+      <button
+        *ngIf="visibleComments.length < comments.length"
+        (click)="loadMoreComments()"
+        class="btn btn-secondary"
+      >
+        Xem thêm
+      </button>
     </div>
   </div>
 </div>
