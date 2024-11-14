@@ -8,6 +8,7 @@ import { Review } from '../../interfaces/review';
 import { Student } from '../../interfaces/student';
 import { AuthService } from '../../../auth/auth.service';
 import { FormsModule } from '@angular/forms';
+import { StudentService } from '../../services/student.service';
 
 @Component({
   selector: 'app-detail-student',
@@ -32,7 +33,8 @@ export class DetailStudentComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private courseService: CourseService,
-    private authService: AuthService
+    private authService: AuthService,
+    private studentService: StudentService
   ) {}
 
   showStickyBox = false;
@@ -56,8 +58,15 @@ export class DetailStudentComponent implements OnInit {
     });
 
     this.updateCourseRatings();
-    this.studentComment = this.courseService.getAllStudent();
-    this.loadComments();
+    this.studentService.getAllStudents().subscribe(
+      (students: Student[]) => {
+        this.studentComment = students; // Lưu dữ liệu sinh viên vào studentComment
+        this.loadComments(); // Sau khi nhận được dữ liệu sinh viên, load comments
+      },
+      (error) => {
+        console.error('Error fetching students:', error);
+      }
+    );
     //Đăng nhập
     //this.isLoggedIn = this.authService.isLoggedIn();
   }
@@ -70,32 +79,27 @@ export class DetailStudentComponent implements OnInit {
       return; // Ngừng hành động nếu chưa đăng nhập
     }
 
-    // Kiểm tra nội dung bình luận
     if (!this.newComment || this.newComment.trim() === '') {
       console.log('Vui lòng nhập bình luận');
-      return; // Ngừng hành động nếu không có bình luận
+      return;
     }
 
-    // Người dùng giả định
     const currentUser: any = {
       id: 100,
       name: 'Nguyễn Đại Nam',
       avt: '../../../../assets/student/img/team-1.jpg',
     };
 
-    // Tạo review mới
     const newReview = {
-      id: currentUser.id, // ID người dùng
-      courseId: Number(this.courseId), // Sử dụng ID khóa học từ tham số
+      id: currentUser.id,
+      courseId: Number(this.courseId),
       rating: 5,
       comment: this.newComment,
       createdAt: new Date(),
     };
 
-    // Thêm bình luận vào dịch vụ (hoặc cơ sở dữ liệu)
     this.courseService.addReview(newReview);
 
-    // Cập nhật lại danh sách bình luận và tổng số bình luận
     this.reviews.push(newReview);
     this.totalComment = this.reviews.length;
 
@@ -103,23 +107,6 @@ export class DetailStudentComponent implements OnInit {
     this.newComment = '';
     console.log(this.comments);
     this.visibleComments = this.comments;
-  }
-  login(): void {
-    const user = { username: 'student1', password: 'password' }; //
-    this.authService.login(user.username, user.password).subscribe(() => {
-      this.isLoggedIn = true;
-
-      this.showOverlay = false;
-    });
-  }
-
-  // Đăng xuất
-  logout(): void {
-    this.authService.logout(); // Đăng xuất
-    this.isLoggedIn = false; // Cập nhật trạng thái đăng xuất
-  }
-  closeOverlay() {
-    this.showOverlay = false;
   }
 
   updateCourseRatings(): void {

@@ -382,13 +382,6 @@
 </div>
 <div class="container">
   <!-- Phần Comments -->
-  <div class="overlay" [class.active]="showOverlay">
-    <div class="overlay-content">
-      <h4>Vui lòng đăng nhập để thêm bình luận!</h4>
-      <button class="btn btn-primary me-3" (click)="login()">Đăng nhập</button>
-      <button class="btn btn-primary" (click)="closeOverlay()">Đóng</button>
-    </div>
-  </div>
   <div class="row" id="Comments">
     <div class="col-lg-10">
       <!-- Form nhập đánh giá mới -->
@@ -419,15 +412,6 @@
         </div>
       </div>
       <h2>Bình luận của học viên</h2>
-
-      <!-- Bình luận hiện tại -->
-      <!-- <div class="comment" *ngFor="let student of comments">
-        <div class="comment-header">
-          <img [src]="student.avt" alt="Avatar" class="avatar" />
-          <strong>{{ student.name }}</strong>
-        </div>
-        <p *ngFor="let review of student.reviews">{{ review.comment }}</p>
-      </div> -->
       <div class="comment" *ngFor="let student of visibleComments">
         <div class="comment-header">
           <img [src]="student.avt" alt="Avatar" class="avatar" />
