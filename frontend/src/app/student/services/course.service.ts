@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Review } from '../interfaces/review';
 import { Course } from '../interfaces/course';
+import { Student } from '../interfaces/student';
 
 @Injectable({
   providedIn: 'root',
@@ -511,6 +512,42 @@ export class CourseService {
         'Khóa học cung cấp kiến thức rất tốt, tôi đã học được nhiều điều.',
       createdAt: new Date('16/03/2024'),
     },
+    //=================================
+    {
+      id: 4,
+      courseId: 1,
+      rating: 1,
+      comment: 'Nguyễn Đại Nam Đẹp Trai!!',
+      createdAt: new Date('11/11/2024'),
+    },
+    {
+      id: 5,
+      courseId: 1,
+      rating: 1,
+      comment: 'Nguyễn Đại Nam Đẹp Trai!!',
+      createdAt: new Date('11/11/2024'),
+    },
+    {
+      id: 6,
+      courseId: 1,
+      rating: 1,
+      comment: 'Nguyễn Đại Nam Đẹp Trai!!',
+      createdAt: new Date('11/11/2024'),
+    },
+    {
+      id: 7,
+      courseId: 1,
+      rating: 1,
+      comment: 'Nguyễn Đại Nam Đẹp Trai!!',
+      createdAt: new Date('11/11/2024'),
+    },
+    {
+      id: 8,
+      courseId: 1,
+      rating: 1,
+      comment: 'Nguyễn Đại Nam Đẹp Trai!!',
+      createdAt: new Date('11/11/2024'),
+    },
   ];
   courses: Course[] = [
     {
@@ -834,7 +871,349 @@ export class CourseService {
       category: 'design',
     },
   ];
-
+  students: Student[] = [
+    {
+      id: 1,
+      name: 'Student 1',
+      avt: '../../../../assets/student/img/team-1.jpg',
+    },
+    {
+      id: 2,
+      name: 'Student 2',
+      avt: '../../../../assets/student/img/team-2.jpg',
+    },
+    {
+      id: 3,
+      name: 'Student 3',
+      avt: '../../../../assets/student/img/team-3.jpg',
+    },
+    {
+      id: 4,
+      name: 'Student 4',
+      avt: '../../../../assets/student/img/team-4.jpg',
+    },
+    {
+      id: 5,
+      name: 'Student 5',
+      avt: '../../../../assets/student/img/team-1.jpg',
+    },
+    {
+      id: 6,
+      name: 'Student 6',
+      avt: '../../../../assets/student/img/team-2.jpg',
+    },
+    {
+      id: 7,
+      name: 'Student 7',
+      avt: '../../../../assets/student/img/team-3.jpg',
+    },
+    {
+      id: 8,
+      name: 'Student 8',
+      avt: '../../../../assets/student/img/team-4.jpg',
+    },
+    {
+      id: 9,
+      name: 'Student 9',
+      avt: '../../../../assets/student/img/team-1.jpg',
+    },
+    {
+      id: 10,
+      name: 'Student 10',
+      avt: '../../../../assets/student/img/team-2.jpg',
+    },
+    {
+      id: 11,
+      name: 'Student 11',
+      avt: '../../../../assets/student/img/team-3.jpg',
+    },
+    {
+      id: 12,
+      name: 'Student 12',
+      avt: '../../../../assets/student/img/team-4.jpg',
+    },
+    {
+      id: 13,
+      name: 'Student 13',
+      avt: '../../../../assets/student/img/team-1.jpg',
+    },
+    {
+      id: 14,
+      name: 'Student 14',
+      avt: '../../../../assets/student/img/team-2.jpg',
+    },
+    {
+      id: 15,
+      name: 'Student 15',
+      avt: '../../../../assets/student/img/team-3.jpg',
+    },
+    {
+      id: 16,
+      name: 'Student 16',
+      avt: '../../../../assets/student/img/team-4.jpg',
+    },
+    {
+      id: 17,
+      name: 'Student 17',
+      avt: '../../../../assets/student/img/team-1.jpg',
+    },
+    {
+      id: 18,
+      name: 'Student 18',
+      avt: '../../../../assets/student/img/team-2.jpg',
+    },
+    {
+      id: 19,
+      name: 'Student 19',
+      avt: '../../../../assets/student/img/team-3.jpg',
+    },
+    {
+      id: 20,
+      name: 'Student 20',
+      avt: '../../../../assets/student/img/team-4.jpg',
+    },
+    {
+      id: 21,
+      name: 'Student 21',
+      avt: '../../../../assets/student/img/team-1.jpg',
+    },
+    {
+      id: 22,
+      name: 'Student 22',
+      avt: '../../../../assets/student/img/team-2.jpg',
+    },
+    {
+      id: 23,
+      name: 'Student 23',
+      avt: '../../../../assets/student/img/team-3.jpg',
+    },
+    {
+      id: 24,
+      name: 'Student 24',
+      avt: '../../../../assets/student/img/team-4.jpg',
+    },
+    {
+      id: 25,
+      name: 'Student 25',
+      avt: '../../../../assets/student/img/team-1.jpg',
+    },
+    {
+      id: 26,
+      name: 'Student 26',
+      avt: '../../../../assets/student/img/team-2.jpg',
+    },
+    {
+      id: 27,
+      name: 'Student 27',
+      avt: '../../../../assets/student/img/team-3.jpg',
+    },
+    {
+      id: 28,
+      name: 'Student 28',
+      avt: '../../../../assets/student/img/team-4.jpg',
+    },
+    {
+      id: 29,
+      name: 'Student 29',
+      avt: '../../../../assets/student/img/team-1.jpg',
+    },
+    {
+      id: 30,
+      name: 'Student 30',
+      avt: '../../../../assets/student/img/team-2.jpg',
+    },
+    {
+      id: 31,
+      name: 'Student 31',
+      avt: '../../../../assets/student/img/team-3.jpg',
+    },
+    {
+      id: 32,
+      name: 'Student 32',
+      avt: '../../../../assets/student/img/team-4.jpg',
+    },
+    {
+      id: 33,
+      name: 'Student 33',
+      avt: '../../../../assets/student/img/team-1.jpg',
+    },
+    {
+      id: 34,
+      name: 'Student 34',
+      avt: '../../../../assets/student/img/team-2.jpg',
+    },
+    {
+      id: 35,
+      name: 'Student 35',
+      avt: '../../../../assets/student/img/team-3.jpg',
+    },
+    {
+      id: 36,
+      name: 'Student 36',
+      avt: '../../../../assets/student/img/team-4.jpg',
+    },
+    {
+      id: 37,
+      name: 'Student 37',
+      avt: '../../../../assets/student/img/team-1.jpg',
+    },
+    {
+      id: 38,
+      name: 'Student 38',
+      avt: '../../../../assets/student/img/team-2.jpg',
+    },
+    {
+      id: 39,
+      name: 'Student 39',
+      avt: '../../../../assets/student/img/team-3.jpg',
+    },
+    {
+      id: 40,
+      name: 'Student 40',
+      avt: '../../../../assets/student/img/team-4.jpg',
+    },
+    {
+      id: 41,
+      name: 'Student 41',
+      avt: '../../../../assets/student/img/team-1.jpg',
+    },
+    {
+      id: 42,
+      name: 'Student 42',
+      avt: '../../../../assets/student/img/team-2.jpg',
+    },
+    {
+      id: 43,
+      name: 'Student 43',
+      avt: '../../../../assets/student/img/team-3.jpg',
+    },
+    {
+      id: 44,
+      name: 'Student 44',
+      avt: '../../../../assets/student/img/team-4.jpg',
+    },
+    {
+      id: 45,
+      name: 'Student 45',
+      avt: '../../../../assets/student/img/team-1.jpg',
+    },
+    {
+      id: 46,
+      name: 'Student 46',
+      avt: '../../../../assets/student/img/team-2.jpg',
+    },
+    {
+      id: 47,
+      name: 'Student 47',
+      avt: '../../../../assets/student/img/team-3.jpg',
+    },
+    {
+      id: 48,
+      name: 'Student 48',
+      avt: '../../../../assets/student/img/team-4.jpg',
+    },
+    {
+      id: 49,
+      name: 'Student 49',
+      avt: '../../../../assets/student/img/team-1.jpg',
+    },
+    {
+      id: 50,
+      name: 'Student 50',
+      avt: '../../../../assets/student/img/team-2.jpg',
+    },
+    {
+      id: 51,
+      name: 'Student 51',
+      avt: '../../../../assets/student/img/team-3.jpg',
+    },
+    {
+      id: 52,
+      name: 'Student 52',
+      avt: '../../../../assets/student/img/team-4.jpg',
+    },
+    {
+      id: 53,
+      name: 'Student 53',
+      avt: '../../../../assets/student/img/team-1.jpg',
+    },
+    {
+      id: 54,
+      name: 'Student 54',
+      avt: '../../../../assets/student/img/team-2.jpg',
+    },
+    {
+      id: 55,
+      name: 'Student 55',
+      avt: '../../../../assets/student/img/team-3.jpg',
+    },
+    {
+      id: 56,
+      name: 'Student 56',
+      avt: '../../../../assets/student/img/team-4.jpg',
+    },
+    {
+      id: 57,
+      name: 'Student 57',
+      avt: '../../../../assets/student/img/team-1.jpg',
+    },
+    {
+      id: 58,
+      name: 'Student 58',
+      avt: '../../../../assets/student/img/team-2.jpg',
+    },
+    {
+      id: 59,
+      name: 'Student 59',
+      avt: '../../../../assets/student/img/team-3.jpg',
+    },
+    {
+      id: 60,
+      name: 'Student 60',
+      avt: '../../../../assets/student/img/team-4.jpg',
+    },
+    {
+      id: 61,
+      name: 'Student 61',
+      avt: '../../../../assets/student/img/team-1.jpg',
+    },
+    {
+      id: 62,
+      name: 'Student 62',
+      avt: '../../../../assets/student/img/team-2.jpg',
+    },
+    {
+      id: 63,
+      name: 'Student 63',
+      avt: '../../../../assets/student/img/team-3.jpg',
+    },
+    {
+      id: 64,
+      name: 'Student 64',
+      avt: '../../../../assets/student/img/team-4.jpg',
+    },
+    {
+      id: 65,
+      name: 'Student 65',
+      avt: '../../../../assets/student/img/team-1.jpg',
+    },
+    {
+      id: 66,
+      name: 'Student 66',
+      avt: '../../../../assets/student/img/team-2.jpg',
+    },
+  ];
+  addReview(newReview: any) {
+    this.reviews.push(newReview); // Thêm bình luận vào mảng reviews
+    // Nếu bạn đang làm việc với API, bạn có thể gọi API ở đây để lưu vào cơ sở dữ liệu.
+    // Ví dụ: return this.http.post('/api/reviews', newReview);
+  }
+  getAllStudent(): Student[] {
+    return this.students;
+  }
+  getStudentById(id: number): Student[] | undefined {
+    return this.students.filter((comment) => comment.id === id);
+  }
   getAllReview(): Review[] {
     return this.reviews;
   }
@@ -851,5 +1230,6 @@ export class CourseService {
     }
     return course;
   }
+
   constructor() {}
 }
