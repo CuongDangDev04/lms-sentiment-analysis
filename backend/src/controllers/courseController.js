@@ -53,7 +53,6 @@ exports.getReviewOfCourse = async (req, res) => {
         type: QueryTypes.SELECT,
       }
     );
-    console.log("CCC" + reviews);
     if (!reviews || reviews.length === 0) {
       return res.status(404).json({ message: "No reviews found" });
     }

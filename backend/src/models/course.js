@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
-
+const Instructor = require(".//instructor")
 const Course = sequelize.define(
   "course",
   {
@@ -21,6 +21,11 @@ const Course = sequelize.define(
     instructorId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: Instructor, // Liên kết với bảng Instructor
+        key: "id",
+      },
+      onDelete: "CASCADE", // Xóa Course nếu Instructor bị xóa
     },
     instructorName: {
       type: DataTypes.STRING,
@@ -63,5 +68,14 @@ const Course = sequelize.define(
     timestamps: true, // Sequelize tự động thêm createdAt và updatedAt
   }
 );
+// Thiết lập quan hệ
+Instructor.hasMany(Course, {
+  foreignKey: "instructorId",
+  as: "courses",
+});
 
+Course.belongsTo(Instructor, {
+  foreignKey: "instructorId",
+  as: "instructor",
+});
 module.exports = Course;
