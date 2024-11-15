@@ -44,7 +44,7 @@ export class RegisterComponent {
       role: this.role, // Gửi vai trò đã chọn lên server
     };
 
-    this.http.post('http://localhost:3000/api/auth/register', body).subscribe(
+    this.http.post('http://localhost:5000/api/auth/register', body).subscribe(
       (response) => {
         console.log('Đăng ký thành công:', response);
         // Hiển thị SweetAlert khi đăng ký thành công

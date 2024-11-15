@@ -16,7 +16,7 @@ export class AuthService {
 
   login(username: string, password: string): Observable<any> {
     return this.http
-      .post('http://localhost:3000/api/auth/login', { username, password })
+      .post('http://localhost:5000/api/auth/login', { username, password })
       .pipe(
         map((response: any) => {
           // Lưu token và user info vào localStorage
