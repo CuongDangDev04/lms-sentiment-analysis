@@ -3,7 +3,7 @@ import { Component, HostListener, NgModule, OnInit } from '@angular/core';
 import { CourseService } from '../../services/course.service';
 import { ActivatedRoute } from '@angular/router';
 import { Course } from '../../interfaces/course';
-import { count } from 'rxjs';
+import { count, firstValueFrom } from 'rxjs';
 import { Review } from '../../interfaces/review';
 import { Student } from '../../interfaces/student';
 import { AuthService } from '../../../auth/auth.service';
@@ -30,6 +30,8 @@ export class DetailStudentComponent implements OnInit {
   commentsPerPage = 3; // Số lượng bình luận hiển thị mỗi lần
   currentPage = 1;
   newComment: string = '';
+  rating: number = 5; // Hoặc có thể lấy giá trị rating từ giao diện người dùng
+  errorMessage: string = '';
   constructor(
     private route: ActivatedRoute,
     private courseService: CourseService,
@@ -43,90 +45,60 @@ export class DetailStudentComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       this.courseId = params.get('id');
-      if (this.courseId) {
-        // Gọi dịch vụ để lấy chi tiết khóa học
-        this.courseDetail = this.courseService.getCourseById(
-          Number(this.courseId)
-        );
-      }
-      const review = this.courseService.getReviewById(Number(this.courseId));
-      if (review) {
-        // Thực hiện hành động nếu tìm thấy review
-        this.totalComment = review.length;
-        this.reviews = review;
-      }
     });
 
-    this.updateCourseRatings();
-    this.studentService.getAllStudents().subscribe(
-      (students: Student[]) => {
-        this.studentComment = students; // Lưu dữ liệu sinh viên vào studentComment
-        this.loadComments(); // Sau khi nhận được dữ liệu sinh viên, load comments
+    this.courseService.getCourseById(Number(this.courseId)).subscribe(
+      (courseDetail: Course) => {
+        this.courseDetail = courseDetail;
       },
       (error) => {
-        console.error('Error fetching students:', error);
+        console.error('Lỗi khi gọi API:', error);
       }
     );
-    //Đăng nhập
-    //this.isLoggedIn = this.authService.isLoggedIn();
-  }
-  addComment(): void {
-    console.log('LOGIN' + this.isLoggedIn);
-
-    // Kiểm tra người dùng có đăng nhập chưa
-    if (!this.isLoggedIn) {
-      this.showOverlay = true;
-      return; // Ngừng hành động nếu chưa đăng nhập
-    }
-
-    if (!this.newComment || this.newComment.trim() === '') {
-      console.log('Vui lòng nhập bình luận');
-      return;
-    }
-
-    const currentUser: any = {
-      id: 100,
-      name: 'Nguyễn Đại Nam',
-      avt: '../../../../assets/student/img/team-1.jpg',
-    };
-
-    const newReview = {
-      id: currentUser.id,
-      courseId: Number(this.courseId),
-      rating: 5,
-      comment: this.newComment,
-      createdAt: new Date(),
-    };
-
-    this.courseService.addReview(newReview);
-
-    this.reviews.push(newReview);
-    this.totalComment = this.reviews.length;
-
-    // Đặt lại giá trị bình luận sau khi thêm
-    this.newComment = '';
-    console.log(this.comments);
-    this.visibleComments = this.comments;
+    console.log(this.courseDetail);
+    this.courseService.getReviewOfCourse(Number(this.courseId)).subscribe(
+      (reviews: Review[]) => {
+        this.reviews = reviews;
+        this.updateCourseRatings();
+        this.totalComment = this.reviews.length;
+        this.studentService.getAllStudents().subscribe(
+          (students: Student[]) => {
+            this.studentComment = students; // Lưu dữ liệu sinh viên vào studentComment
+            console.log(this.studentComment);
+            this.loadComments(); // Sau khi nhận được dữ liệu sinh viên, load comments
+          },
+          (error) => {
+            console.error('Error fetching students:', error);
+          }
+        );
+      },
+      (error) => {
+        console.error('Lỗi khi gọi API:', error);
+      }
+    );
+    console.log(this.reviews);
   }
 
   updateCourseRatings(): void {
-    const courseReviews = this.reviews.filter(
-      (review) => review.courseId === this.courseDetail.id
-    );
-
-    const totalRating = courseReviews.reduce(
-      (sum, review) => sum + review.rating,
-      0
-    );
-
-    if (courseReviews.length > 0) {
-      this.courseDetail.rating = parseFloat(
-        (totalRating / courseReviews.length).toFixed(1)
+    if (Array.isArray(this.reviews)) {
+      const courseReviews = this.reviews.filter(
+        (review) => review.courseId === this.courseDetail.id
       );
-    } else {
-      this.courseDetail.rating = 0; // Nếu không có review, set rating là 0
+
+      if (courseReviews.length > 0) {
+        const totalRating = courseReviews.reduce(
+          (sum, review) => sum + review.rating,
+          0
+        );
+        this.courseDetail.rating = parseFloat(
+          (totalRating / courseReviews.length).toFixed(1)
+        );
+      } else {
+        this.courseDetail.rating = 0;
+      }
     }
   }
+
   combineStudentReviews(
     students: Student[],
     reviews: Review[],
