@@ -26,15 +26,26 @@ exports.getCourseById = async (req, res) => {
   }
 };
 
-
-
 exports.updateCourse = async (req, res) => {
-  const { name, description, instructorId, instructorName, number_of_lessons, number_of_students, certificate, rating, duration, imageUrl, studentsCount, category } = req.body;
+  const {
+    name,
+    description,
+    instructorId,
+    instructorName,
+    number_of_lessons,
+    number_of_students,
+    certificate,
+    rating,
+    duration,
+    imageUrl,
+    studentsCount,
+    category,
+  } = req.body;
 
   try {
     const course = await Course.findByPk(req.params.id);
     if (!course) {
-      return res.status(404).json({ message: 'Khóa học không tồn tại' });
+      return res.status(404).json({ message: "Khóa học không tồn tại" });
     }
 
     course.name = name || course.name;
@@ -54,25 +65,38 @@ exports.updateCourse = async (req, res) => {
 
     res.status(200).json(course);
   } catch (error) {
-    res.status(500).json({ message: 'Lỗi khi cập nhật khóa học', error });
+    res.status(500).json({ message: "Lỗi khi cập nhật khóa học", error });
   }
 };
 exports.deleteCourse = async (req, res) => {
   try {
     const course = await Course.findByPk(req.params.id);
     if (!course) {
-      return res.status(404).json({ message: 'Khóa học không tồn tại' });
+      return res.status(404).json({ message: "Khóa học không tồn tại" });
     }
 
     await course.destroy();
-    res.status(200).json({ message: 'Khóa học đã bị xóa thành công' });
+    res.status(200).json({ message: "Khóa học đã bị xóa thành công" });
   } catch (error) {
-    res.status(500).json({ message: 'Lỗi khi xóa khóa học', error });
+    res.status(500).json({ message: "Lỗi khi xóa khóa học", error });
   }
 };
 
 exports.createCourse = async (req, res) => {
-  const { name, description, instructorId, instructorName, number_of_lessons, number_of_students, certificate, rating, duration, imageUrl, studentsCount, category } = req.body;
+  const {
+    name,
+    description,
+    instructorId,
+    instructorName,
+    number_of_lessons,
+    number_of_students,
+    certificate,
+    rating,
+    duration,
+    imageUrl,
+    studentsCount,
+    category,
+  } = req.body;
   try {
     const newCourse = await Course.create({
       name,
@@ -86,10 +110,10 @@ exports.createCourse = async (req, res) => {
       duration,
       imageUrl,
       studentsCount,
-      category
+      category,
     });
     res.status(201).json(newCourse);
   } catch (error) {
-    res.status(500).json({ message: 'Lỗi khi tạo khóa học', error });
+    res.status(500).json({ message: "Lỗi khi tạo khóa học", error });
   }
 };
