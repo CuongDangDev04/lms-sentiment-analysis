@@ -148,6 +148,37 @@ export class DetailStudentComponent implements OnInit {
     );
     this.visibleComments = [...this.visibleComments, ...nextComments]; // Cập nhật visibleComments
   }
+
+  addComment() {
+    if (!this.isLoggedIn) {
+      this.errorMessage = 'Bạn phải đăng nhập để bình luận';
+      return;
+    }
+
+    if (!this.newComment || this.newComment.trim() === '') {
+      this.errorMessage = 'Vui lòng nhập bình luận';
+      return;
+    }
+
+    const commentData = {
+      id: 100, // ID người dùng
+      courseId: this.courseId,
+      rating: this.rating,
+      comment: this.newComment,
+    };
+
+    this.courseService.addComment(commentData).subscribe(
+      (response) => {
+        console.log('Bình luận thành công:', response);
+        this.newComment = ''; // Reset form
+        this.errorMessage = ''; // Reset error message
+      },
+      (error) => {
+        console.error('Lỗi khi gửi bình luận:', error);
+        this.errorMessage = 'Đã xảy ra lỗi khi thêm bình luận';
+      }
+    );
+  }
   @HostListener('window:scroll', [])
   onWindowScroll() {
     const container = document.querySelector('.container-title');
