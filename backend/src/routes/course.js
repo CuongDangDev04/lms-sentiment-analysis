@@ -6,4 +6,6 @@ router.get("/courses", courseController.getAllCourses);
 
 router.get("/:id", courseController.getCourseById);
 
+router.get("/review/:courseId", courseController.getReviewOfCourse);
+
 module.exports = router;

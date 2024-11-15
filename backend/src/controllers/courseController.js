@@ -1,5 +1,7 @@
+const { QueryTypes } = require("sequelize");
 const Course = require("../models/course");
 const Review = require("../models/review");
+const sequelize = require("../config/db");
 exports.getAllCourses = async (req, res) => {
   try {
     const courses = await Course.findAll();
@@ -23,5 +25,28 @@ exports.getCourseById = async (req, res) => {
     res
       .status(500)
       .json({ message: "Error fetching course", error: error.message });
+  }
+};
+
+exports.getReviewOfCourse = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const review = await sequelize.query(
+      "SELECT * FROM reviews where courseId = $courseId",
+      {
+        bind: { courseId: courseId },
+        type: QueryTypes.SELECT,
+      }
+    );
+    console.log(review);
+    if (!review) {
+      return res.status(404).json({ message: "Review not found" });
+    }
+    res.status(200).json({ review });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Error fetching review", error: error.message });
   }
 };
