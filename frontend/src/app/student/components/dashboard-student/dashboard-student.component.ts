@@ -29,9 +29,7 @@ export class DashboardStudentComponent implements OnInit {
 
   courses: Course[] = [];
 
-  constructor() {
-    this.reviews = this.courseService.getAllReview();
-  }
+  constructor() {}
   getAllCourses(): void {
     this.courseService.getAllCourses().subscribe(
       (courses) => {
@@ -85,6 +83,14 @@ export class DashboardStudentComponent implements OnInit {
     }
   }
   ngOnInit(): void {
+    this.courseService.getAllReview().subscribe(
+      (reviews: Review[]) => {
+        this.reviews = reviews;
+      },
+      (error) => {
+        console.error('Lỗi khi gọi API:', error);
+      }
+    );
     this.getAllCourses();
     this.totalCourses = this.courses.length; // Cập nhật tổng số khóa học
     this.current_courses(); // Khởi tạo lại danh sách khóa học hiển thị
