@@ -13,7 +13,7 @@ import { CourseService } from '../../services/course.service';
   styleUrls: ['./course-student.component.css'],
 })
 export class CourseStudentComponent implements OnInit {
-  courseSevices: CourseService = inject(CourseService);
+  courseService: CourseService = inject(CourseService);
   searchTerm: string = '';
   selectedCategory: string = 'all'; // 'all' để hiển thị tất cả các khóa học theo mặc định
 
@@ -21,20 +21,31 @@ export class CourseStudentComponent implements OnInit {
 
   courses: Course[] = [];
 
-  constructor() {
-    this.reviews = this.courseSevices.getAllReview();
-    this.courses = this.courseSevices.getAllCourse();
-  }
+  constructor() {}
   filteredCourseList: Course[] = [];
 
   // Phân trang
   currentPage: number = 1;
   pageSize: number = 9;
 
+  //Khởi tạo tất cả khóa học
   ngOnInit(): void {
-    this.updateCourseRatings();
-    this.applyFilter(); // Khởi tạo danh sách khóa học sau khi lọc
-    console.log(this.courses);
+    this.getAllCourses(); // Gọi API để lấy dữ liệu khóa học
+  }
+
+  // Khởi tạo tất cả khóa học
+  getAllCourses(): void {
+    this.courseService.getAllCourses().subscribe(
+      (courses) => {
+        this.courses = courses; // Cập nhật courses sau khi lấy được dữ liệu từ API
+        console.log(this.courses); // In ra dữ liệu sau khi đã gán
+        this.updateCourseRatings(); // Cập nhật rating khóa học sau khi có danh sách
+        this.applyFilter(); // Áp dụng bộ lọc nếu có
+      },
+      (error) => {
+        console.error('Có lỗi xảy ra khi lấy dữ liệu khóa học:', error); // Xử lý lỗi nếu có
+      }
+    );
   }
 
   // Phương thức lọc chung

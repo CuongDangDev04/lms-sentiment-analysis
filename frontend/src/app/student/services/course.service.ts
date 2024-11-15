@@ -3,10 +3,15 @@ import { Review } from '../interfaces/review';
 import { Course } from '../interfaces/course';
 import { Student } from '../interfaces/student';
 
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+
 @Injectable({
   providedIn: 'root',
 })
 export class CourseService {
+  constructor(private http: HttpClient) {}
   reviews: Review[] = [
     // Reviews cho khóa học 1
     {
@@ -513,6 +518,7 @@ export class CourseService {
       createdAt: new Date('16/03/2024'),
     },
     //=================================
+<<<<<<< HEAD
     {
       id: 4,
       courseId: 1,
@@ -598,279 +604,45 @@ export class CourseService {
       studentsCount: 25,
       category: 'communication',
     },
+=======
+>>>>>>> Nam
     {
       id: 4,
-      name: 'Quản Lý Dự Án Cơ Bản',
-      description:
-        'Khóa học này sẽ giúp bạn hiểu rõ các nguyên lý cơ bản trong quản lý dự án, từ việc lập kế hoạch đến việc theo dõi và đánh giá hiệu quả công việc. Bạn sẽ học được cách sử dụng các công cụ và phương pháp quản lý dự án để đảm bảo dự án được triển khai thành công.',
-      instructorId: 4,
-      instructorName: 'David Brown',
-      number_of_lessons: 4,
-      number_of_students: 120000,
-      certificate: true,
-      rating: 4,
-      duration: 53,
-      imageUrl: '../../../../assets/student/img/course-3.jpg',
-      studentsCount: 50,
-      category: 'project_management',
+      courseId: 1,
+      rating: 1,
+      comment: 'Nguyễn Đại Nam Đẹp Trai!!',
+      createdAt: new Date('11/11/2024'),
     },
     {
       id: 5,
-      name: 'Thiết Kế UX/UI cho Người Mới',
-      description:
-        'Khóa học cung cấp cho bạn các kiến thức cơ bản về thiết kế UX/UI, từ cách nghiên cứu người dùng đến việc thiết kế giao diện người dùng trực quan. Bạn sẽ học cách tạo ra các sản phẩm thiết kế đáp ứng nhu cầu của người dùng và tối ưu hóa trải nghiệm người dùng.',
-      instructorId: 5,
-      instructorName: 'Emily Davis',
-      number_of_lessons: 4,
-      number_of_students: 120000,
-      certificate: true,
-      rating: 4,
-      duration: 24,
-      imageUrl: '../../../../assets/student/img/course-2.jpg',
-      studentsCount: 60,
-      category: 'design',
+      courseId: 1,
+      rating: 1,
+      comment: 'Nguyễn Đại Nam Đẹp Trai!!',
+      createdAt: new Date('11/11/2024'),
     },
     {
       id: 6,
-      name: 'Marketing Online 101',
-      description:
-        'Khóa học này là bước đầu tiên để bạn hiểu rõ về marketing trực tuyến. Bạn sẽ học các chiến lược marketing cơ bản như SEO, SEM, và sử dụng mạng xã hội để quảng bá sản phẩm, dịch vụ và xây dựng thương hiệu trực tuyến.',
-      instructorId: 6,
-      instructorName: 'Michael Scott',
-      number_of_lessons: 4,
-      number_of_students: 120000,
-      certificate: true,
-      rating: 4,
-      duration: 52,
-      imageUrl: '../../../../assets/student/img/course-1.jpg',
-      studentsCount: 35,
-      category: 'marketing',
+      courseId: 1,
+      rating: 1,
+      comment: 'Nguyễn Đại Nam Đẹp Trai!!',
+      createdAt: new Date('11/11/2024'),
     },
     {
       id: 7,
-      name: 'Quản Lý Thời Gian Hiệu Quả',
-      description:
-        'Khóa học này giúp bạn học cách quản lý thời gian hiệu quả. Bạn sẽ tìm hiểu cách ưu tiên công việc, sắp xếp thời gian hợp lý và đối mặt với áp lực công việc để đạt được kết quả tối ưu trong cuộc sống cá nhân và công việc.',
-      instructorId: 7,
-      instructorName: 'Sarah Lee',
-      number_of_lessons: 4,
-      number_of_students: 120000,
-      certificate: true,
-      rating: 4,
-      duration: 12,
-      imageUrl: '../../../../assets/student/img/course-1.jpg',
-      studentsCount: 40,
-      category: 'personal_development',
+      courseId: 1,
+      rating: 1,
+      comment: 'Nguyễn Đại Nam Đẹp Trai!!',
+      createdAt: new Date('11/11/2024'),
     },
     {
       id: 8,
-      name: 'Kỹ Năng Đàm Phán',
-      description:
-        'Khóa học này giúp bạn hiểu rõ về các kỹ thuật đàm phán, từ việc xây dựng chiến lược đàm phán đến cách ứng xử trong quá trình đàm phán để đạt được kết quả có lợi cho tất cả các bên tham gia.',
-      instructorId: 8,
-      instructorName: 'Chris Martin',
-      number_of_lessons: 4,
-      number_of_students: 120000,
-      certificate: true,
-      rating: 4,
-      duration: 23,
-      imageUrl: '../../../../assets/student/img/course-2.jpg',
-      studentsCount: 55,
-      category: 'communication',
-    },
-    {
-      id: 9,
-      name: 'Phân Tích Dữ Liệu Cơ Bản',
-      description:
-        'Khóa học này cung cấp các kiến thức nền tảng về phân tích dữ liệu, bao gồm các phương pháp thu thập, xử lý và trực quan hóa dữ liệu. Bạn sẽ học cách sử dụng các công cụ và phần mềm phân tích dữ liệu cơ bản để đưa ra các quyết định thông minh trong công việc.',
-      instructorId: 9,
-      instructorName: 'Alex Turner',
-      number_of_lessons: 4,
-      number_of_students: 120000,
-      certificate: true,
-      rating: 4,
-      duration: 12,
-      imageUrl: '../../../../assets/student/img/course-3.jpg',
-      studentsCount: 65,
-      category: 'data_analysis',
-    },
-    {
-      id: 10,
-      name: 'Lập Trình Web với JavaScript',
-      description:
-        'Khóa học này sẽ dạy bạn các kỹ năng lập trình web cơ bản bằng JavaScript. Bạn sẽ học cách xây dựng trang web động, xử lý sự kiện, và tạo ra các tính năng tương tác để người dùng có thể trải nghiệm trên trình duyệt.',
-      instructorId: 10,
-      instructorName: 'Olivia Wang',
-      number_of_lessons: 4,
-      number_of_students: 120000,
-      certificate: true,
-      rating: 4,
-      duration: 14,
-      imageUrl: '../../../../assets/student/img/course-3.jpg',
-      studentsCount: 80,
-      category: 'programming',
-    },
-    {
-      id: 11,
-      name: 'Học Python cho Người Mới',
-      description:
-        'Khóa học này dành cho những người mới bắt đầu học lập trình. Bạn sẽ làm quen với Python, một trong những ngôn ngữ lập trình phổ biến nhất hiện nay. Khóa học sẽ bao gồm các bài học về cú pháp cơ bản, cấu trúc dữ liệu và lập trình hướng đối tượng.',
-      instructorId: 11,
-      instructorName: 'Liam Nguyen',
-      number_of_lessons: 4,
-      number_of_students: 120000,
-      certificate: true,
-      rating: 4,
-      duration: 15,
-      imageUrl: '../../../../assets/student/img/course-2.jpg',
-      studentsCount: 50,
-      category: 'programming',
-    },
-    {
-      id: 12,
-      name: 'Kỹ Năng Giải Quyết Vấn Đề',
-      description:
-        'Khóa học này sẽ trang bị cho bạn các phương pháp và kỹ thuật giải quyết vấn đề một cách hiệu quả. Bạn sẽ học cách xác định vấn đề, phân tích tình huống, và tìm ra các giải pháp tối ưu để ứng dụng vào công việc và cuộc sống.',
-      instructorId: 12,
-      instructorName: 'Sophia Tran',
-      number_of_lessons: 4,
-      number_of_students: 120000,
-      certificate: true,
-      rating: 4,
-      duration: 24,
-      imageUrl: '../../../../assets/student/img/course-1.jpg',
-      studentsCount: 45,
-      category: 'personal_development',
-    },
-    {
-      id: 13,
-      name: 'Thiết Kế Đồ Họa Cơ Bản',
-      description:
-        'Khóa học thiết kế đồ họa này sẽ giúp bạn hiểu các nguyên lý cơ bản của thiết kế, bao gồm cách sử dụng màu sắc, phông chữ và bố cục trong thiết kế đồ họa. Bạn cũng sẽ học cách sử dụng các phần mềm thiết kế phổ biến để tạo ra các sản phẩm đồ họa chất lượng.',
-      instructorId: 13,
-      instructorName: 'Noah Lee',
-      number_of_lessons: 4,
-      number_of_students: 120000,
-      certificate: true,
-      rating: 4,
-      duration: 15,
-      imageUrl: '../../../../assets/student/img/course-1.jpg',
-      studentsCount: 70,
-      category: 'design',
-    },
-    {
-      id: 14,
-      name: 'Phân Tích Tài Chính',
-      description:
-        'Khóa học này sẽ cung cấp các kiến thức cơ bản về phân tích tài chính, bao gồm cách đọc báo cáo tài chính, phân tích chỉ số tài chính và đánh giá hiệu quả tài chính của một doanh nghiệp. Bạn sẽ học cách sử dụng các công cụ và phương pháp tài chính để ra quyết định đầu tư và quản lý tài chính.',
-      instructorId: 14,
-      instructorName: 'Emma Kim',
-      number_of_lessons: 4,
-      number_of_students: 120000,
-      certificate: true,
-      rating: 4,
-      duration: 23,
-      imageUrl: '../../../../assets/student/img/course-2.jpg',
-      studentsCount: 55,
-      category: 'finance',
-    },
-    {
-      id: 15,
-      name: 'Thành Công trong Bán Hàng',
-      description:
-        'Khóa học này giúp bạn nâng cao kỹ năng bán hàng, bao gồm việc xây dựng mối quan hệ với khách hàng, thuyết phục khách hàng và chốt đơn thành công. Bạn sẽ học các chiến lược bán hàng từ cơ bản đến nâng cao để đạt được hiệu quả tối ưu.',
-      instructorId: 15,
-      instructorName: 'Ethan Park',
-      number_of_lessons: 4,
-      number_of_students: 120000,
-      certificate: true,
-      rating: 4,
-      duration: 24,
-      imageUrl: '../../../../assets/student/img/course-3.jpg',
-      studentsCount: 60,
-      category: 'sales',
-    },
-    {
-      id: 16,
-      name: 'Kỹ Năng Giao Tiếp Căn Bản',
-      description:
-        'Khóa học này dành cho những ai muốn cải thiện kỹ năng giao tiếp cơ bản. Bạn sẽ học cách tạo dựng mối quan hệ, giao tiếp hiệu quả trong môi trường công việc và cuộc sống, từ cách bắt chuyện đến cách duy trì các cuộc trò chuyện mạch lạc và tự tin.',
-      instructorId: 1,
-      instructorName: 'John Doe',
-      number_of_lessons: 4,
-      number_of_students: 120000,
-      certificate: true,
-      rating: 4,
-      duration: 14,
-      imageUrl: '../../../../assets/student/img/course-1.jpg',
-      studentsCount: 30,
-      category: 'communication',
-    },
-    {
-      id: 17,
-      name: 'Kỹ Năng Thuyết Trình Hiệu Quả',
-      description:
-        'Khóa học thuyết trình này giúp bạn nắm vững các kỹ thuật thuyết trình chuyên nghiệp. Bạn sẽ học cách xây dựng bài thuyết trình hấp dẫn, sử dụng ngôn ngữ cơ thể để tạo ấn tượng mạnh mẽ và làm chủ sân khấu dù ở bất kỳ hoàn cảnh nào.',
-      instructorId: 2,
-      instructorName: 'Jane Smith',
-      number_of_lessons: 4,
-      number_of_students: 120000,
-      certificate: true,
-      rating: 4,
-      duration: 24,
-      imageUrl: '../../../../assets/student/img/course-2.jpg',
-      studentsCount: 45,
-      category: 'presentation',
-    },
-    {
-      id: 18,
-      name: 'Kỹ Năng Giao Tiếp Nâng Cao',
-      description:
-        'Khóa học này phù hợp cho những người đã có nền tảng giao tiếp và muốn phát triển kỹ năng giao tiếp nâng cao. Bạn sẽ học cách giao tiếp trong các tình huống phức tạp, giải quyết xung đột và thuyết phục người khác một cách hiệu quả.',
-      instructorId: 3,
-      instructorName: 'Alice Johnson',
-      number_of_lessons: 4,
-      number_of_students: 120000,
-      certificate: true,
-      rating: 4,
-      duration: 34,
-      imageUrl: '../../../../assets/student/img/course-3.jpg',
-      studentsCount: 25,
-      category: 'communication',
-    },
-    {
-      id: 19,
-      name: 'Quản Lý Dự Án Cơ Bản',
-      description:
-        'Khóa học này sẽ giúp bạn hiểu rõ các nguyên lý cơ bản trong quản lý dự án, từ việc lập kế hoạch đến việc theo dõi và đánh giá hiệu quả công việc. Bạn sẽ học được cách sử dụng các công cụ và phương pháp quản lý dự án để đảm bảo dự án được triển khai thành công.',
-      instructorId: 4,
-      instructorName: 'David Brown',
-      number_of_lessons: 4,
-      number_of_students: 120000,
-      certificate: true,
-      rating: 4,
-      duration: 23,
-      imageUrl: '../../../../assets/student/img/course-3.jpg',
-      studentsCount: 50,
-      category: 'project_management',
-    },
-    {
-      id: 20,
-      name: 'Thiết Kế UX/UI cho Người Mới',
-      description:
-        'Khóa học cung cấp cho bạn các kiến thức cơ bản về thiết kế UX/UI, từ cách nghiên cứu người dùng đến việc thiết kế giao diện người dùng trực quan. Bạn sẽ học cách tạo ra các sản phẩm thiết kế đáp ứng nhu cầu của người dùng và tối ưu hóa trải nghiệm người dùng.',
-      instructorId: 5,
-      instructorName: 'Emily Davis',
-      number_of_lessons: 4,
-      number_of_students: 120000,
-      certificate: true,
-      rating: 4,
-      duration: 12,
-      imageUrl: '../../../../assets/student/img/course-2.jpg',
-      studentsCount: 60,
-      category: 'design',
+      courseId: 1,
+      rating: 1,
+      comment: 'Nguyễn Đại Nam Đẹp Trai!!',
+      createdAt: new Date('11/11/2024'),
     },
   ];
+<<<<<<< HEAD
   students: Student[] = [
     {
       id: 1,
@@ -1213,6 +985,10 @@ export class CourseService {
   }
   getStudentById(id: number): Student[] | undefined {
     return this.students.filter((comment) => comment.id === id);
+=======
+  addReview(newReview: any) {
+    this.reviews.push(newReview);
+>>>>>>> Nam
   }
   getAllReview(): Review[] {
     return this.reviews;
@@ -1220,15 +996,11 @@ export class CourseService {
   getReviewById(id: number): Review[] | undefined {
     return this.reviews.filter((review) => review.courseId === id);
   }
-  getAllCourse(): Course[] {
-    return this.courses;
+  getAllCourses(): Observable<Course[]> {
+    return this.http.get<Course[]>('http://localhost:5000/api/course/courses');
   }
-  getCourseById(id: number): Course | undefined {
-    const course = this.courses.find((course) => course.id === id);
-    if (!course) {
-      console.log(`No course found with id: ${id}`);
-    }
-    return course;
+
+  getCourseById(id: number): Observable<Course> {
+    return this.http.get<Course>(`${'http://localhost:5000/api/course'}/${id}`);
   }
-  constructor() {}
 }

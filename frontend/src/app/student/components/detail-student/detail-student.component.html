@@ -400,16 +400,20 @@
             placeholder="Nhập bình luận của bạn..."
             rows="4"
             class="comment-input"
+            [(ngModel)]="newComment"
           ></textarea>
-          <button id="submitComment" class="btn btn-primary">
+          <button
+            id="submitComment"
+            class="btn btn-primary"
+            (click)="addComment()"
+          >
             Gửi bình luận
           </button>
         </div>
       </div>
       <h2>Bình luận của học viên</h2>
 
-      <!-- Bình luận hiện tại -->
-      <!-- <div class="comment" *ngFor="let student of visibleComments">
+      <div class="comment" *ngFor="let student of visibleComments">
         <div class="comment-header">
           <img [src]="student.avt" alt="Avatar" class="avatar" />
           <strong>{{ student.name }}</strong>
@@ -417,16 +421,17 @@
         <div *ngFor="let review of student.reviews">
           <p>{{ review.comment }}</p>
         </div>
-      </div> -->
+      </div>
 
       <!-- Nút xem thêm nếu còn bình luận để load -->
-      <!-- <button
+      <button
         *ngIf="visibleComments.length < comments.length"
         (click)="loadMoreComments()"
         class="btn btn-secondary"
       >
         Xem thêm
-      </button> -->
+
+      </button>
     </div>
   </div>
 </div>

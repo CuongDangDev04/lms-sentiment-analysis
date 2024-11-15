@@ -18,7 +18,7 @@ import { CourseService } from '../../services/course.service';
   styleUrl: './dashboard-student.component.css',
 })
 export class DashboardStudentComponent implements OnInit {
-  courseServices: CourseService = inject(CourseService);
+  courseService: CourseService = inject(CourseService);
   progressCurrent: number = 100; // Số giờ hoàn thành
   progressTotal: number = 173; // Tổng số giờ
   progressPercentage: number = 0; // Tỷ lệ phần trăm
@@ -30,8 +30,17 @@ export class DashboardStudentComponent implements OnInit {
   courses: Course[] = [];
 
   constructor() {
-    this.reviews = this.courseServices.getAllReview();
-    this.courses = this.courseServices.getAllCourse();
+    this.reviews = this.courseService.getAllReview();
+  }
+  getAllCourses(): void {
+    this.courseService.getAllCourses().subscribe(
+      (courses) => {
+        this.courses = courses; // Gán dữ liệu nhận được vào mảng courses
+      },
+      (error) => {
+        console.error('There was an error!', error); // Xử lý lỗi nếu có
+      }
+    );
   }
   totalCourses: number = this.courses.length; // Tổng số khóa học
   index = 0;
@@ -76,7 +85,7 @@ export class DashboardStudentComponent implements OnInit {
     }
   }
   ngOnInit(): void {
-    this.courses = this.courseServices.getAllCourse(); // Đảm bảo courses được nạp lại
+    this.getAllCourses();
     this.totalCourses = this.courses.length; // Cập nhật tổng số khóa học
     this.current_courses(); // Khởi tạo lại danh sách khóa học hiển thị
     this.circumference = 2 * Math.PI * this.radius;
