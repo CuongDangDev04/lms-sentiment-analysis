@@ -102,3 +102,30 @@ exports.login = async (req, res) => {
     res.status(500).json({ error: "Login failed!" });
   }
 };
+exports.getUser = async (req, res) => {
+  try {
+    // Lấy thông tin người dùng từ req.userId (được xác thực từ middleware)
+    const user = await User.findOne({
+      where: { id: req.userId },
+      attributes: ['id', 'username', 'fullname', 'role', 'email'],
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+
+    // Trả về thông tin người dùng
+    res.status(200).json({
+      user: {
+        id: user.id,
+        username: user.username,
+        fullname: user.fullname,
+        role: user.role,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    console.error("Get user error:", error);
+    res.status(500).json({ error: "Failed to get user information!" });
+  }
+};

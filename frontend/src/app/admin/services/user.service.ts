@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../interfaces/User';  // Import interface User
+import { NewUser } from '../interfaces/NewUser';
 
 @Injectable({
   providedIn: 'root'
@@ -35,15 +36,21 @@ export class UserService {
   }
 
   // Tạo mới học sinh
-  createStudent(student: User): Observable<User> {
+  // createStudent(student: User): Observable<User> {
+  //   return this.http.post<User>(this.studentUrl, student);
+  // }
+
+  // // Tạo mới giảng viên
+  // createInstructor(instructor: User): Observable<User> {
+  //   return this.http.post<User>(this.instructorUrl, instructor);
+  // }
+  createStudent(student: NewUser): Observable<User> {
     return this.http.post<User>(this.studentUrl, student);
   }
 
-  // Tạo mới giảng viên
-  createInstructor(instructor: User): Observable<User> {
+  createInstructor(instructor: NewUser): Observable<User> {
     return this.http.post<User>(this.instructorUrl, instructor);
   }
-
   // Cập nhật học sinh
   updateStudent(id: number, student: User): Observable<User> {
     return this.http.put<User>(`${this.studentUrl}/${id}`, student);
