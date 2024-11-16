@@ -1,0 +1,66 @@
+// src/app/services/user.service.ts
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { User } from '../interfaces/User';  // Import interface User
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+  // URL gốc của API cho student và instructor
+  private studentUrl = 'http://localhost:5000/api/student';
+  private instructorUrl = 'http://localhost:5000/api/instructor';
+
+  constructor(private http: HttpClient) {}
+
+  // Lấy tất cả học sinh
+  getAllStudents(): Observable<User[]> {
+    return this.http.get<User[]>(this.studentUrl);
+  }
+
+  // Lấy tất cả giảng viên
+  getAllInstructors(): Observable<User[]> {
+    return this.http.get<User[]>(this.instructorUrl);
+  }
+
+  // Lấy học sinh theo ID
+  getStudentById(id: number): Observable<User> {
+    return this.http.get<User>(`${this.studentUrl}/${id}`);
+  }
+
+  // Lấy giảng viên theo ID
+  getInstructorById(id: number): Observable<User> {
+    return this.http.get<User>(`${this.instructorUrl}/${id}`);
+  }
+
+  // Tạo mới học sinh
+  createStudent(student: User): Observable<User> {
+    return this.http.post<User>(this.studentUrl, student);
+  }
+
+  // Tạo mới giảng viên
+  createInstructor(instructor: User): Observable<User> {
+    return this.http.post<User>(this.instructorUrl, instructor);
+  }
+
+  // Cập nhật học sinh
+  updateStudent(id: number, student: User): Observable<User> {
+    return this.http.put<User>(`${this.studentUrl}/${id}`, student);
+  }
+
+  // Cập nhật giảng viên
+  updateInstructor(id: number, instructor: User): Observable<User> {
+    return this.http.put<User>(`${this.instructorUrl}/${id}`, instructor);
+  }
+
+  // Xóa học sinh
+  deleteStudent(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.studentUrl}/${id}`);
+  }
+
+  // Xóa giảng viên
+  deleteInstructor(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.instructorUrl}/${id}`);
+  }
+}

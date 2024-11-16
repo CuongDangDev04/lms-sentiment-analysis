@@ -5,6 +5,7 @@ const sequelize = require("./config/db"); // Kết nối với cơ sở dữ li�
 const authRoutes = require("./routes/auth"); // Routes cho đăng ký và đăng nhập
 const  studentRoutes = require('./routes/student');
 const courseRoutes = require('./routes/course')
+const instructorRoutes = require("./routes/intructor");
 const app = express();
 
 // Middleware
@@ -13,6 +14,7 @@ app.use(bodyParser.json());
 app.use("/api/auth", authRoutes); // Đường dẫn cho auth
 app.use("/api/student", studentRoutes);
 app.use("/api/course", courseRoutes);
+app.use("/api/instructor", instructorRoutes);
 const PORT = process.env.PORT || 5000;
 
 // Kết nối với cơ sở dữ liệu và khởi động server

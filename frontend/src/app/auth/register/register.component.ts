@@ -19,6 +19,7 @@ export class RegisterComponent {
   password: string = '';
   confirmPassword: string = '';
   role: string = ''; // Thêm biến role để lưu vai trò
+  email: string = ''; // Thêm biến email
   errorMessage: string = ''; // Biến chứa thông báo lỗi
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -36,12 +37,19 @@ export class RegisterComponent {
       return;
     }
 
+    // Kiểm tra nếu email chưa được nhập
+    if (!this.email) {
+      this.errorMessage = 'Vui lòng nhập email!';
+      return;
+    }
+
     const body = {
       id: this.id,
       username: this.username,
       fullname: this.fullname,
       password: this.password,
       role: this.role, // Gửi vai trò đã chọn lên server
+      email: this.email, // Gửi email lên server
     };
 
     this.http.post('http://localhost:5000/api/auth/register', body).subscribe(
