@@ -3,7 +3,7 @@ import { Component, HostListener, NgModule, OnInit } from '@angular/core';
 import { CourseService } from '../../services/course.service';
 import { ActivatedRoute } from '@angular/router';
 import { Course } from '../../interfaces/course';
-import { count, firstValueFrom } from 'rxjs';
+import { count, firstValueFrom, forkJoin } from 'rxjs';
 import { Review } from '../../interfaces/review';
 import { Student } from '../../interfaces/student';
 import { AuthService } from '../../../auth/auth.service';
@@ -37,7 +37,9 @@ export class DetailStudentComponent implements OnInit {
     private courseService: CourseService,
     private authService: AuthService,
     private studentService: StudentService
-  ) {}
+  ) {
+    this.isLoggedIn = authService.isLoggedIn();
+  }
 
   showStickyBox = false;
   isMenuFixed = false;
@@ -47,30 +49,19 @@ export class DetailStudentComponent implements OnInit {
       this.courseId = params.get('id');
     });
 
-    this.courseService.getCourseById(Number(this.courseId)).subscribe(
-      (courseDetail: Course) => {
+    forkJoin({
+      courseDetail: this.courseService.getCourseById(Number(this.courseId)),
+      reviews: this.courseService.getReviewOfCourse(Number(this.courseId)),
+      students: this.studentService.getAllStudents(),
+    }).subscribe(
+      ({ courseDetail, reviews, students }) => {
         this.courseDetail = courseDetail;
-      },
-      (error) => {
-        console.error('Lỗi khi gọi API:', error);
-      }
-    );
-    console.log(this.courseDetail);
-    this.courseService.getReviewOfCourse(Number(this.courseId)).subscribe(
-      (reviews: Review[]) => {
         this.reviews = reviews;
+        this.studentComment = students;
         this.updateCourseRatings();
         this.totalComment = this.reviews.length;
-        this.studentService.getAllStudents().subscribe(
-          (students: Student[]) => {
-            this.studentComment = students; // Lưu dữ liệu sinh viên vào studentComment
-            console.log(this.studentComment);
-            this.loadComments(); // Sau khi nhận được dữ liệu sinh viên, load comments
-          },
-          (error) => {
-            console.error('Error fetching students:', error);
-          }
-        );
+        console.log(this.studentComment);
+        this.loadComments(); // Chỉ gọi loadComments sau khi tất cả dữ liệu đã được tải xong
       },
       (error) => {
         console.error('Lỗi khi gọi API:', error);
@@ -170,6 +161,7 @@ export class DetailStudentComponent implements OnInit {
     this.courseService.addComment(commentData).subscribe(
       (response) => {
         console.log('Bình luận thành công:', response);
+
         this.newComment = ''; // Reset form
         this.errorMessage = ''; // Reset error message
       },
@@ -178,6 +170,7 @@ export class DetailStudentComponent implements OnInit {
         this.errorMessage = 'Đã xảy ra lỗi khi thêm bình luận';
       }
     );
+    window.location.reload();
   }
   @HostListener('window:scroll', [])
   onWindowScroll() {
