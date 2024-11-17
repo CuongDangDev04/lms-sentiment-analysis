@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 const User = require("./user");  // Sử dụng User thay vì Instructor
+const Category = require("./category");
 
 const Course = sequelize.define(
   "course",
@@ -62,9 +63,14 @@ const Course = sequelize.define(
       type: DataTypes.STRING, // Đường dẫn đến hình ảnh
       allowNull: true,
     },
-    category: { // id khóa ngoại, tạo thêm table category
-      type: DataTypes.STRING,
+    categoryId: {
+      type: DataTypes.INTEGER,  // Sử dụng kiểu INTEGER cho categoryId
       allowNull: false,
+      references: {
+        model: Category, // Model mà khóa ngoại trỏ đến
+        key: "id", // Trường khóa chính trong bảng Category
+      },
+      onDelete: "CASCADE", // Khi category bị xóa, các khóa học liên quan cũng sẽ bị xóa
     },
   },
   {
@@ -85,5 +91,7 @@ Course.belongsTo(User, {
   foreignKey: "instructorId",
   as: "instructor",
 });
-
+Course.belongsTo(Category, {
+  foreignKey: "categoryId", // Trường khóa ngoại trong Course
+});
 module.exports = Course;
