@@ -15,6 +15,10 @@
       <input id="fullname" type="text" [(ngModel)]="newUser.fullname" name="fullname" required />
     </div>
     <div class="form-group">
+      <label for="id">Mã số Sinh Viên/Giảng Viên</label>
+      <input id="id" type="id" [(ngModel)]="newUser.id" name="id" required />
+    </div>
+    <div class="form-group">
       <label for="email">Email</label>
       <input id="email" type="email" [(ngModel)]="newUser.email" name="email" required />
     </div>
@@ -57,7 +61,7 @@
 
     <div class="form-group">
       <label for="userName">Username</label>
-      <input id="userName" type="text" [(ngModel)]="newUser.username" name="userName" required />
+      <input id="userName" type="text" [(ngModel)]="newUser.username" name="userName" disabled />
     </div>
     <div class="form-group">
       <label for="name">Tên Người Dùng</label>
@@ -68,7 +72,17 @@
       <label for="userEmail">Email</label>
       <input id="userEmail" type="email" [(ngModel)]="newUser.email" name="email" required />
     </div>
-
+ 
+  
+    <div class="form-group">
+      <label for="birthdate">Ngày Sinh</label>
+      <input id="birthdate" type="date" [(ngModel)]="newUser.birthdate" name="birthdate" />
+    </div>
+  
+    <div class="form-group">
+      <label for="phone">Số Điện Thoại</label>
+      <input id="phone" type="text" [(ngModel)]="newUser.phone" name="phone" />
+    </div>
     <button type="submit" class="btn-save">{{ isEditing ? 'Cập Nhật Người Dùng' : '' }}</button>
     <button type="button" class="btn-reset" (click)="resetForm()">Đặt Lại</button>
   </form>

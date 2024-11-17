@@ -4,7 +4,7 @@ const User = require("./user");  // Sử dụng User thay vì Instructor
 const Category = require("./category");
 
 const Course = sequelize.define(
-  "course",
+  "Course", // Tên model phải là "Course" (viết hoa)
   {
     id: {
       type: DataTypes.INTEGER,
@@ -81,7 +81,7 @@ const Course = sequelize.define(
 // Thiết lập quan hệ
 User.hasMany(Course, {
   foreignKey: "instructorId",
-  as: "courses",
+  as: "courses", // Alias "courses" cho quan hệ từ User đến Course
   scope: {
     role: 'instructor',  // Điều kiện role phải là 'instructor'
   },
@@ -89,9 +89,13 @@ User.hasMany(Course, {
 
 Course.belongsTo(User, {
   foreignKey: "instructorId",
-  as: "instructor",
+  as: "instructor", // Alias "instructor" cho quan hệ từ Course đến User
 });
+
+// Cập nhật alias cho mối quan hệ Course - Category
 Course.belongsTo(Category, {
   foreignKey: "categoryId", // Trường khóa ngoại trong Course
+  as: "category", // Alias "category" cho quan hệ từ Course đến Category
 });
+
 module.exports = Course;
