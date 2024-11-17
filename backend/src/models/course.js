@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
-const Instructor = require(".//instructor")
+const User = require("./user");  // Sử dụng User thay vì Instructor
+
 const Course = sequelize.define(
   "course",
   {
@@ -22,44 +23,46 @@ const Course = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: Instructor, // Liên kết với bảng Instructor
+        model: User, // Liên kết với bảng User thay vì Instructor
         key: "id",
       },
-      onDelete: "CASCADE", // Xóa Course nếu Instructor bị xóa
-    },
-    instructorName: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      onDelete: "CASCADE", // Xóa Course nếu User bị xóa
+      validate: {
+        isInstructor(value) {
+          // Kiểm tra role của User là 'instructor'
+          if (value) {
+            User.findOne({ where: { id: value, role: 'instructor' } })
+              .then(user => {
+                if (!user) {
+                  throw new Error("User must have role 'instructor'");
+                }
+              })
+              .catch(err => { throw err; });
+          }
+        },
+      },
     },
     number_of_lessons: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     number_of_students: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    certificate: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
+      allowNull: true,
     },
     rating: {
       type: DataTypes.FLOAT, // Dùng FLOAT cho điểm đánh giá
       allowNull: true,
     },
-    duration: {
-      type: DataTypes.INTEGER, // Thời gian khóa học, có thể tính bằng giờ hoặc ngày
-      allowNull: false,
+    duration: {   //tính theo giờ
+      type: DataTypes.INTEGER, // Thời gian khóa học tính theo giờ 
+      allowNull: true,
     },
     imageUrl: {
       type: DataTypes.STRING, // Đường dẫn đến hình ảnh
       allowNull: true,
     },
-    studentsCount: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    category: {
+    category: { // id khóa ngoại, tạo thêm table category
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -68,14 +71,19 @@ const Course = sequelize.define(
     timestamps: true, // Sequelize tự động thêm createdAt và updatedAt
   }
 );
+
 // Thiết lập quan hệ
-Instructor.hasMany(Course, {
+User.hasMany(Course, {
   foreignKey: "instructorId",
   as: "courses",
+  scope: {
+    role: 'instructor',  // Điều kiện role phải là 'instructor'
+  },
 });
 
-Course.belongsTo(Instructor, {
+Course.belongsTo(User, {
   foreignKey: "instructorId",
   as: "instructor",
 });
+
 module.exports = Course;

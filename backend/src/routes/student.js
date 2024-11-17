@@ -14,5 +14,5 @@ router.delete("/:id", studentController.deleteStudent);
 // Endpoint để tạo mới Student
 router.post("/", studentController.createStudent);
 
-router.put("/:id" , studentController.editStudent);
+router.put("/:id" , studentController.updateStudent);
 module.exports = router;

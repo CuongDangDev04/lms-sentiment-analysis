@@ -1,176 +1,123 @@
-const Instructor = require("../models/instructor");
-const User = require("../models/user");
-const { register } = require("../controllers/authController");
+const bcrypt = require('bcrypt');
+const User = require('../models/user');
 
-// Tạo mới tài khoản instructor
+// Tạo Instructor mới
 exports.createInstructor = async (req, res) => {
-  const { username, password, fullname, email, id } = req.body;
-  // Kiểm tra nếu các trường bắt buộc chưa có
-  if (!username || !password || !fullname || !email || !id) {
-    
-    console.log(req.body)
-  
-    return res.status(400).json({ message: "All fields are required!" });
-  }
+  const { id, username, password, fullname, email, avt, birthdate, phone } = req.body;
 
   try {
-    req.body.role = "instructor"; // Đặt vai trò là 'instructor'
-    const registrationResult = await register(req, res); // Gọi phương thức register để tạo tài khoản người dùng
-
-    if (registrationResult.status !== 201) {
-      return res.status(500).json({ message: "Failed to register user!" });
+    // Kiểm tra nếu người dùng đã tồn tại
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already in use.' });
     }
 
-    const userId = registrationResult.user.id;
+    // Mã hóa mật khẩu
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Tạo thông tin instructor trong cơ sở dữ liệu
-    const instructor = await Instructor.create({
-      name: fullname,
-      userId,
-      avt: req.body.avt || null, // Ảnh đại diện có thể để trống
+    // Tạo người dùng mới với role là 'instructor'
+    const newUser = await User.create({
+      id,
+      username,
+      password: hashedPassword,
+      fullname,
+      email,
+      avt,
+      birthdate,
+      phone,
+      role: 'instructor', // Role là instructor
     });
 
-    res.status(201).json({
-      message: "Instructor created successfully!",
-      instructor,
-      role: registrationResult.user.role,
-    });
+    res.status(201).json({ message: 'Instructor created successfully', user: newUser });
   } catch (error) {
-    console.error("Error creating instructor:", error);
-    res.status(500).json({ error: "Failed to create instructor!" });
+    console.error('Create instructor error:', error);
+    res.status(500).json({ message: 'Failed to create instructor!' });
   }
 };
 
-// Lấy danh sách tất cả instructor
+// Lấy danh sách tất cả Instructor
 exports.getAllInstructors = async (req, res) => {
   try {
-    const instructors = await Instructor.findAll({
-      include: {
-        model: User,
-        as: "user",
-        attributes: ["id", "username", "email", "role"], // Bao gồm 'role'
-      },
+    const instructors = await User.findAll({
+      where: { role: 'instructor' },
     });
 
-    res.status(200).json(instructors);
+    res.status(200).json({ instructors });
   } catch (error) {
-    console.error("Error fetching instructors:", error);
-    res.status(500).json({ error: "Failed to retrieve instructors!" });
+    console.error('Get all instructors error:', error);
+    res.status(500).json({ error: 'Failed to get instructor information!' });
   }
 };
 
-// Lấy chi tiết một instructor theo ID
+// Lấy thông tin Instructor theo ID
 exports.getInstructorById = async (req, res) => {
-  try {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    const instructor = await Instructor.findByPk(id, {
-      include: {
-        model: User,
-        as: "user",
-        attributes: ["id", "username", "email", "role"], // Bao gồm 'role'
-      },
+  try {
+    const instructor = await User.findOne({
+      where: { id, role: 'instructor' },
     });
 
     if (!instructor) {
-      return res.status(404).json({ message: "Instructor not found" });
+      return res.status(404).json({ message: 'Instructor not found!' });
     }
 
-    res.status(200).json(instructor);
+    res.status(200).json({ instructor });
   } catch (error) {
-    console.error("Error fetching instructor:", error);
-    res.status(500).json({ error: "Failed to retrieve instructor!" });
+    console.error('Get instructor by ID error:', error);
+    res.status(500).json({ error: 'Failed to get instructor information!' });
   }
 };
 
-// Xóa một instructor theo ID
+// Cập nhật thông tin Instructor
+exports.updateInstructor = async (req, res) => {
+  const { fullname, email, avt, birthdate, phone } = req.body;
+
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: 'Invalid instructor ID' });
+    }
+
+    const user = await User.findOne({ where: { id, role: 'instructor' } });
+    if (!user) {
+      return res.status(404).json({ message: 'Instructor not found' });
+    }
+
+    user.fullname = fullname || user.fullname;
+    user.email = email || user.email;
+    user.avt = avt || user.avt;
+    user.birthdate = birthdate || user.birthdate;
+    user.phone = phone || user.phone;
+
+    await user.save();
+
+    res.status(200).json({ message: 'Instructor updated successfully', user });
+  } catch (error) {
+    console.error('Update instructor error:', error.message);
+    res.status(500).json({ message: 'Failed to update instructor information!' });
+  }
+};
+
+// Xóa Instructor
 exports.deleteInstructor = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = parseInt(req.params.id, 10);
 
-    const instructor = await Instructor.findByPk(id, {
-      include: {
-        model: User,
-        as: "user",
-        attributes: ["role"], // Bao gồm 'role' để kiểm tra
-      },
-    });
-
-    if (!instructor) {
-      return res.status(404).json({ message: "Instructor not found" });
+    if (isNaN(id)) {
+      return res.status(400).json({ message: 'Invalid instructor ID' });
     }
 
-    // Kiểm tra role trước khi xóa
-    if (instructor.user.role !== "instructor") {
-      return res.status(403).json({ message: "Only instructors can be deleted!" });
+    const user = await User.findOne({ where: { id, role: 'instructor' } });
+    if (!user) {
+      return res.status(404).json({ message: 'Instructor not found' });
     }
 
-    await instructor.destroy();
+    await user.destroy();
 
-    res.status(200).json({ message: "Instructor deleted successfully!" });
+    res.status(200).json({ message: 'Instructor deleted successfully' });
   } catch (error) {
-    console.error("Error deleting instructor:", error);
-    res.status(500).json({ error: "Failed to delete instructor!" });
-  }
-};
-
-// Chỉnh sửa thông tin instructor
-exports.editInstructor = async (req, res) => {
-  const { id } = req.params;
-  const { user, name } = req.body;
-
-  const username = user?.username;
-  const email = user?.email;
-  const fullname = name;
-
-  if (!username && !email && !fullname) {
-    return res.status(400).json({
-      message: "At least one field is required to update!",
-      fieldsExpected: ["username", "email", "fullname"],
-    });
-  }
-
-  try {
-    const instructor = await Instructor.findByPk(id, {
-      include: {
-        model: User,
-        as: "user",
-        attributes: ["id", "username", "email", "role"], // Bao gồm 'role'
-      },
-    });
-
-    if (!instructor) {
-      return res.status(404).json({ message: "Instructor not found" });
-    }
-
-    const userToUpdate = instructor.user;
-
-    if (username) userToUpdate.username = username;
-    if (email) userToUpdate.email = email;
-
-    if (fullname) {
-      instructor.name = fullname; // Cập nhật Instructor.name
-      userToUpdate.fullname = fullname; // Đồng bộ fullname với User.fullname
-    }
-
-    await userToUpdate.save();
-    await instructor.save();
-
-    res.status(200).json({
-      message: "Instructor updated successfully!",
-      instructor: {
-        id: instructor.id,
-        name: instructor.name,
-        role: userToUpdate.role, // Bao gồm 'role'
-        user: {
-          username: userToUpdate.username,
-          email: userToUpdate.email,
-          fullname: userToUpdate.fullname,
-        },
-      },
-    });
-  } catch (error) {
-    console.error("Error updating instructor:", error);
-    res.status(500).json({ error: "Failed to update instructor!" });
+    console.error('Delete instructor error:', error.message);
+    res.status(500).json({ message: 'Failed to delete instructor!' });
   }
 };

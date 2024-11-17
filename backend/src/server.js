@@ -12,9 +12,10 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use("/api/auth", authRoutes); // Đường dẫn cho auth
-app.use("/api/student", studentRoutes);
-app.use("/api/course", courseRoutes);
 app.use("/api/instructor", instructorRoutes);
+// app.use("/api/course", courseRoutes);
+
+app.use("/api/student", studentRoutes);
 const PORT = process.env.PORT || 5000;
 
 // Kết nối với cơ sở dữ liệu và khởi động server

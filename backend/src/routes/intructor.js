@@ -12,6 +12,6 @@ router.get("/:id", instructorController.getInstructorById);
 router.delete("/:id", instructorController.deleteInstructor);
 
 router.post("/", instructorController.createInstructor);
-router.put("/:id", instructorController.editInstructor);
+router.put("/:id", instructorController.updateInstructor);
 
 module.exports = router;

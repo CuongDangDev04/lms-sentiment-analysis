@@ -22,7 +22,7 @@ const User = sequelize.define('User', {
         allowNull: false,
     },
     role: {
-        type: DataTypes.ENUM('admin', 'instructor', 'student'), // Vai trò người dùng
+        type: DataTypes.ENUM('admin', 'instructor', 'student'),
         allowNull: false,
     },
     email: {
@@ -32,7 +32,21 @@ const User = sequelize.define('User', {
         validate: {
             isEmail: true, // Kiểm tra định dạng email hợp lệ
         }
+    },
+    avt: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+
+    birthdate: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
+    phone: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
+
 });
 
 module.exports = User;

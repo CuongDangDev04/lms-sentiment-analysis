@@ -1,32 +1,32 @@
 const User = require("../models/user");
-const Student = require("../models/student");
-const Instructor = require("../models/instructor");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 exports.register = async (req, res) => {
   const { id, username, password, fullname, role, email } = req.body;
 
+  // Kiểm tra dữ liệu đầu vào
   if (!id || !username || !password || !fullname || !role || !email) {
     return res.status(400).json({ message: "All fields are required!" });
   }
 
-  // Kiểm tra xem email đã tồn tại chưa
-  const existingUser = await User.findOne({ where: { email } });
-  if (existingUser) {
-    return res.status(400).json({ message: "Email already exists!" });
-  }
-
-  // Kiểm tra xem username đã tồn tại chưa
-  const existingUsername = await User.findOne({ where: { username } });
-  if (existingUsername) {
-    return res.status(400).json({ message: "Username already exists!" });
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
   try {
-    // Tạo người dùng
+    // Kiểm tra xem email đã tồn tại chưa
+    const existingUserByEmail = await User.findOne({ where: { email } });
+    if (existingUserByEmail) {
+      return res.status(400).json({ message: "Email already exists!" });
+    }
+
+    // Kiểm tra xem username đã tồn tại chưa
+    const existingUserByUsername = await User.findOne({ where: { username } });
+    if (existingUserByUsername) {
+      return res.status(400).json({ message: "Username already exists!" });
+    }
+
+    // Mã hóa mật khẩu
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Tạo người dùng mới
     const user = await User.create({
       id,
       username,
@@ -36,41 +36,22 @@ exports.register = async (req, res) => {
       email,
     });
 
-    // Tạo bản ghi Student nếu vai trò là student
-    if (role === 'student') {
-      await Student.create({
-        userId: user.id,
-        name: fullname, 
-        avt: "", // Hoặc trường hợp không có ảnh đại diện, có thể để trống
-      });
-    }
-
-    // Tạo bản ghi Instructor nếu vai trò là instructor
-    if (role === 'instructor') {
-      await Instructor.create({
-        userId: user.id,
-        name: fullname,
-        avt: "", // Hoặc trường hợp không có ảnh đại diện, có thể để trống
-      });
-    }
-
     res.status(201).json({ message: "User created successfully!", user });
   } catch (error) {
     console.error("Registration error:", error);
     res.status(500).json({ error: "User registration failed!" });
   }
 };
-
-
 exports.login = async (req, res) => {
   const { username, password } = req.body;
 
-  // Kiểm tra nếu username hoặc password chưa được nhập
+  // Kiểm tra nếu thiếu thông tin đăng nhập
   if (!username || !password) {
     return res.status(400).json({ message: "Username and password are required!" });
   }
 
   try {
+    // Tìm người dùng theo username
     const user = await User.findOne({ where: { username } });
     if (!user) return res.status(404).json({ message: "User not found!" });
 
@@ -82,20 +63,14 @@ exports.login = async (req, res) => {
     const token = jwt.sign(
       { id: user.id, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "2h" }
     );
 
-    // Trả về thông tin người dùng và token
+    // Trả về toàn bộ thông tin người dùng và token
     res.status(200).json({
       message: "Login successful!",
       token,
-      user: {
-        id: user.id,
-        username: user.username,
-        fullname: user.fullname,
-        role: user.role,
-        email: user.email, 
-      },
+      user: user // Trả về tất cả thuộc tính của người dùng
     });
   } catch (error) {
     console.error("Login error:", error);
@@ -106,23 +81,17 @@ exports.getUser = async (req, res) => {
   try {
     // Lấy thông tin người dùng từ req.userId (được xác thực từ middleware)
     const user = await User.findOne({
-      where: { id: req.userId },
-      attributes: ['id', 'username', 'fullname', 'role', 'email'],
+      where: { id: req.userId }  // Tìm người dùng theo ID
     });
 
+    // Nếu không tìm thấy người dùng, trả về lỗi 404
     if (!user) {
       return res.status(404).json({ message: "User not found!" });
     }
 
-    // Trả về thông tin người dùng
+    // Trả về tất cả thông tin người dùng
     res.status(200).json({
-      user: {
-        id: user.id,
-        username: user.username,
-        fullname: user.fullname,
-        role: user.role,
-        email: user.email,
-      },
+      user: user // Trả về toàn bộ thông tin của người dùng
     });
   } catch (error) {
     console.error("Get user error:", error);

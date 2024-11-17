@@ -4,6 +4,7 @@ import { UserService } from '../../services/user.service';
 import Swal from 'sweetalert2';
 import { User } from '../../interfaces/User';
 import { NgFor, NgIf } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-manager-users-admin',
@@ -16,37 +17,33 @@ export class ManagerUsersAdminComponent implements OnInit {
   users: User[] = [];
   newUser: User = {
     id: 0,
-    name: '',
-    userId: 0,
+    username: '',
+    password: '',
+    fullname: '',
+    role: '',
+    email: '',
     avt: '',
-    user: {
-      id: 0,
-      username: '',
-      email: '',
-      role: '',
-      fullname: '',
-      password: '',
-    }
+    birthdate: '',
+    phone: ''
   };
   isEditing = false;
 
   searchName = '';
   searchEmail = '';
   filterRole = '';
+  isAdding = false; // Biến để kiểm soát hiển thị form thêm
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit() {
     this.loadUsers();
   }
 
   loadUsers() {
-    // Lấy dữ liệu sinh viên
     this.userService.getAllStudents().subscribe((students) => {
-      this.users = [...students];  // Khởi tạo mảng users với students
-      // Sau đó lấy dữ liệu giảng viên
+      this.users = [...students];
       this.userService.getAllInstructors().subscribe((instructors) => {
-        this.users = [...this.users, ...instructors];  // Gộp instructors vào mảng users
+        this.users = [...this.users, ...instructors];
       });
     });
   }
@@ -56,13 +53,14 @@ export class ManagerUsersAdminComponent implements OnInit {
     return this.users.filter((user) => {
       return (
         (!this.searchName ||
-          user.name.toLowerCase().includes(this.searchName.toLowerCase())) &&
+          user.fullname.toLowerCase().includes(this.searchName.toLowerCase())) &&
         (!this.searchEmail ||
-          user.user.email.toLowerCase().includes(this.searchEmail.toLowerCase())) &&
-        (!this.filterRole || user.user.role === this.filterRole)
+          user.email.toLowerCase().includes(this.searchEmail.toLowerCase())) &&
+        (!this.filterRole || user.role === this.filterRole)
       );
     });
   }
+
   getRoleDisplay(role: string): string {
     switch (role) {
       case 'student':
@@ -73,36 +71,22 @@ export class ManagerUsersAdminComponent implements OnInit {
         return role;
     }
   }
+
   selectRole(role: string) {
     this.filterRole = role;
   }
 
   isFormValid(): boolean {
     return (
-      this.newUser.name.trim() !== '' &&
-      this.newUser.user.role.trim() !== '' &&
-      this.newUser.user.email.trim() !== '' &&
-      (!this.isEditing || (this.isEditing && this.newUser.user.password?.trim() === ''))
+      this.newUser.fullname.trim() !== '' &&
+      this.newUser.role.trim() !== '' &&
+      this.newUser.email.trim() !== '' &&
+      (!this.isEditing || (this.isEditing && this.newUser.password?.trim() === ''))
     );
   }
 
   editUser(user: User) {
-    this.newUser = {
-      id: user.id,
-      userId: user.user.id,
-      avt: user.avt,
-      name: user.name,
-
-      user: {
-        password: '',
-
-        id: user.user.id,
-        username: user.user.username,
-        email: user.user.email,
-        role: user.user.role,
-        fullname: user.user.fullname,
-      }
-    };
+    this.newUser = { ...user };
     this.isEditing = true;
     window.scrollTo(0, 0);
   }
@@ -110,10 +94,10 @@ export class ManagerUsersAdminComponent implements OnInit {
   updateUser() {
     const errorMessages: string[] = [];
   
-    if (this.newUser.name.trim() === '') {
+    if (this.newUser.fullname.trim() === '') {
       errorMessages.push('Vui lòng nhập tên người dùng.');
     }
-    if (this.newUser.user.email.trim() === '') {
+    if (this.newUser.email.trim() === '') {
       errorMessages.push('Vui lòng nhập email.');
     }
   
@@ -132,29 +116,29 @@ export class ManagerUsersAdminComponent implements OnInit {
   
     const updateUser = {
       ...this.newUser,
-      password: this.newUser.user.password?.trim() === '' ? this.newUser.user.password : this.newUser.user.password,
+      password: this.newUser.password?.trim() === '' ? this.newUser.password : this.newUser.password,
     };
   
-    if (this.newUser.user.role === 'student') {
+    if (this.newUser.role === 'student') {
       this.userService.updateStudent(this.newUser.id, updateUser).subscribe(() => {
         this.loadUsers();
         Swal.fire({
           icon: 'success',
           title: 'Cập nhật thành công!',
-          text: `Người dùng ${this.newUser.user.username} đã được cập nhật.`,
+          text: `Người dùng ${this.newUser.username} đã được cập nhật.`,
           confirmButtonText: 'OK',
           customClass: {
             confirmButton: 'btn btn-success',
           },
         });
       });
-    } else if (this.newUser.user.role === 'instructor') {
+    } else if (this.newUser.role === 'instructor') {
       this.userService.updateInstructor(this.newUser.id, updateUser).subscribe(() => {
         this.loadUsers();
         Swal.fire({
           icon: 'success',
           title: 'Cập nhật thành công!',
-          text: `Người dùng ${this.newUser.user.username} đã được cập nhật.`,
+          text: `Người dùng ${this.newUser.username} đã được cập nhật.`,
           confirmButtonText: 'OK',
           customClass: {
             confirmButton: 'btn btn-success',
@@ -164,7 +148,6 @@ export class ManagerUsersAdminComponent implements OnInit {
     }
     this.resetForm();
   }
-  
 
   deleteUser(userId: number, role: string) {
     Swal.fire({
@@ -200,22 +183,89 @@ export class ManagerUsersAdminComponent implements OnInit {
       }
     });
   }
-  
 
   resetForm() {
     this.newUser = {
       id: 0,
-      name: '',
-      userId: 0,
+      username: '',
+      password: '',
+      fullname: '',
+      role: '',
+      email: '',
       avt: '',
-      user: {
-        id: 0,
-        username: '',
-        email: '',
-        role: '',
-        fullname: '',
-      }
+      birthdate: '',
+      phone: ''
     };
     this.isEditing = false;
+  }
+  createUser() {
+    const errorMessages: string[] = [];
+  
+    // Kiểm tra form có hợp lệ hay không
+    if (this.newUser.fullname.trim() === '') {
+      errorMessages.push('Vui lòng nhập tên người dùng.');
+    }
+    if (this.newUser.email.trim() === '') {
+      errorMessages.push('Vui lòng nhập email.');
+    }
+    if (this.newUser.password.trim() === '') {
+      errorMessages.push('Vui lòng nhập mật khẩu.');
+    }
+    if (this.newUser.role.trim() === '') {
+      errorMessages.push('Vui lòng chọn vai trò.');
+    }
+  
+    if (errorMessages.length > 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Thông báo!',
+        text: errorMessages.join('\n'),
+        confirmButtonText: 'OK',
+        customClass: {
+          confirmButton: 'btn btn-success',
+        },
+      });
+      return;
+    }
+  
+    // Gửi yêu cầu tạo user
+    const createFunction =
+      this.newUser.role === 'student'
+        ? this.userService.createStudent(this.newUser)
+        : this.userService.createInstructor(this.newUser);
+  
+    createFunction.subscribe(
+      (createdUser) => {
+        this.loadUsers(); // Cập nhật danh sách user
+        Swal.fire({
+          icon: 'success',
+          title: 'Thành công!',
+          text: `Người dùng ${createdUser.fullname} đã được tạo.`,
+          confirmButtonText: 'OK',
+          customClass: {
+            confirmButton: 'btn btn-success',
+          },
+        });
+        this.resetForm(); // Reset form
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi!',
+          text: 'Đã xảy ra lỗi khi tạo người dùng. Vui lòng thử lại.',
+          confirmButtonText: 'OK',
+          customClass: {
+            confirmButton: 'btn btn-danger',
+          },
+        });
+      }
+    );
+  }
+  
+  toggleAddUserForm() {
+    this.isAdding = !this.isAdding; // Đổi trạng thái hiển thị form
+    if (!this.isAdding) {
+      this.resetForm(); // Đặt lại form khi tắt
+    }
   }
 }

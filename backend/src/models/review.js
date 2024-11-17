@@ -8,7 +8,7 @@ const Review = sequelize.define("Review", {
     allowNull: false,
     autoIncrement: false, // Người dùng nhập vào id
   },
-  courseId: {
+  courseId: { 
     type: DataTypes.INTEGER,
     allowNull: false,
     unique: true,

@@ -1,9 +1,8 @@
 // src/app/services/user.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {  map, Observable,   } from 'rxjs';
 import { User } from '../interfaces/User';  // Import interface User
-import { NewUser } from '../interfaces/NewUser';
 
 @Injectable({
   providedIn: 'root'
@@ -15,15 +14,20 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  // Lấy tất cả học sinh
   getAllStudents(): Observable<User[]> {
-    return this.http.get<User[]>(this.studentUrl);
+    return this.http.get<{ students: User[] }>(this.studentUrl).pipe(
+      map((response) => response.students)
+    );
   }
 
-  // Lấy tất cả giảng viên
   getAllInstructors(): Observable<User[]> {
-    return this.http.get<User[]>(this.instructorUrl);
+    return this.http.get<{ instructors: User[] }>(this.instructorUrl).pipe(
+      map((response) => response.instructors)
+    );
   }
+  
+  
+
 
   // Lấy học sinh theo ID
   getStudentById(id: number): Observable<User> {
@@ -36,21 +40,15 @@ export class UserService {
   }
 
   // Tạo mới học sinh
-  // createStudent(student: User): Observable<User> {
-  //   return this.http.post<User>(this.studentUrl, student);
-  // }
-
-  // // Tạo mới giảng viên
-  // createInstructor(instructor: User): Observable<User> {
-  //   return this.http.post<User>(this.instructorUrl, instructor);
-  // }
-  createStudent(student: NewUser): Observable<User> {
+  createStudent(student: User): Observable<User> {
     return this.http.post<User>(this.studentUrl, student);
   }
 
-  createInstructor(instructor: NewUser): Observable<User> {
+  // Tạo mới giảng viên
+  createInstructor(instructor: User): Observable<User> {
     return this.http.post<User>(this.instructorUrl, instructor);
   }
+
   // Cập nhật học sinh
   updateStudent(id: number, student: User): Observable<User> {
     return this.http.put<User>(`${this.studentUrl}/${id}`, student);
