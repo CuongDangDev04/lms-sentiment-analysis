@@ -268,4 +268,8 @@ export class ManagerUsersAdminComponent implements OnInit {
       this.resetForm(); // Đặt lại form khi tắt
     }
   }
+  cancelAdd() {
+    this.isAdding = false; // Ẩn form thêm và hiển thị lại nút
+    this.resetForm();
+  }
 }

@@ -79,26 +79,18 @@ export class AuthService {
     if (!token) {
       throw new Error('No token found');
     }
-
+  
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get('http://localhost:5000/api/auth/user', { headers }).pipe(
       map((response: any) => {
-        // Lưu thông tin người dùng vào localStorage nếu không có
         if (response.user) {
-          localStorage.setItem(
-            'user',
-            JSON.stringify({
-              id: response.user.id,
-              username: response.user.username,
-              fullname: response.user.fullname,
-              role: response.user.role,
-              email: response.user.email,
-            })
-          );
-          this.user = response.user; // Gán thông tin người dùng vào service
+          // Lưu tất cả các thuộc tính của user vào localStorage
+          localStorage.setItem('user', JSON.stringify(response.user));
+          this.user = response.user; // Gán toàn bộ thông tin user vào service
         }
-        return response;
+        return response.user;
       })
     );
   }
+  
 }
