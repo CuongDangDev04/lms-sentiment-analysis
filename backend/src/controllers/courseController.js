@@ -53,10 +53,7 @@ exports.getReviewOfCourse = async (req, res) => {
         type: QueryTypes.SELECT,
       }
     );
-    if (!reviews || reviews.length === 0) {
-      return res.status(404).json({ message: "No reviews found" });
-    }
-    // Trả về mảng thuần túy mà không đóng gói trong một đối tượng
+
     res.status(200).json(reviews);
   } catch (error) {
     console.error(error);
@@ -67,17 +64,17 @@ exports.getReviewOfCourse = async (req, res) => {
 };
 
 exports.addComment = async (req, res) => {
-  const { id, courseId, rating, comment } = req.body;
+  const { studentId, courseId, rating, comment } = req.body;
 
   try {
     // Kiểm tra xem các trường cần thiết có tồn tại hay không
-    if (!id || !courseId || !rating || !comment) {
+    if (!studentId || !courseId || !rating || !comment) {
       return res.status(400).json({ message: "Thiếu thông tin cần thiết" });
     }
 
     // Tìm review cũ (nếu có) dựa trên id và courseId
     const existingReview = await Review.findOne({
-      where: { id, courseId },
+      where: { studentId, courseId },
     });
 
     if (existingReview) {
@@ -88,10 +85,10 @@ exports.addComment = async (req, res) => {
       return res.status(200).json(existingReview);
     } else {
       const newReview = await Review.create({
-        id,
         courseId,
         rating,
         comment,
+        studentId,
       });
 
       return res.status(201).json(newReview);

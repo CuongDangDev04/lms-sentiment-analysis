@@ -2,10 +2,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { User } from '../interfaces/User';  // Import interface User
+import { User } from '../interfaces/User'; // Import interface User
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
   // URL gốc của API cho student và instructor

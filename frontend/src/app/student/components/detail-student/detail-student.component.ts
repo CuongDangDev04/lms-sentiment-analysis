@@ -19,6 +19,7 @@ import { StudentService } from '../../services/student.service';
 })
 export class DetailStudentComponent implements OnInit {
   isLoggedIn: boolean = true;
+  studentLogin: any;
   showOverlay: boolean = false;
   courseId: string | null = null;
   courseDetail: any;
@@ -48,19 +49,22 @@ export class DetailStudentComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       this.courseId = params.get('id');
     });
-
     forkJoin({
+      studentLogin: this.studentService.getStudentByUserId(321),
       courseDetail: this.courseService.getCourseById(Number(this.courseId)),
       reviews: this.courseService.getReviewOfCourse(Number(this.courseId)),
       students: this.studentService.getAllStudents(),
     }).subscribe(
-      ({ courseDetail, reviews, students }) => {
+      ({ courseDetail, reviews, students, studentLogin }) => {
+        console.log('Reviews for courseId ' + this.courseId + ':', reviews);
+        this.studentLogin = studentLogin;
         this.courseDetail = courseDetail;
         this.reviews = reviews;
         this.studentComment = students;
         this.updateCourseRatings();
         this.totalComment = this.reviews.length;
         console.log(this.studentComment);
+        console.log('Đây là student đang login: ' + this.studentLogin);
         this.loadComments(); // Chỉ gọi loadComments sau khi tất cả dữ liệu đã được tải xong
       },
       (error) => {
@@ -103,12 +107,12 @@ export class DetailStudentComponent implements OnInit {
     // Kết hợp thông tin của sinh viên với review
     return students
       .filter((student) =>
-        courseReviews.some((review) => review.id === student.id)
+        courseReviews.some((review) => review.studentId === student.id)
       ) // Chỉ lấy sinh viên đã có review trong khóa học này
       .map((student) => {
         // Lấy tất cả review của sinh viên trong khóa học
         const studentReviews = courseReviews.filter(
-          (review) => review.id === student.id
+          (review) => review.studentId === student.id
         );
 
         return {
@@ -152,18 +156,19 @@ export class DetailStudentComponent implements OnInit {
     }
 
     const commentData = {
-      id: 100, // ID người dùng
+      //studentId: this.studentLogin.id,
+      studentId: 3,
       courseId: this.courseId,
-      rating: this.rating,
+      //rating: this.rating,
+      rating: 3,
       comment: this.newComment,
     };
-
     this.courseService.addComment(commentData).subscribe(
       (response) => {
         console.log('Bình luận thành công:', response);
 
-        this.newComment = ''; // Reset form
-        this.errorMessage = ''; // Reset error message
+        this.newComment = '';
+        this.errorMessage = '';
       },
       (error) => {
         console.error('Lỗi khi gửi bình luận:', error);

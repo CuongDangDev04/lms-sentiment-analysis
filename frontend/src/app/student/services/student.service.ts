@@ -9,8 +9,11 @@ import { Student } from '../interfaces/student';
 export class StudentService {
   constructor(private http: HttpClient) {}
   getAllStudents(): Observable<Student[]> {
-    return this.http.get<Student[]>(
-      'http://localhost:5000/api/student/students'
+    return this.http.get<Student[]>('http://localhost:5000/api/student');
+  }
+  getStudentByUserId(userId: Number): Observable<Student> {
+    return this.http.get<Student>(
+      `${'http://localhost:5000/api/student/get-student-by-user'}/${userId}`
     );
   }
 }

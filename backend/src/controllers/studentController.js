@@ -1,8 +1,7 @@
-const  User = require("../models/user"); 
-const  Student = require("../models/student"); 
+const User = require("../models/user");
+const Student = require("../models/student");
 
-
-const { register } = require("../controllers/authController"); 
+const { register } = require("../controllers/authController");
 
 // Tạo mới tài khoản student
 exports.createStudent = async (req, res) => {
@@ -14,7 +13,7 @@ exports.createStudent = async (req, res) => {
   }
 
   // Gọi phương thức register để tạo tài khoản người dùng
-  req.body.role = 'student'; // Xác định vai trò là student
+  req.body.role = "student"; // Xác định vai trò là student
   const registrationResult = await register(req, res); // Gọi register để tạo tài khoản người dùng
 
   if (registrationResult.status !== 201) {
@@ -65,6 +64,30 @@ exports.getStudentById = async (req, res) => {
     res.status(500).json({ error: "Failed to retrieve student!" });
   }
 };
+exports.getStudentByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params; // Lấy userId từ params
+
+    // Kiểm tra nếu userId không tồn tại
+    if (!userId) {
+      return res.status(400).json({ message: "userId is required" });
+    }
+
+    // Tìm sinh viên theo userId
+    const student = await Student.findOne({ where: { userId: userId } });
+
+    // Kiểm tra nếu không tìm thấy sinh viên
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    // Trả về thông tin sinh viên
+    res.status(200).json(student);
+  } catch (error) {
+    console.error("Error fetching student:", error);
+    res.status(500).json({ error: "Failed to retrieve student!" });
+  }
+};
 
 exports.deleteStudent = async (req, res) => {
   try {
@@ -80,7 +103,6 @@ exports.deleteStudent = async (req, res) => {
     res.status(500).json({ error: "Failed to delete student!" });
   }
 };
-
 
 exports.editStudent = async (req, res) => {
   const { id } = req.params; // Lấy id từ params
