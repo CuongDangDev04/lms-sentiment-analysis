@@ -402,12 +402,20 @@
             class="comment-input"
             [(ngModel)]="newComment"
           ></textarea>
-          <button id="submitComment" class="btn btn-primary">
+          <button
+            id="submitComment"
+            class="btn btn-primary"
+            (click)="addComment()"
+          >
             Gửi bình luận
           </button>
+          <p *ngIf="errorMessage" style="color: red">{{ errorMessage }}</p>
         </div>
       </div>
       <h2>Bình luận của học viên</h2>
+      <div *ngIf="visibleComments.length === 0">
+        <p>Hiện không có bình luận nào</p>
+      </div>
       <div class="comment" *ngFor="let student of visibleComments">
         <div class="comment-header">
           <img [src]="student.avt" alt="Avatar" class="avatar" />

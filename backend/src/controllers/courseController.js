@@ -1,20 +1,34 @@
-const Course = require("../models/course");  
+const Course = require("../models/course");
 const User = require("../models/user");
 const Category = require("../models/category");
 
 // Tạo mới khóa học
 exports.createCourse = async (req, res) => {
   try {
-    const { name, description, instructorId, number_of_lessons, number_of_students, rating, duration, imageUrl, categoryId } = req.body;
+    const {
+      name,
+      description,
+      instructorId,
+      number_of_lessons,
+      number_of_students,
+      rating,
+      duration,
+      imageUrl,
+      categoryId,
+    } = req.body;
 
     // Kiểm tra xem giảng viên có hợp lệ không
-    const instructor = await User.findOne({ where: { id: instructorId, role: 'instructor' } });
+    const instructor = await User.findOne({
+      where: { id: instructorId, role: "instructor" },
+    });
     if (!instructor) {
-      return res.status(400).json({ error: "Instructor must have role 'instructor'" });
+      return res
+        .status(400)
+        .json({ error: "Instructor must have role 'instructor'" });
     }
 
     // Kiểm tra xem danh mục có tồn tại không
-    const category = await Category.findByPk(categoryId);  // Đổi categoryId thành id
+    const category = await Category.findByPk(categoryId); // Đổi categoryId thành id
     if (!category) {
       return res.status(400).json({ error: "Category not found" });
     }
@@ -29,7 +43,7 @@ exports.createCourse = async (req, res) => {
       rating,
       duration,
       imageUrl,
-      categoryId,  // Đổi categoryId thành id
+      categoryId, // Đổi categoryId thành id
     });
 
     res.status(201).json(course);
@@ -51,8 +65,8 @@ exports.getAllCourses = async (req, res) => {
           model: Category,
           as: "category",
           attributes: ["id", "name"],
-        }
-      ]
+        },
+      ],
     });
     res.status(200).json(courses);
   } catch (err) {
@@ -62,7 +76,7 @@ exports.getAllCourses = async (req, res) => {
 
 // Lấy khóa học theo ID
 exports.getCourseById = async (req, res) => {
-  const { id } = req.params;  // Đổi courseId thành id
+  const { id } = req.params; // Đổi courseId thành id
   console.log(id);
   // Kiểm tra xem id có phải là số nguyên hay không
   if (isNaN(id)) {
@@ -70,7 +84,8 @@ exports.getCourseById = async (req, res) => {
   }
 
   try {
-    const course = await Course.findByPk(id, {  // Đổi courseId thành id
+    const course = await Course.findByPk(id, {
+      // Đổi courseId thành id
       include: [
         {
           model: User,
@@ -81,8 +96,8 @@ exports.getCourseById = async (req, res) => {
           model: Category,
           as: "category",
           attributes: ["id", "name"],
-        }
-      ]
+        },
+      ],
     });
 
     if (!course) {
@@ -90,25 +105,111 @@ exports.getCourseById = async (req, res) => {
     }
 
     res.status(200).json(course);
-  } catch (err) {
-    console.error(err);  // Để dễ dàng debug
-    res.status(500).json({ error: err.message });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Error fetching course", error: error.message });
+  }
+};
+exports.getAllReview = async (req, res) => {
+  try {
+    const reviews = await sequelize.query("SELECT * FROM reviews", {
+      type: QueryTypes.SELECT,
+    });
+    console.log("DCMM" + reviews);
+    if (!reviews || reviews.length === 0) {
+      return res.status(404).json({ message: "No reviews found" });
+    }
+    res.status(200).json(reviews);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Error fetching review", error: error.message });
+  }
+};
+exports.getReviewOfCourse = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const reviews = await sequelize.query(
+      "SELECT * FROM reviews where courseId = $courseId",
+      {
+        bind: { courseId: courseId },
+        type: QueryTypes.SELECT,
+      }
+    );
+
+    res.status(200).json(reviews);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Error fetching review", error: error.message });
+  }
+};
+
+exports.addComment = async (req, res) => {
+  const { studentId, courseId, rating, comment } = req.body;
+
+  try {
+    // Kiểm tra xem các trường cần thiết có tồn tại hay không
+    if (!studentId || !courseId || !rating || !comment) {
+      return res.status(400).json({ message: "Thiếu thông tin cần thiết" });
+    }
+
+    // Tìm review cũ (nếu có) dựa trên id và courseId
+    const existingReview = await Review.findOne({
+      where: { studentId, courseId },
+    });
+
+    if (existingReview) {
+      // Nếu tìm thấy review, cập nhật review đó
+      existingReview.rating = rating;
+      existingReview.comment = comment;
+      await existingReview.save();
+      return res.status(200).json(existingReview);
+    } else {
+      const newReview = await Review.create({
+        courseId,
+        rating,
+        comment,
+        studentId,
+      });
+
+      return res.status(201).json(newReview);
+    }
+  } catch (error) {
+    console.error("Lỗi khi thêm hoặc cập nhật comment:", error);
+    res.status(500).json({
+      message: "Có lỗi xảy ra khi thêm hoặc cập nhật comment",
+      error: error.message,
+    });
   }
 };
 
 // Cập nhật khóa học
 exports.updateCourse = async (req, res) => {
-  const { id } = req.params;  // Đổi courseId thành id
-  const { name, description, number_of_lessons, number_of_students, rating, duration, imageUrl, categoryId } = req.body;  // Đổi categoryId thành id
+  const { id } = req.params; // Đổi courseId thành id
+  const {
+    name,
+    description,
+    number_of_lessons,
+    number_of_students,
+    rating,
+    duration,
+    imageUrl,
+    categoryId,
+  } = req.body; // Đổi categoryId thành id
 
   try {
-    const course = await Course.findByPk(id);  // Đổi courseId thành id
+    const course = await Course.findByPk(id); // Đổi courseId thành id
     if (!course) {
       return res.status(404).json({ error: "Course not found" });
     }
 
     // Kiểm tra xem danh mục có tồn tại không
-    const category = await Category.findByPk(categoryId);  // Đổi categoryId thành id
+    const category = await Category.findByPk(categoryId); // Đổi categoryId thành id
     if (!category) {
       return res.status(400).json({ error: "Category not found" });
     }
@@ -121,7 +222,7 @@ exports.updateCourse = async (req, res) => {
     course.rating = rating || course.rating;
     course.duration = duration || course.duration;
     course.imageUrl = imageUrl || course.imageUrl;
-    course.categoryId = categoryId || course.categoryId;  // Đổi categoryId thành id
+    course.categoryId = categoryId || course.categoryId; // Đổi categoryId thành id
 
     await course.save();
 
@@ -133,9 +234,9 @@ exports.updateCourse = async (req, res) => {
 
 // Xóa khóa học
 exports.deleteCourse = async (req, res) => {
-  const { id } = req.params;  // Đổi courseId thành id
+  const { id } = req.params; // Đổi courseId thành id
   try {
-    const course = await Course.findByPk(id);  // Đổi courseId thành id
+    const course = await Course.findByPk(id); // Đổi courseId thành id
     if (!course) {
       return res.status(404).json({ error: "Course not found" });
     }
