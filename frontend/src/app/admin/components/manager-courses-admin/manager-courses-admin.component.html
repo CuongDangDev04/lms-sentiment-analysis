@@ -1,69 +1,138 @@
+<div class="course-management">
+  <h2>Quản lý Khóa học</h2>
+  <!-- Nút Thêm Người Dùng -->
+  <button class="btn-add-course " (click)="toggleAddCourseForm()">
+    {{ isAdding ? 'Đóng Form Thêm Khóa học' : 'Thêm Khóa học' }}
+  </button>
+  <!-- form thêm khóa học -->
+  <form class="course-form" *ngIf="isAdding" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="courseName">Tên khóa học</label>
+      <input id="courseName" type="text" [(ngModel)]="course.name" name="name" required />
+    </div>
 
+    <div class="form-group">
+      <label for="courseDescription">Mô tả khóa học</label>
+      <textarea id="courseDescription" [(ngModel)]="course.description" name="description"></textarea>
+    </div>
 
-   <div class="course-management">
-    <h2>Quản lý Khóa học</h2>
+    <div class="form-group">
+      <label for="instructor">Giảng viên phụ trách</label>
+      <select id="instructor" [(ngModel)]="course.instructorId" name="instructorId" required>
+        <option *ngFor="let course of courses" [value]="course.instructor.id">
+          {{ course.instructor.fullname }}
+        </option>
+      </select>
+    </div>
+
     
-    <form class="course-form" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="courseName">Tên khóa học</label>
-        <input id="courseName" type="text" [(ngModel)]="course.name" name="name" required />
-      </div>
+    <div class="form-group">
+      <label for="category">Danh mục khóa học</label>
+      <select id="category" [(ngModel)]="course.categoryId" name="categoryId" required>
+        <option *ngFor="let course of courses" [value]="course.categoryId">
+          {{ course.category.name }}
+        </option>
+      </select>
+    </div>
   
-      <div class="form-group">
-        <label for="courseDescription">Mô tả khóa học</label>
-        <textarea id="courseDescription" [(ngModel)]="course.description" name="description"></textarea>
-      </div>
-  
-      <div class="form-group">
-        <label for="instructor">Giảng viên phụ trách</label>
-        <select id="instructor" [(ngModel)]="course.instructorId" name="instructorId" required>
-          <option *ngFor="let instructor of instructors" [value]="instructor.id">
-            {{ instructor.name }}
-          </option>
-        </select>
-      </div>
-  
-      <button type="submit" class="btn-save">{{ isEditing ? 'Cập Nhật' : 'Thêm Khóa Học' }}</button>
-      <button type="button" class="btn-reset" (click)="resetForm()">Đặt Lại</button>
-    </form>
-  
-    <h3>Danh sách Khóa học</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Tên Khóa học</th>
-          <th>Mô tả</th>
-          <th>Giảng viên phụ trách</th>
-          <th>Thao tác</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let course of courses">
-          <td>{{ course.name }}</td>
-          <td>{{ course.description }}</td>
-          <td>{{ course.instructorName }}</td>
-          <td>
-              <button (click)="editCourse(course)"
-                type="button"
-                data-bs-toggle="tooltip"
-                title=""
-                class="btn btn-link btn-primary btn-lg"
-                data-original-title="Edit Task"
-              >
-                <i class="fa fa-edit"></i>
-              </button>
-              <button (click)="deleteCourse(course.id)"
-                type="button"
-                data-bs-toggle="tooltip"
-                title=""
-                class="btn btn-link btn-danger"
-                data-original-title="Remove"
-              >
-                <i class="fa fa-times"></i>
-              </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  
+
+    <button type="submit" class="btn-save">{{ isEditing ? 'Cập Nhật' : 'Thêm Khóa Học' }}</button>
+    <button type="button" class="btn-reset" (click)="resetForm()">Đặt Lại</button>
+  </form>
+  <!-- form chỉnh sửa khóa học -->
+  <form class="course-form" *ngIf="isEditing" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="courseName">Tên khóa học</label>
+      <input id="courseName" type="text" [(ngModel)]="course.name" name="name" required />
+    </div>
+
+    <div class="form-group">
+      <label for="courseDescription">Mô tả khóa học</label>
+      <textarea id="courseDescription" [(ngModel)]="course.description" name="description"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="instructor">Giảng viên phụ trách</label>
+      <select id="instructor" [(ngModel)]="course.instructorId" name="instructorId" required>
+        <option *ngFor="let course of courses" [value]="course.instructor.id">
+          {{ course.instructor.fullname }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="number_of_lessons">Số buổi học</label>
+      <input id="number_of_lessons" type="number" [(ngModel)]="course.number_of_lessons" name="number_of_lessons" required />
+    </div>
+
+    <div class="form-group">
+      <label for="number_of_students">Số lượng học viên</label>
+      <input id="number_of_students" type="number" [(ngModel)]="course.number_of_students" name="number_of_students" required />
+    </div>
+
+    <div class="form-group">
+      <label for="rating">Đánh giá</label>
+      <input id="rating" type="number" [(ngModel)]="course.rating" name="rating" min="1" max="5" required />
+    </div>
+
+    <div class="form-group">
+      <label for="duration">Thời gian (giờ)</label>
+      <input id="duration" type="number" [(ngModel)]="course.duration" name="duration" required />
+    </div>
+
+    <div class="form-group">
+      <label for="imageUrl">URL hình ảnh</label>
+      <input id="imageUrl" type="text" [(ngModel)]="course.imageUrl" name="imageUrl" />
+    </div>
+
+    <div class="form-group">
+      <label for="category">Danh mục khóa học</label>
+      <select id="category" [(ngModel)]="course.categoryId" name="categoryId" required>
+        <option *ngFor="let course of courses" [value]="course.categoryId">
+          {{ course.category.name }}
+        </option>
+      </select>
+    </div>
+   
+
+    <button type="submit" class="btn-save">{{ isEditing ? 'Cập Nhật' : 'Thêm Khóa Học' }}</button>
+    <button type="button" class="btn-reset" (click)="resetForm()">Đặt Lại</button>
+  </form>
+
+  <h3>Danh sách Khóa học</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Tên Khóa học</th>
+        <th>Mô tả</th>
+        <th>Giảng viên phụ trách</th>
+        <th>Danh mục</th>
+        <th>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let course of courses">
+        <td>{{ course.name }}</td>
+        <td>{{ course.description }}</td>
+        <td>{{ course.instructor.fullname }}</td>
+        <td>{{ course.category.name }}</td>
+        <td>
+          <button (click)="editCourse(course)"
+            type="button"
+            class="btn btn-link btn-primary btn-lg"
+            title="Chỉnh sửa"
+          >
+            <i class="fa fa-edit"></i>
+          </button>
+          <button (click)="deleteCourse(course.id)"
+            type="button"
+            class="btn btn-link btn-danger"
+            title="Xóa"
+          >
+            <i class="fa fa-times"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -26,7 +26,7 @@ exports.createStudent = async (req, res) => {
       avt,
       birthdate,
       phone,
-      role: 'instructor',  // Đảm bảo rằng role là 'student'
+      role: 'student',  // Đảm bảo rằng role là 'student'
     });
 
     // Trả về thông báo thành công

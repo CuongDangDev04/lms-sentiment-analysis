@@ -1,180 +1,117 @@
-import { NgFor } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
-
-interface Course {
-  id: number;
-  name: string;
-  description: string;
-  instructorId: number;
-  instructorName: string;
-}
+import { NgFor, NgIf } from '@angular/common';
+import { CourseService } from '../../services/course.service'; // Đường dẫn tới service
+import { Course } from '../../interfaces/Course'; // Đường dẫn tới interface
 
 @Component({
   selector: 'app-manager-courses-admin',
   standalone: true,
-  imports: [FormsModule, NgFor],
+  imports: [FormsModule, NgFor, NgIf],
   templateUrl: './manager-courses-admin.component.html',
   styleUrls: ['./manager-courses-admin.component.css']
 })
-export class ManagerCoursesAdminComponent {
-  course: Partial<Course> = {};
-  courses: Course[] = [];
-  instructors = [
-    { id: 1, name: 'Giảng viên Kỹ năng mềm 1' },
-    { id: 2, name: 'Giảng viên Kỹ năng mềm 2' },
-    { id: 3, name: 'Giảng viên Kỹ năng mềm 3' },
-  ];
-  isEditing = false;
+export class ManagerCoursesAdminComponent implements OnInit {
+  courses: Course[] = []; // Danh sách khóa học
+  course: Partial<Course> = {}; // Khóa học hiện tại
+  
+  isEditing = false; // Trạng thái chỉnh sửa
+  isAdding = false;
+  constructor(private courseService: CourseService) {}
 
-  constructor() {
-    this.populateCourses();
+  ngOnInit(): void {
+    this.loadCourses(); // Gọi API lấy danh sách khóa học
   }
 
-  populateCourses() {
-    // Dữ liệu giả cho các khóa học về kỹ năng mềm
-    this.courses = [
-      {
-        id: 1,
-        name: 'Khóa học Giao tiếp hiệu quả',
-        description: 'Khóa học giúp cải thiện kỹ năng giao tiếp và xây dựng mối quan hệ.',
-        instructorId: 1,
-        instructorName: 'Giảng viên Kỹ năng mềm 1',
+  // Lấy danh sách khóa học
+  loadCourses(): void {
+    this.courseService.getAllCourses().subscribe({
+      next: (data) => {
+        this.courses = data; // Gán dữ liệu khóa học vào mảng
       },
-      {
-        id: 2,
-        name: 'Khóa học Quản lý thời gian',
-        description: 'Khóa học cung cấp các kỹ thuật quản lý thời gian hiệu quả.',
-        instructorId: 2,
-        instructorName: 'Giảng viên Kỹ năng mềm 2',
+      error: () => {
+        console.error('Lỗi khi tải danh sách khóa học.');
       },
-      {
-        id: 3,
-        name: 'Khóa học Giải quyết xung đột',
-        description: 'Khóa học giúp học viên nắm bắt và xử lý xung đột trong môi trường làm việc.',
-        instructorId: 3,
-        instructorName: 'Giảng viên Kỹ năng mềm 3',
-      },
-      {
-        id: 4,
-        name: 'Khóa học Làm việc nhóm',
-        description: 'Khóa học phát triển kỹ năng làm việc nhóm hiệu quả và hợp tác.',
-        instructorId: 1,
-        instructorName: 'Giảng viên Kỹ năng mềm 1',
-      },
-      {
-        id: 5,
-        name: 'Khóa học Tư duy phản biện',
-        description: 'Khóa học giúp phát triển tư duy phản biện và khả năng phân tích.',
-        instructorId: 2,
-        instructorName: 'Giảng viên Kỹ năng mềm 2',
-      },
-      {
-        id: 6,
-        name: 'Khóa học Kỹ năng thuyết trình',
-        description: 'Khóa học giúp nâng cao kỹ năng thuyết trình và truyền đạt thông tin.',
-        instructorId: 3,
-        instructorName: 'Giảng viên Kỹ năng mềm 3',
-      }
-    ];
+    });
   }
 
-  onSubmit() {
-    const errorMessages: string[] = [];
-  
-    if (!this.course.name) {
-      errorMessages.push('Vui lòng nhập tên khóa học.');
-    }
-  
-    if (!this.course.description) {
-      errorMessages.push('Vui lòng nhập mô tả cho khóa học.');
-    }
-  
-    if (this.course.instructorId === undefined) {
-      errorMessages.push('Vui lòng chọn giảng viên.');
-    }
-  
-    if (errorMessages.length > 0) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Thông báo!',
-        text: errorMessages.join('\n'),
-        confirmButtonText: 'Đã hiểu',
-      });
-      return;
-    }
-  
-    const instructorName = this.getInstructorName(this.course.instructorId as number); // Cast to number
-  
-    if (this.isEditing && this.course.id !== undefined) {
-      const index = this.courses.findIndex(c => c.id === this.course.id);
-      if (index !== -1) {
-        this.courses[index] = {
-          ...this.course,
-          instructorId: this.course.instructorId as number, // Cast to number
-          instructorName: instructorName,
-        } as Course;
-      }
-    } else {
-      const newCourse: Course = {
-        id: this.courses.length + 1,
-        name: this.course.name || '',
-        description: this.course.description || '',
-        instructorId: this.course.instructorId as number, // Cast to number
-        instructorName: instructorName,
-      };
-      this.courses = [...this.courses, newCourse];
-    }
-  
-    this.resetForm();
-  }
-  
-
-  editCourse(course: Course) {
+  // Chỉnh sửa khóa học
+  editCourse(course: Course): void {
     this.course = { ...course };
-    this.isEditing = true;
     window.scrollTo(0, 0);
+
+    this.isEditing = true;
+    this.isAdding = false;
   }
 
-  deleteCourse(id: number) {
-    const courseToDelete = this.courses.find(course => course.id === id);
-    if (courseToDelete) {
-      Swal.fire({
-        title: `Bạn có chắc xóa khóa học (${courseToDelete.name}) không?`,
-        text: 'Bạn sẽ không thể khôi phục lại!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Xác nhận!',
-        cancelButtonText: 'Hủy',
-        customClass: {
-          confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger'
-        }
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.courses = this.courses.filter(course => course.id !== id);
-          Swal.fire({
-            title: 'Đã xóa!',
-            text: 'Khóa học đã được xóa.',
-            icon: 'success',
-            confirmButtonText: 'Ok',
-            customClass: {
-              confirmButton: 'btn btn-success'
-            }
-          });
-        }
+  // Xử lý thêm hoặc cập nhật khóa học
+  onSubmit(): void {
+    if (this.isEditing && this.course.id) {
+      // Cập nhật khóa học
+      this.courseService.updateCourse(this.course.id, this.course).subscribe({
+        next: () => {
+          Swal.fire('Cập nhật thành công', 'Khóa học đã được cập nhật.', 'success'); // SweetAlert khi cập nhật thành công
+          this.loadCourses(); // Cập nhật lại danh sách khóa học
+          this.resetForm();
+        },
+        error: () => {
+          Swal.fire('Cập nhật thất bại', 'Không thể cập nhật khóa học.', 'error'); // SweetAlert khi có lỗi
+        },
+      });
+    } else {
+      // Thêm mới khóa học
+      this.courseService.createCourse(this.course).subscribe({
+        next: () => {
+          Swal.fire('Thêm thành công', 'Khóa học đã được thêm.', 'success'); // SweetAlert khi thêm thành công
+          this.loadCourses(); // Cập nhật lại danh sách khóa học
+          this.resetForm();
+        },
+        error: () => {
+          Swal.fire('Thêm thất bại', 'Không thể thêm khóa học.', 'error'); // SweetAlert khi có lỗi
+        },
       });
     }
   }
 
-  resetForm() {
+  // Đặt lại form
+  resetForm(): void {
     this.course = {};
     this.isEditing = false;
   }
 
-  getInstructorName(instructorId: number | undefined): string {
-    const instructor = this.instructors.find(i => i.id == instructorId);
-    return instructor ? instructor.name : '';
+  // Xóa khóa học
+  deleteCourse(id: number): void {
+    Swal.fire({
+      title: 'Bạn có chắc chắn muốn xóa?',
+      text: 'Bạn sẽ không thể khôi phục lại khóa học này!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Có, xóa nó!',
+      cancelButtonText: 'Hủy',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.courseService.deleteCourse(id).subscribe({
+          next: () => {
+            Swal.fire('Đã xóa!', 'Khóa học đã bị xóa.', 'success'); // SweetAlert khi xóa thành công
+            this.loadCourses(); // Cập nhật lại danh sách khóa học
+          },
+          error: () => {
+            Swal.fire('Xóa thất bại', 'Không thể xóa khóa học.', 'error'); // SweetAlert khi có lỗi
+          },
+        });
+      }
+    });
+  }
+  toggleAddCourseForm(): void {
+    this.isAdding = !this.isAdding; // Đổi trạng thái hiển thị form thêm
+    if (this.isAdding) {
+      this.isEditing = false; // Đóng form chỉnh sửa nếu đang mở
+      this.resetForm(); // Đặt lại form khi chuyển đổi
+    }
+  }
+  cancelAdd() {
+    this.isAdding = false; // Ẩn form thêm và hiển thị lại nút
+    this.resetForm();
   }
 }

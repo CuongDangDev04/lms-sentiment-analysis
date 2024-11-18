@@ -36,6 +36,7 @@
   }
   
   .form-group input[type="text"],
+  .form-group input[type="number"],
   .form-group textarea,
   .form-group select {
     width: 80%;
@@ -109,6 +110,7 @@
     padding: 12px;
     border: 1px solid #ddd;
     text-align: left;
+    color: black;
   }
   
   table tbody tr:nth-child(even) {
@@ -119,3 +121,13 @@
     background-color: #e9ecef;
   }
   
+  .btn-add-course {
+    background-color: #4CAF50; /* Màu nền xanh */
+    color: white; /* Màu chữ trắng */
+    padding: 12px 24px; /* Khoảng cách xung quanh nội dung */
+    font-size: 16px; /* Cỡ chữ */
+    border: none; /* Bỏ viền */
+    border-radius: 4px; /* Bo tròn góc */
+    cursor: pointer; /* Con trỏ chuột khi hover */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Hiệu ứng khi hover */
+  }

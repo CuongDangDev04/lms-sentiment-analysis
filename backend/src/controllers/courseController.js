@@ -1,7 +1,7 @@
 const Course = require("../models/course");  
 const User = require("../models/user");
 const Category = require("../models/category");
-
+const StudentCourse = require("../models/studentcourse")
 // Tạo mới khóa học
 exports.createCourse = async (req, res) => {
   try {
@@ -14,7 +14,7 @@ exports.createCourse = async (req, res) => {
     }
 
     // Kiểm tra xem danh mục có tồn tại không
-    const category = await Category.findByPk(categoryId);  // Đổi categoryId thành id
+    const category = await Category.findByPk(categoryId);  
     if (!category) {
       return res.status(400).json({ error: "Category not found" });
     }
@@ -29,7 +29,7 @@ exports.createCourse = async (req, res) => {
       rating,
       duration,
       imageUrl,
-      categoryId,  // Đổi categoryId thành id
+      categoryId,  
     });
 
     res.status(201).json(course);
@@ -62,7 +62,7 @@ exports.getAllCourses = async (req, res) => {
 
 // Lấy khóa học theo ID
 exports.getCourseById = async (req, res) => {
-  const { id } = req.params;  // Đổi courseId thành id
+  const { id } = req.params; 
   console.log(id);
   // Kiểm tra xem id có phải là số nguyên hay không
   if (isNaN(id)) {
@@ -70,7 +70,7 @@ exports.getCourseById = async (req, res) => {
   }
 
   try {
-    const course = await Course.findByPk(id, {  // Đổi courseId thành id
+    const course = await Course.findByPk(id, { 
       include: [
         {
           model: User,
@@ -121,7 +121,7 @@ exports.updateCourse = async (req, res) => {
     course.rating = rating || course.rating;
     course.duration = duration || course.duration;
     course.imageUrl = imageUrl || course.imageUrl;
-    course.categoryId = categoryId || course.categoryId;  // Đổi categoryId thành id
+    course.categoryId = categoryId || course.categoryId; 
 
     await course.save();
 
@@ -145,3 +145,120 @@ exports.deleteCourse = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+
+// Thêm sinh viên vào khóa học ok
+exports.addStudentToCourse = async (req, res) => {
+  try {
+      const { id } = req.params; // Đây là courseId
+      const { userId } = req.body; // Đây là userId của sinh viên
+
+      // Kiểm tra xem khóa học có tồn tại không
+      const course = await Course.findByPk(id);
+      if (!course) {
+          return res.status(404).json({ error: "Course not found" });
+      }
+
+      // Kiểm tra xem sinh viên có tồn tại và có vai trò là "student" không
+      const student = await User.findOne({ where: { id: userId, role: "student" } });
+      if (!student) {
+          return res.status(400).json({ error: "User must be a student" });
+      }
+
+      // Kiểm tra xem sinh viên đã trong khóa học chưa
+      const existingRecord = await StudentCourse.findOne({ where: { userId, courseId: id } });
+      if (existingRecord) {
+          return res.status(400).json({ error: "Student is already enrolled in this course" });
+      }
+
+      // Thêm sinh viên vào khóa học
+      await StudentCourse.create({ userId, courseId: id });
+      res.status(201).json({ message: "Student added to course successfully" });
+  } catch (err) {
+      console.error(err); // Để debug
+      res.status(500).json({ error: err.message });
+  }
+};
+
+
+
+// Lấy danh sách sinh viên trong một khóa học ok
+exports.getStudentsInCourse = async (req, res) => {
+  const { id } = req.params;  
+
+
+  try {
+    // Tìm khóa học bằng `id`
+    const course = await Course.findByPk(id);  
+    if (!course) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+
+    // Lấy danh sách sinh viên trong khóa học
+    const students = await Course.findAll({
+      where: { id },  
+      include: [
+        {
+          model: User,
+          as: "students",  
+          attributes: ["id", "fullname", "email", "phone", "birthdate"],
+        },
+      ],
+    });
+
+    res.status(200).json(students);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Xóa sinh viên khỏi khóa học ok 
+exports.removeStudentFromCourse = async (req, res) => {
+  try {
+    const { userId, courseId } = req.body;
+
+    // Kiểm tra xem bản ghi có tồn tại không
+    const record = await StudentCourse.findOne({ where: { userId, courseId } });
+    if (!record) {
+      return res.status(404).json({ error: "Student is not enrolled in this course" });
+    }
+
+    // Xóa bản ghi
+    await record.destroy();
+    res.status(200).json({ message: "Student removed from course successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Lấy danh sách khóa học mà một sinh viên tham gia ok
+exports.getCoursesOfStudent = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    // Kiểm tra xem sinh viên có tồn tại không
+    const student = await User.findOne({ where: { id: userId, role: "student" } });
+    if (!student) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+
+    // Lấy danh sách khóa học mà sinh viên tham gia
+    const courses = await Course.findAll({
+      include: [
+        {
+          model: User,
+          as: "students",  // Sử dụng alias "students" trong mối quan hệ "Course belongsToMany User"
+          where: { id: userId },  // Lọc các sinh viên theo userId
+          attributes: ["id", "fullname", "email", "phone", "birthdate"], // Chọn thuộc tính cần thiết
+        },
+      ],
+    });
+
+    res.status(200).json(courses);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+

@@ -89,6 +89,8 @@ export class ManagerUsersAdminComponent implements OnInit {
     this.newUser = { ...user };
     this.isEditing = true;
     window.scrollTo(0, 0);
+    this.isEditing = true;
+    this.isAdding = false;
   }
 
   updateUser() {
@@ -263,9 +265,10 @@ export class ManagerUsersAdminComponent implements OnInit {
   }
   
   toggleAddUserForm() {
-    this.isAdding = !this.isAdding; // Đổi trạng thái hiển thị form
-    if (!this.isAdding) {
-      this.resetForm(); // Đặt lại form khi tắt
+    this.isAdding = !this.isAdding; // Đổi trạng thái hiển thị form thêm
+    if (this.isAdding) {
+      this.isEditing = false; // Đóng form chỉnh sửa nếu đang mở
+      this.resetForm(); // Đặt lại form khi chuyển đổi
     }
   }
   cancelAdd() {
