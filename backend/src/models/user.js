@@ -21,6 +21,10 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    avt: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
     role: {
         type: DataTypes.ENUM('admin', 'instructor', 'student'), // Vai trò người dùng
         allowNull: false,
@@ -32,6 +36,10 @@ const User = sequelize.define('User', {
         validate: {
             isEmail: true, // Kiểm tra định dạng email hợp lệ
         }
+    },
+    phone: {
+        type: DataTypes.STRING,
+        allowNull: false,
     }
 });
 
