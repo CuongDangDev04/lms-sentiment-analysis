@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Role } from './interfaces/roles'; // Import Role Enum
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthService {
-  private user: { role: Role } | null = null;
+  private user: { id: number; username: string; fullname: string; role: Role; email: string } | null = null;
 
   constructor(private http: HttpClient) {
     this.loadUserFromLocalStorage();
@@ -19,24 +19,41 @@ export class AuthService {
       .post('http://localhost:5000/api/auth/login', { username, password })
       .pipe(
         map((response: any) => {
-          // Lưu token và user info vào localStorage
+          // Lưu token vào localStorage
           localStorage.setItem('token', response.token);
+
+          // Lưu thông tin đầy đủ của người dùng vào localStorage (id, username, fullname, role, email)
           localStorage.setItem(
             'user',
-            JSON.stringify({ role: response.user.role })
-          ); // Lưu thông tin user
-          this.user = { role: response.user.role }; // Gán giá trị role từ response vào user
+            JSON.stringify({
+              id: response.user.id,
+              username: response.user.username,
+              fullname: response.user.fullname,
+              role: response.user.role,
+              email: response.user.email,
+            })
+          );
+
+          // Gán giá trị vào đối tượng user của service
+          this.user = {
+            id: response.user.id,
+            username: response.user.username,
+            fullname: response.user.fullname,
+            role: response.user.role,
+            email: response.user.email,
+          };
+
           return response;
         })
       );
   }
 
+  // Hàm tải thông tin người dùng từ localStorage
   loadUserFromLocalStorage() {
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');
     if (token && user) {
-      this.user = JSON.parse(user); // Lấy thông tin user từ localStorage
-      // Có thể thêm logic kiểm tra tính hợp lệ của token ở đây
+      this.user = JSON.parse(user); // Lấy thông tin người dùng từ localStorage
     }
   }
 
@@ -44,13 +61,36 @@ export class AuthService {
     return this.user;
   }
 
+  // Hàm kiểm tra xem người dùng đã đăng nhập chưa
   isLoggedIn(): boolean {
     return this.user !== null;
   }
 
+  // Hàm đăng xuất
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     this.user = null;
   }
+
+  // Hàm lấy thông tin người dùng từ API
+  fetchUserInfo(): Observable<any> {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('No token found');
+    }
+  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get('http://localhost:5000/api/auth/user', { headers }).pipe(
+      map((response: any) => {
+        if (response.user) {
+          // Lưu tất cả các thuộc tính của user vào localStorage
+          localStorage.setItem('user', JSON.stringify(response.user));
+          this.user = response.user; // Gán toàn bộ thông tin user vào service
+        }
+        return response.user;
+      })
+    );
+  }
+  
 }

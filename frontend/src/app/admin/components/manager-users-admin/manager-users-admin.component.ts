@@ -1,49 +1,59 @@
-import { NgFor } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { UserService } from '../../services/user.service';
 import Swal from 'sweetalert2';
-
-interface User {
-  id: number;
-  name: string;
-  role: string;
-  email: string;
-}
+import { User } from '../../interfaces/User';
+import { NgFor, NgIf } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-manager-users-admin',
   standalone: true,
-  imports: [FormsModule, NgFor],
+  imports: [FormsModule, NgIf, NgFor],
   templateUrl: './manager-users-admin.component.html',
   styleUrls: ['./manager-users-admin.component.css'],
 })
-export class ManagerUsersAdminComponent {
-  users: User[] = [
-    { id: 1, name: 'Nguyen Van A', role: 'sinhvien', email: 'a@student.edu' },
-    { id: 2, name: 'Tran Thi B', role: 'giangvien', email: 'b@teacher.edu' },
-    { id: 3, name: 'Le Van C', role: 'sinhvien', email: 'c@student.edu' },
-    { id: 4, name: 'Pham Minh D', role: 'giangvien', email: 'd@teacher.edu' },
-    { id: 5, name: 'Nguyen Thi E', role: 'sinhvien', email: 'e@student.edu' },
-    { id: 6, name: 'Vo Van F', role: 'giangvien', email: 'f@teacher.edu' },
-    { id: 7, name: 'Nguyen Van G', role: 'sinhvien', email: 'g@student.edu' },
-    { id: 8, name: 'Tran Thi H', role: 'giangvien', email: 'h@teacher.edu' },
-    { id: 9, name: 'Hoang Van I', role: 'sinhvien', email: 'i@student.edu' },
-    { id: 10, name: 'Phan Van J', role: 'giangvien', email: 'j@teacher.edu' },
-  ];
-
-  newUser: User = { id: 0, name: '', role: '', email: '' };
+export class ManagerUsersAdminComponent implements OnInit {
+  users: User[] = [];
+  newUser: User = {
+    id: 0,
+    username: '',
+    password: '',
+    fullname: '',
+    role: '',
+    email: '',
+    avt: '',
+    birthdate: '',
+    phone: ''
+  };
   isEditing = false;
 
-  // Các biến dùng cho tìm kiếm và lọc
   searchName = '';
   searchEmail = '';
   filterRole = '';
+  isAdding = false; // Biến để kiểm soát hiển thị form thêm
+
+  constructor(private userService: UserService, private router: Router) { }
+
+  ngOnInit() {
+    this.loadUsers();
+  }
+
+  loadUsers() {
+    this.userService.getAllStudents().subscribe((students) => {
+      this.users = [...students];
+      this.userService.getAllInstructors().subscribe((instructors) => {
+        this.users = [...this.users, ...instructors];
+      });
+    });
+  }
+  
 
   get filteredUsers() {
     return this.users.filter((user) => {
       return (
         (!this.searchName ||
-          user.name.toLowerCase().includes(this.searchName.toLowerCase())) &&
+          user.fullname.toLowerCase().includes(this.searchName.toLowerCase())) &&
         (!this.searchEmail ||
           user.email.toLowerCase().includes(this.searchEmail.toLowerCase())) &&
         (!this.filterRole || user.role === this.filterRole)
@@ -51,82 +61,28 @@ export class ManagerUsersAdminComponent {
     });
   }
 
+  getRoleDisplay(role: string): string {
+    switch (role) {
+      case 'student':
+        return 'Sinh viên';
+      case 'instructor':
+        return 'Giảng viên';
+      default:
+        return role;
+    }
+  }
+
   selectRole(role: string) {
-    this.filterRole = role; // Cập nhật vai trò đã chọn
+    this.filterRole = role;
   }
 
   isFormValid(): boolean {
     return (
-      this.newUser.name.trim() !== '' &&
+      this.newUser.fullname.trim() !== '' &&
       this.newUser.role.trim() !== '' &&
-      this.newUser.email.trim() !== ''
+      this.newUser.email.trim() !== '' &&
+      (!this.isEditing || (this.isEditing && this.newUser.password?.trim() === ''))
     );
-  }
-
-  addUser() {
-    // Khởi tạo mảng để chứa thông báo lỗi
-    const errorMessages: string[] = [];
-
-    // Kiểm tra từng trường và thêm thông báo lỗi nếu cần
-    if (this.newUser.name.trim() === '') {
-      errorMessages.push('Vui lòng nhập tên người dùng.');
-    }
-    if (this.newUser.role.trim() === '') {
-      errorMessages.push('Vui lòng chọn vai trò cho người dùng.');
-    }
-    if (this.newUser.email.trim() === '') {
-      errorMessages.push('Vui lòng nhập email.');
-    }
-
-    // Nếu có lỗi, hiển thị tất cả thông báo lỗi
-    if (errorMessages.length > 0) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Thông báo!',
-        text: errorMessages.join('\n'), // Nối các thông báo bằng dòng mới
-        confirmButtonText: 'OK',
-        customClass: {
-          confirmButton: 'btn btn-success',
-        },
-      });
-      return; // Dừng lại nếu thông tin không hợp lệ
-    }
-
-    if (this.isEditing) {
-      // Cập nhật thông tin người dùng hiện tại
-      const index = this.users.findIndex((user) => user.id === this.newUser.id);
-      if (index !== -1) {
-        this.users[index] = { ...this.newUser };
-        Swal.fire({
-          icon: 'success',
-          title: 'Cập nhật thành công!',
-          text: `Người dùng ${this.newUser.name} đã được cập nhật.`,
-          confirmButtonText: 'OK',
-          customClass: {
-            confirmButton: 'btn btn-success',
-          },
-        });
-      }
-    } else {
-      // Thêm người dùng mới
-      const newId =
-        this.users.length > 0
-          ? Math.max(...this.users.map((user) => user.id)) + 1
-          : 1;
-      this.users.push({ ...this.newUser, id: newId });
-
-      // Hiển thị thông báo thành công khi thêm người dùng
-      Swal.fire({
-        icon: 'success',
-        title: 'Thêm thành công!',
-        text: `Người dùng ${this.newUser.name} đã được thêm.`,
-        confirmButtonText: 'OK',
-        customClass: {
-          confirmButton: 'btn btn-success',
-        },
-      });
-    }
-    this.resetForm();
   }
 
   editUser(user: User) {
@@ -135,24 +91,85 @@ export class ManagerUsersAdminComponent {
     window.scrollTo(0, 0);
   }
 
-  deleteUser(userId: number) {
-    const userToDelete = this.users.find((user) => user.id === userId);
-    if (userToDelete) {
+  updateUser() {
+    const errorMessages: string[] = [];
+  
+    if (this.newUser.fullname.trim() === '') {
+      errorMessages.push('Vui lòng nhập tên người dùng.');
+    }
+    if (this.newUser.email.trim() === '') {
+      errorMessages.push('Vui lòng nhập email.');
+    }
+  
+    if (errorMessages.length > 0) {
       Swal.fire({
-        title: `Bạn có chắc xóa người dùng (${userToDelete.name}) không?`,
-        text: 'Bạn sẽ không thể khôi phục lại! ',
         icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Xác nhận',
-        cancelButtonText: 'Hủy',
+        title: 'Thông báo!',
+        text: errorMessages.join('\n'),
+        confirmButtonText: 'OK',
         customClass: {
           confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger',
         },
-      }).then((result) => {
-        if (result.isConfirmed) {
-          // Thực hiện xóa người dùng
-          this.users = this.users.filter((user) => user.id !== userId);
+      });
+      return;
+    }
+  
+    const updateUser = {
+      ...this.newUser,
+      password: this.newUser.password?.trim() === '' ? this.newUser.password : this.newUser.password,
+    };
+  
+    if (this.newUser.role === 'student') {
+      this.userService.updateStudent(this.newUser.id, updateUser).subscribe(() => {
+        this.loadUsers();
+        Swal.fire({
+          icon: 'success',
+          title: 'Cập nhật thành công!',
+          text: `Người dùng ${this.newUser.username} đã được cập nhật.`,
+          confirmButtonText: 'OK',
+          customClass: {
+            confirmButton: 'btn btn-success',
+          },
+        });
+      });
+    } else if (this.newUser.role === 'instructor') {
+      this.userService.updateInstructor(this.newUser.id, updateUser).subscribe(() => {
+        this.loadUsers();
+        Swal.fire({
+          icon: 'success',
+          title: 'Cập nhật thành công!',
+          text: `Người dùng ${this.newUser.username} đã được cập nhật.`,
+          confirmButtonText: 'OK',
+          customClass: {
+            confirmButton: 'btn btn-success',
+          },
+        });
+      });
+    }
+    this.resetForm();
+  }
+
+  deleteUser(userId: number, role: string) {
+    Swal.fire({
+      title: 'Bạn có chắc chắn muốn xóa người dùng này?',
+      text: 'Hành động này không thể hoàn tác.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Xóa',
+      cancelButtonText: 'Hủy',
+      customClass: {
+        confirmButton: 'btn btn-danger',
+        cancelButton: 'btn btn-secondary',
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const deleteFunction =
+          role === 'student'
+            ? this.userService.deleteStudent(userId)
+            : this.userService.deleteInstructor(userId);
+  
+        deleteFunction.subscribe(() => {
+          this.loadUsers();
           Swal.fire({
             title: 'Đã xóa!',
             text: 'Người dùng đã được xóa.',
@@ -162,13 +179,98 @@ export class ManagerUsersAdminComponent {
               confirmButton: 'btn btn-success',
             },
           });
-        }
-      });
-    }
+        });
+      }
+    });
   }
 
   resetForm() {
-    this.newUser = { id: 0, name: '', role: '', email: '' };
+    this.newUser = {
+      id: 0,
+      username: '',
+      password: '',
+      fullname: '',
+      role: '',
+      email: '',
+      avt: '',
+      birthdate: '',
+      phone: ''
+    };
     this.isEditing = false;
   }
+  createUser() {
+    const errorMessages: string[] = [];
+  
+    // Kiểm tra form có hợp lệ hay không
+    if (this.newUser.fullname.trim() === '') {
+      errorMessages.push('Vui lòng nhập tên người dùng.');
+    }
+    if (this.newUser.email.trim() === '') {
+      errorMessages.push('Vui lòng nhập email.');
+    }
+    if (this.newUser.password.trim() === '') {
+      errorMessages.push('Vui lòng nhập mật khẩu.');
+    }
+    if (this.newUser.role.trim() === '') {
+      errorMessages.push('Vui lòng chọn vai trò.');
+    }
+  
+    if (errorMessages.length > 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Thông báo!',
+        text: errorMessages.join('\n'),
+        confirmButtonText: 'OK',
+        customClass: {
+          confirmButton: 'btn btn-success',
+        },
+      });
+      return;
+    }
+  
+    // Gửi yêu cầu tạo user
+    const createFunction =
+      this.newUser.role === 'student'
+        ? this.userService.createStudent(this.newUser)
+        : this.userService.createInstructor(this.newUser);
+  
+    createFunction.subscribe(
+      (createdUser) => {
+        this.loadUsers(); // Cập nhật danh sách user
+        Swal.fire({
+          icon: 'success',
+          title: 'Thành công!',
+          text: `Người dùng ${createdUser.fullname} đã được tạo.`,
+          confirmButtonText: 'OK',
+          customClass: {
+            confirmButton: 'btn btn-success',
+          },
+        });
+        this.resetForm(); // Reset form
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi!',
+          text: 'Đã xảy ra lỗi khi tạo người dùng. Vui lòng thử lại.',
+          confirmButtonText: 'OK',
+          customClass: {
+            confirmButton: 'btn btn-danger',
+          },
+        });
+      }
+    );
+  }
+  
+  toggleAddUserForm() {
+    this.isAdding = !this.isAdding; // Đổi trạng thái hiển thị form
+    if (!this.isAdding) {
+      this.resetForm(); // Đặt lại form khi tắt
+    }
+  }
+  cancelAdd() {
+    this.isAdding = false; // Ẩn form thêm và hiển thị lại nút
+    this.resetForm();
+  }
+  
 }

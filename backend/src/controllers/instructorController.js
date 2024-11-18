@@ -1,139 +1,123 @@
-const  Instructor = require("../models/instructor"); 
-const  User = require("../models/user"); 
+const bcrypt = require('bcrypt');
+const User = require('../models/user');
 
-const { register } = require("../controllers/authController"); // Import phương thức register từ controller người dùng
-
+// Tạo Instructor mới
 exports.createInstructor = async (req, res) => {
-  const { username, password, fullname, email, id } = req.body;
+  const { id, username, password, fullname, email, avt, birthdate, phone } = req.body;
 
-  // Kiểm tra nếu các trường bắt buộc chưa có
-  if (!username || !password || !fullname || !email || !id) {
-    return res.status(400).json({ message: "All fields are required!" });
+  try {
+    // Kiểm tra nếu người dùng đã tồn tại
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already in use.' });
+    }
+
+    // Mã hóa mật khẩu
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Tạo người dùng mới với role là 'instructor'
+    const newUser = await User.create({
+      id,
+      username,
+      password: hashedPassword,
+      fullname,
+      email,
+      avt,
+      birthdate,
+      phone,
+      role: 'instructor', // Role là instructor
+    });
+
+    res.status(201).json({ message: 'Instructor created successfully', user: newUser });
+  } catch (error) {
+    console.error('Create instructor error:', error);
+    res.status(500).json({ message: 'Failed to create instructor!' });
   }
-
-  // Gọi phương thức register để tạo tài khoản người dùng
-  req.body.role = 'instructor'; // Xác định vai trò là instructor
-  const registrationResult = await register(req, res); // Gọi register để tạo tài khoản người dùng
-
-  if (registrationResult.status !== 201) {
-    return res.status(500).json({ message: "Failed to register user!" });
-  }
-
-  // Trả về thông báo thành công sau khi đăng ký tài khoản người dùng
-  res.status(201).json({
-    message: "Instructor created successfully!",
-    user: registrationResult.user,
-  });
 };
 
-
-
+// Lấy danh sách tất cả Instructor
 exports.getAllInstructors = async (req, res) => {
   try {
-    const instructors = await Instructor.findAll({
-      include: {
-        model: User, // Liên kết với bảng User để lấy thông tin user
-        as: "user",
-        attributes: ["id", "username", "email"], // Chỉ lấy một số thuộc tính của User
-      },
-    }); 
-    res.status(200).json(instructors);
-  } catch (error) {
-    console.error("Error fetching instructors:", error);
-    res.status(500).json({ error: "Failed to retrieve instructors!" });
-  }
-};
-
-// Lấy chi tiết Instructor theo ID
-exports.getInstructorById = async (req, res) => {
-  try {
-    const { id } = req.params; // Lấy id từ params
-    const instructor = await Instructor.findByPk(id, {
-      include: {
-        model: User,
-        as: "user",
-        attributes: ["id", "username", "email"],
-      },
+    const instructors = await User.findAll({
+      where: { role: 'instructor' },
     });
-    if (!instructor) {
-      return res.status(404).json({ message: "Instructor not found" });
-    }
-    res.status(200).json(instructor);
+
+    res.status(200).json({ instructors });
   } catch (error) {
-    console.error("Error fetching instructor:", error);
-    res.status(500).json({ error: "Failed to retrieve instructor!" });
+    console.error('Get all instructors error:', error);
+    res.status(500).json({ error: 'Failed to get instructor information!' });
   }
 };
 
-// Xóa Instructor theo ID
+// Lấy thông tin Instructor theo ID
+exports.getInstructorById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const instructor = await User.findOne({
+      where: { id, role: 'instructor' },
+    });
+
+    if (!instructor) {
+      return res.status(404).json({ message: 'Instructor not found!' });
+    }
+
+    res.status(200).json({ instructor });
+  } catch (error) {
+    console.error('Get instructor by ID error:', error);
+    res.status(500).json({ error: 'Failed to get instructor information!' });
+  }
+};
+
+// Cập nhật thông tin Instructor
+exports.updateInstructor = async (req, res) => {
+  const { fullname, email, avt, birthdate, phone } = req.body;
+
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: 'Invalid instructor ID' });
+    }
+
+    const user = await User.findOne({ where: { id, role: 'instructor' } });
+    if (!user) {
+      return res.status(404).json({ message: 'Instructor not found' });
+    }
+
+    user.fullname = fullname || user.fullname;
+    user.email = email || user.email;
+    user.avt = avt || user.avt;
+    user.birthdate = birthdate || user.birthdate;
+    user.phone = phone || user.phone;
+
+    await user.save();
+
+    res.status(200).json({ message: 'Instructor updated successfully', user });
+  } catch (error) {
+    console.error('Update instructor error:', error.message);
+    res.status(500).json({ message: 'Failed to update instructor information!' });
+  }
+};
+
+// Xóa Instructor
 exports.deleteInstructor = async (req, res) => {
   try {
-    const { id } = req.params;
-    const instructor = await Instructor.findByPk(id);
-    if (!instructor) {
-      return res.status(404).json({ message: "Instructor not found" });
+    const id = parseInt(req.params.id, 10);
+
+    if (isNaN(id)) {
+      return res.status(400).json({ message: 'Invalid instructor ID' });
     }
-    await instructor.destroy(); // Xóa Instructor
-    res.status(200).json({ message: "Instructor deleted successfully" });
+
+    const user = await User.findOne({ where: { id, role: 'instructor' } });
+    if (!user) {
+      return res.status(404).json({ message: 'Instructor not found' });
+    }
+
+    await user.destroy();
+
+    res.status(200).json({ message: 'Instructor deleted successfully' });
   } catch (error) {
-    console.error("Error deleting instructor:", error);
-    res.status(500).json({ error: "Failed to delete instructor!" });
+    console.error('Delete instructor error:', error.message);
+    res.status(500).json({ message: 'Failed to delete instructor!' });
   }
 };
-exports.editInstructor = async (req, res) => {
-    const { id } = req.params; // Lấy id từ params
-    const { user, name } = req.body; // Lấy thông tin từ request body
-  
-    const username = user?.username; // Trích xuất username từ user
-    const email = user?.email; // Trích xuất email từ user
-    const fullname = name; // Ánh xạ name thành fullname
-  
-    // Kiểm tra nếu không có trường nào cần cập nhật
-    if (!username && !email && !fullname) {
-      return res.status(400).json({
-        message: "At least one field is required to update!",
-        fieldsExpected: ["username", "email", "fullname"],
-      });
-    }
-  
-    try {
-      // Tìm Instructor bao gồm User liên kết
-      const instructor = await Instructor.findByPk(id, {
-        include: {
-          model: User,
-          as: "user",
-        },
-      });
-  
-      if (!instructor) {
-        return res.status(404).json({ message: "Instructor not found" });
-      }
-  
-      // Cập nhật User
-      const userToUpdate = instructor.user;
-      if (username) userToUpdate.username = username;
-      if (email) userToUpdate.email = email;
-  
-      // Cập nhật Instructor và đồng bộ fullname với User.fullname
-      if (fullname) {
-        instructor.name = fullname; // Cập nhật Instructor.name
-        userToUpdate.fullname = fullname; // Đồng bộ fullname với User.fullname
-      }
-  
-      // Lưu User trước để đảm bảo tính toàn vẹn dữ liệu
-      await userToUpdate.save();
-  
-      // Lưu Instructor sau khi cập nhật
-      await instructor.save();
-  
-      res.status(200).json({
-        message: "Instructor updated successfully!",
-        instructor,
-        user: userToUpdate,
-      });
-    } catch (error) {
-      console.error("Error updating instructor:", error);
-      res.status(500).json({ error: "Failed to update instructor!" });
-    }
-  };
-  

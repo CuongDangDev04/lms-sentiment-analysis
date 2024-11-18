@@ -30,6 +30,7 @@ export const adminRoutes: Routes = [
             {
                 path: 'feedbackmanger', component: FeedbackManagerAdminComponent
             }
+            
         ]
     }
 ];

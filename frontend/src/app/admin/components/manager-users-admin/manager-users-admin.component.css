@@ -211,3 +211,32 @@ table tbody tr:hover {
   color: red;
   font-style: italic;
 }
+/* Nút Thêm Người Dùng */
+.btn-add-user {
+  background-color: #4CAF50; /* Màu nền xanh */
+  color: white; /* Màu chữ trắng */
+  padding: 12px 24px; /* Khoảng cách xung quanh nội dung */
+  font-size: 16px; /* Cỡ chữ */
+  border: none; /* Bỏ viền */
+  border-radius: 4px; /* Bo tròn góc */
+  cursor: pointer; /* Con trỏ chuột khi hover */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Hiệu ứng khi hover */
+}
+
+.btn-add-user:hover {
+  background-color: #45a049; /* Màu nền khi hover */
+  transform: translateY(-2px); /* Hiệu ứng nổi lên */
+}
+
+.btn-add-user:focus {
+  outline: none; /* Bỏ outline khi nút được nhấn */
+}
+
+.btn-add-user i {
+  margin-right: 8px; /* Khoảng cách giữa icon và text */
+}
+
+/* Đảm bảo nút không bị lệch khi hiển thị icon */
+.btn-add-user i.fa {
+  font-size: 18px;
+}

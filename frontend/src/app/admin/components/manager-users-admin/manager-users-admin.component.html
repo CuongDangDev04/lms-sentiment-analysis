@@ -1,36 +1,94 @@
 <div class="user-management">
   <h2>Quản lý Người Dùng</h2>
-  
- 
 
-  <!-- Form thêm/chỉnh sửa người dùng -->
-  <form class="user-form" (ngSubmit)="addUser()">
+  <!-- Nút Thêm Người Dùng -->
+  <button class="btn-add-user" (click)="toggleAddUserForm()">
+    {{ isAdding ? 'Đóng Form Thêm Người Dùng' : 'Thêm Người Dùng' }}
+  </button>
+  <form class="user-form" *ngIf="isAdding" (ngSubmit)="createUser()">
     <div class="form-group">
-      <label for="userName">Tên người dùng</label>
-      <input id="userName" type="text" [(ngModel)]="newUser.name" name="name" required />
+      <label for="username">Username</label>
+      <input id="username" type="text" [(ngModel)]="newUser.username" name="username" required />
+    </div>
+    <div class="form-group">
+      <label for="fullname">Tên Người Dùng</label>
+      <input id="fullname" type="text" [(ngModel)]="newUser.fullname" name="fullname" required />
+    </div>
+    <div class="form-group">
+      <label for="id">Mã số Sinh Viên/Giảng Viên</label>
+      <input id="id" type="id" [(ngModel)]="newUser.id" name="id" required />
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" type="email" [(ngModel)]="newUser.email" name="email" required />
+    </div>
+    <div class="form-group">
+      <label for="password">Mật khẩu</label>
+      <input id="password" type="password" [(ngModel)]="newUser.password" name="password" required />
+    </div>
+    <div class="form-group">
+      <label for="role">Vai trò</label>
+      <select id="role" class="form-control" [(ngModel)]="newUser.role" name="role" required>
+        <option value="">-- Chọn vai trò --</option>
+        <option value="student">Sinh viên</option>
+        <option value="instructor">Giảng viên</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="birthdate">Ngày sinh</label>
+      <input id="birthdate" type="date" [(ngModel)]="newUser.birthdate" name="birthdate" />
+    </div>
+    <div class="form-group">
+      <label for="phone">Số điện thoại</label>
+      <input id="phone" type="text" [(ngModel)]="newUser.phone" name="phone" />
+    </div>
+    <button type="submit" class=" btn-save">Thêm người dùng</button>
+    <button type="button" class=" btn-reset" (click)="cancelAdd()">Hủy</button>
+  </form>
+
+  <!-- Form chỉnh sửa người dùng -->
+  <form class="user-form" *ngIf="isEditing" (ngSubmit)="updateUser()">
+    <div class="form-group">
+      <label for="id">Mã số sinh viên/giảng viên</label>
+      <input id="id" type="text" [(ngModel)]="newUser.id" name="id" disabled />
+    </div>
+
+    <!-- Vai trò sẽ được hiển thị nhưng không thể thay đổi -->
+    <div class="form-group">
+      <label for="userRole">Vai trò</label>
+      <input id="userRole" type="text" [value]="getRoleDisplay(newUser.role)" name="role" disabled />
     </div>
 
     <div class="form-group">
-      <label for="userRole">Vai trò</label>
-      <select id="userRole" [(ngModel)]="newUser.role" name="role" required>
-        <option value="sinhvien">Sinh viên</option>
-        <option value="giangvien">Giảng viên</option>
-      </select>
+      <label for="userName">Username</label>
+      <input id="userName" type="text" [(ngModel)]="newUser.username" name="userName" disabled />
+    </div>
+    <div class="form-group">
+      <label for="name">Tên Người Dùng</label>
+      <input id="name" type="text" [(ngModel)]="newUser.fullname" name="name" required />
     </div>
 
     <div class="form-group">
       <label for="userEmail">Email</label>
       <input id="userEmail" type="email" [(ngModel)]="newUser.email" name="email" required />
     </div>
-
-    <button type="submit" class="btn-save">{{ isEditing ? 'Cập Nhật Người Dùng' : 'Thêm Người Dùng' }}</button>
+ 
+  
+    <div class="form-group">
+      <label for="birthdate">Ngày Sinh</label>
+      <input id="birthdate" type="date" [(ngModel)]="newUser.birthdate" name="birthdate" />
+    </div>
+  
+    <div class="form-group">
+      <label for="phone">Số Điện Thoại</label>
+      <input id="phone" type="text" [(ngModel)]="newUser.phone" name="phone" />
+    </div>
+    <button type="submit" class="btn-save">{{ isEditing ? 'Cập Nhật Người Dùng' : '' }}</button>
     <button type="button" class="btn-reset" (click)="resetForm()">Đặt Lại</button>
   </form>
 
   <!-- Danh sách người dùng -->
-  <h3>Danh sách Người Dùng</h3>
-   <!-- Bộ lọc và tìm kiếm -->
-   <div class="filter-search">
+  <div class="filter-search">
     <div class="form-group">
       <label for="searchName">Tìm kiếm theo tên</label>
       <input id="searchName" type="text" [(ngModel)]="searchName" placeholder="Nhập tên người dùng..." />
@@ -41,42 +99,30 @@
       <input id="searchEmail" type="text" [(ngModel)]="searchEmail" placeholder="Nhập email..." />
     </div>
   </div>
+
   <table class="table">
     <thead>
       <tr>
         <th>Tên Người Dùng</th>
-        <th>
-          <div class="dropdown d-inline">
-            <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-              {{ filterRole ? (filterRole === 'sinhvien' ? 'SINH VIÊN' : 'GIẢNG VIÊN') : 'VAI TRÒ' }}
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <li>
-                <a class="dropdown-item" (click)="selectRole('')">Tất cả</a>
-              </li>
-              <li>
-                <a class="dropdown-item" (click)="selectRole('sinhvien')">Sinh viên</a>
-              </li>
-              <li>
-                <a class="dropdown-item" (click)="selectRole('giangvien')">Giảng viên</a>
-              </li>
-            </ul>
-          </div>
-        </th>
+        <th>Username</th>
+        <th>Mã Số Sinh Viên/Giảng Viên</th>
+        <th>Vai trò</th>
         <th>Email</th>
         <th>Thao tác</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let user of filteredUsers">
-        <td>{{ user.name }}</td>
-        <td>{{ user.role === 'sinhvien' ? 'Sinh viên' : 'Giảng viên' }}</td>
+        <td>{{ user.fullname }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.id }}</td>
+        <td>{{ getRoleDisplay(user.role) }}</td>
         <td>{{ user.email }}</td>
         <td>
           <button (click)="editUser(user)" type="button" class="btn btn-link btn-primary btn-lg" title="Chỉnh Sửa">
             <i class="fa fa-edit"></i>
           </button>
-          <button (click)="deleteUser(user.id)" type="button" class="btn btn-link btn-danger" title="Xóa">
+          <button (click)="deleteUser(user.id, user.role)" type="button" class="btn btn-link btn-danger" title="Xóa">
             <i class="fa fa-times"></i>
           </button>
         </td>

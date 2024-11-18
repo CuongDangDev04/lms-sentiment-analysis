@@ -49,7 +49,7 @@ export class DetailStudentComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       this.courseId = params.get('id');
     });
-    forkJoin({
+    forkJoin({ 
       studentLogin: this.studentService.getStudentByUserId(321),
       courseDetail: this.courseService.getCourseById(Number(this.courseId)),
       reviews: this.courseService.getReviewOfCourse(Number(this.courseId)),
@@ -72,6 +72,7 @@ export class DetailStudentComponent implements OnInit {
       }
     );
     console.log(this.reviews);
+    console.log("../../../../assets/student/img/course-1.jpg")
   }
 
   updateCourseRatings(): void {

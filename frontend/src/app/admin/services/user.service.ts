@@ -1,7 +1,8 @@
 // src/app/services/user.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+
+import { map, Observable } from 'rxjs';
 import { User } from '../interfaces/User'; // Import interface User
 
 @Injectable({
@@ -14,14 +15,16 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  // Lấy tất cả học sinh
   getAllStudents(): Observable<User[]> {
-    return this.http.get<User[]>(this.studentUrl);
+    return this.http
+      .get<{ students: User[] }>(this.studentUrl)
+      .pipe(map((response) => response.students));
   }
 
-  // Lấy tất cả giảng viên
   getAllInstructors(): Observable<User[]> {
-    return this.http.get<User[]>(this.instructorUrl);
+    return this.http
+      .get<{ instructors: User[] }>(this.instructorUrl)
+      .pipe(map((response) => response.instructors));
   }
 
   // Lấy học sinh theo ID
