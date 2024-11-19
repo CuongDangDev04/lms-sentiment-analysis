@@ -3,7 +3,9 @@ const User = require("./user");
 const Course = require("./course");
 const Category = require("./category");
 const StudentCourse = require("./studentcourse");
-const Review = require('./review')
+const Review = require('./review');
+const ApprovalRequest = require('./ApprovalRequest ');  // Import mô hình ApprovalRequest
+
 // User - Course (Instructor)
 User.hasMany(Course, {
   foreignKey: "instructorId",
@@ -31,6 +33,25 @@ User.belongsToMany(Course, {
   foreignKey: "userId", // Khóa ngoại trong bảng trung gian
 });
 
+// Thêm mối quan hệ ApprovalRequest - User (Instructor và Admin)
+User.hasMany(ApprovalRequest, {
+  foreignKey: "instructorId",
+  as: "approvalRequests", // Alias "approvalRequests" cho mối quan hệ
+});
+ApprovalRequest.belongsTo(User, {
+  foreignKey: "instructorId",
+  as: "instructor", // Alias "instructor" cho mối quan hệ
+});
+
+User.hasMany(ApprovalRequest, {
+  foreignKey: "adminId",
+  as: "adminApprovalRequests", // Alias "adminApprovalRequests" cho mối quan hệ
+});
+ApprovalRequest.belongsTo(User, {
+  foreignKey: "adminId",
+  as: "admin", // Alias "admin" cho mối quan hệ
+});
+
 // Export tất cả các model và sequelize
 module.exports = {
   sequelize,
@@ -38,5 +59,6 @@ module.exports = {
   Course,
   Category,
   StudentCourse,
-  Review
+  Review,
+  ApprovalRequest, 
 };

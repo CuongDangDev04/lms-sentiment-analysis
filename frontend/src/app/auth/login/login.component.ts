@@ -35,38 +35,43 @@ export class LoginComponent {
         console.log('Login successful:', response);
         console.log('User role:', response.user.role); // Đảm bảo vai trò được log đúng
   
-        // Hiển thị thông báo đăng nhập thành công
         Swal.fire({
           title: 'Đăng nhập thành công!',
           text: `Chào mừng ${response.user.fullname}, bạn đã đăng nhập thành công.`,
           icon: 'success',
           confirmButtonText: 'OK'
         }).then(() => {
-          // Điều hướng người dùng đến trang tương ứng dựa trên vai trò
           switch (response.user.role) {
             case Role.Admin:
-              console.log('Navigating to /admin');
               this.router.navigate(['/admin']);
               break;
             case Role.Instructor:
-              console.log('Navigating to /instructors');
               this.router.navigate(['/instructors']);
               break;
             case Role.Student:
-              console.log('Navigating to /student');
               this.router.navigate(['/student']);
               break;
             default:
-              console.log('Navigating to /');
               this.router.navigate(['/']);
           }
         });
       },
       (error) => {
         console.error('Login failed:', error);
-        this.errorMessage = 'Đăng nhập không thành công! Kiểm tra lại thông tin.';
+        // Kiểm tra lỗi về tài khoản chưa được phê duyệt
+        if (error.error && error.error.message === "Your account has not been approved yet!") {
+          Swal.fire({
+            title: 'Tài khoản chưa được phê duyệt!',
+            text: 'Vui lòng chờ quản trị viên phê duyệt tài khoản với quyền giáo viên.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+          });
+        } else {
+          this.errorMessage = 'Đăng nhập không thành công! Kiểm tra lại thông tin.';
+        }
       }
     );
   }
+  
   
 }

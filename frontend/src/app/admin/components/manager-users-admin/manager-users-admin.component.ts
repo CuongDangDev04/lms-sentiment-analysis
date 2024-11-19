@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./manager-users-admin.component.css'],
 })
 export class ManagerUsersAdminComponent implements OnInit {
+  
   users: User[] = [];
   newUser: User = {
     id: 0,
@@ -24,7 +25,8 @@ export class ManagerUsersAdminComponent implements OnInit {
     email: '',
     avt: '',
     birthdate: '',
-    phone: ''
+    phone: '',
+    isApproved:true
   };
   isEditing = false;
 
@@ -196,7 +198,8 @@ export class ManagerUsersAdminComponent implements OnInit {
       email: '',
       avt: '',
       birthdate: '',
-      phone: ''
+      phone: '',
+      isApproved:true
     };
     this.isEditing = false;
   }
@@ -275,5 +278,35 @@ export class ManagerUsersAdminComponent implements OnInit {
     this.isAdding = false; // Ẩn form thêm và hiển thị lại nút
     this.resetForm();
   }
+
+  approveInstructor(requestId: number) {
+    this.userService.approveInstructor(requestId).subscribe(
+      (response) => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Phê duyệt thành công!',
+          text: 'Giảng viên đã được phê duyệt.',
+          confirmButtonText: 'OK',
+          customClass: {
+            confirmButton: 'btn btn-success',
+          },
+        });
+        // Tải lại danh sách người dùng sau khi phê duyệt
+        this.loadUsers();
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi!',
+          text: 'Đã xảy ra lỗi khi phê duyệt giảng viên.',
+          confirmButtonText: 'OK',
+          customClass: {
+            confirmButton: 'btn btn-danger',
+          },
+        });
+      }
+    );
+  }
+  
   
 }

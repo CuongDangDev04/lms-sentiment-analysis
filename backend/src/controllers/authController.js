@@ -1,32 +1,30 @@
 const {User} = require("../models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const ApprovalRequest = require('../models/ApprovalRequest ')
 exports.register = async (req, res) => {
   const { id, username, password, fullname, role, email } = req.body;
 
-  // Kiểm tra dữ liệu đầu vào
-  if (!id || !username || !password || !fullname || !role || !email) {
+  if (!username || !password || !fullname || !role || !email) {
     return res.status(400).json({ message: "All fields are required!" });
   }
 
   try {
-    // Kiểm tra xem email đã tồn tại chưa
     const existingUserByEmail = await User.findOne({ where: { email } });
     if (existingUserByEmail) {
       return res.status(400).json({ message: "Email already exists!" });
     }
 
-    // Kiểm tra xem username đã tồn tại chưa
     const existingUserByUsername = await User.findOne({ where: { username } });
     if (existingUserByUsername) {
       return res.status(400).json({ message: "Username already exists!" });
     }
 
-    // Mã hóa mật khẩu
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Tạo người dùng mới
+    // Gán giá trị mặc định cho `isApproved` tùy theo role
+    const isApproved = role === "instructor" ? false : true;
+
     const user = await User.create({
       id,
       username,
@@ -34,7 +32,17 @@ exports.register = async (req, res) => {
       fullname,
       role,
       email,
+      isApproved,  // Gán giá trị isApproved tùy theo role
     });
+
+    if (role === "instructor") {
+      // Tạo yêu cầu phê duyệt cho instructor
+      await ApprovalRequest.create({
+        instructorId: user.id,
+        adminId: 0, // Chưa có admin xử lý yêu cầu
+        status: "pending", // Yêu cầu đang chờ
+      });
+    }
 
     res.status(201).json({ message: "User created successfully!", user });
   } catch (error) {
@@ -42,6 +50,54 @@ exports.register = async (req, res) => {
     res.status(500).json({ error: "User registration failed!" });
   }
 };
+exports.approveInstructor = async (req, res) => {
+  const { requestId } = req.params;  // Lấy requestId từ URL params
+
+  try {
+    // Lấy yêu cầu phê duyệt từ requestId
+    const approvalRequest = await ApprovalRequest.findByPk(requestId);
+
+    if (!approvalRequest) {
+      return res.status(404).json({ message: "Approval request not found!" });
+    }
+
+    // Kiểm tra trạng thái yêu cầu phê duyệt
+    if (approvalRequest.status !== "pending") {
+      return res.status(400).json({ message: "This request has already been processed." });
+    }
+
+    // Lấy thông tin giảng viên (instructor) liên quan đến yêu cầu phê duyệt
+    const instructor = await User.findByPk(approvalRequest.instructorId, {
+      attributes: { exclude: ['password'] }  // Loại bỏ mật khẩu
+    });
+
+    if (!instructor) {
+      return res.status(404).json({ message: "Instructor not found!" });
+    }
+
+    // Trả về thông tin giảng viên và yêu cầu phê duyệt
+    res.status(200).json({
+      message: "Instructor details retrieved successfully!",
+      approvalRequest,
+      instructor,  // Trả về thông tin giảng viên trừ mật khẩu
+    });
+
+    // Cập nhật trạng thái phê duyệt
+    instructor.isApproved = true;
+    await instructor.save();
+
+    // Cập nhật trạng thái yêu cầu phê duyệt
+    approvalRequest.status = "approved";
+    await approvalRequest.save();
+
+  } catch (error) {
+    console.error("Approval error:", error);
+    res.status(500).json({ error: "Failed to approve instructor." });
+  }
+};
+
+
+
 exports.login = async (req, res) => {
   const { username, password } = req.body;
 
@@ -55,6 +111,10 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ where: { username } });
     if (!user) return res.status(404).json({ message: "User not found!" });
 
+     // Kiểm tra xem người dùng đã được phê duyệt chưa
+     if (!user.isApproved) {
+      return res.status(403).json({ message: "Your account has not been approved yet!" });
+    }
     // Kiểm tra mật khẩu
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid password!" });

@@ -45,6 +45,12 @@ const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  isApproved: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,  // Mặc định là chưa được phê duyệt
+    allowNull: false,
+  },
+  
 });
 
 module.exports = User;

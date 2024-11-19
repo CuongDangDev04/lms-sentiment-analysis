@@ -56,15 +56,25 @@ export class RegisterComponent {
       (response) => {
         console.log('Đăng ký thành công:', response);
         // Hiển thị SweetAlert khi đăng ký thành công
-        Swal.fire({
-          title: 'Đăng ký thành công!',
-          text: 'Bạn sẽ được chuyển đến trang đăng nhập.',
-          icon: 'success',
-          confirmButtonText: 'OK',
-        }).then(() => {
-          // Chuyển hướng về trang đăng nhập sau khi đăng ký thành công
-          this.router.navigate(['/']); // Giả sử trang đăng nhập có đường dẫn là '/'
-        });
+        if (this.role === 'instructor') {
+          Swal.fire({
+            title: 'Đăng ký thành công!',
+            text: 'Vui lòng đợi admin phê duyệt trước khi bạn có thể sử dụng tài khoản giáo viên.',
+            icon: 'info',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            this.router.navigate(['/']); // Chuyển hướng về trang đăng nhập
+          });
+        } else {
+          Swal.fire({
+            title: 'Đăng ký thành công!',
+            text: 'Bạn sẽ được chuyển đến trang đăng nhập.',
+            icon: 'success',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            this.router.navigate(['/']); // Chuyển hướng về trang đăng nhập
+          });
+        }
       },
       (error) => {
         console.error('Đăng ký thất bại:', error);

@@ -11,8 +11,15 @@ export class UserService {
   // URL gốc của API cho student và instructor
   private studentUrl = 'http://localhost:5000/api/student';
   private instructorUrl = 'http://localhost:5000/api/instructor';
-
+  private approvalUrl = 'http://localhost:5000/api/auth/approve-instructor';
   constructor(private http: HttpClient) {}
+
+   // Phê duyệt giảng viên
+   approveInstructor(requestId: number): Observable<any> {
+    return this.http.put(`${this.approvalUrl}/${requestId}`, {}).pipe(
+      map((response) => response)
+    );
+  }
 
   getAllStudents(): Observable<User[]> {
     return this.http.get<{ students: User[] }>(this.studentUrl).pipe(

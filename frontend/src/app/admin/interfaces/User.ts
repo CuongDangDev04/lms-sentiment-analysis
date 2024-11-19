@@ -8,4 +8,5 @@ export interface User {
     avt?: string;  
     birthdate?: string;  
     phone?: string;  
+    isApproved: Boolean;
 }

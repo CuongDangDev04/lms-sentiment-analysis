@@ -5,6 +5,8 @@
   <button class="btn-add-user" (click)="toggleAddUserForm()">
     {{ isAdding ? 'Đóng Form Thêm Người Dùng' : 'Thêm Người Dùng' }}
   </button>
+
+  <!-- Form Thêm Người Dùng -->
   <form class="user-form" *ngIf="isAdding" (ngSubmit)="createUser()">
     <div class="form-group">
       <label for="username">Username</label>
@@ -42,8 +44,8 @@
       <label for="phone">Số điện thoại</label>
       <input id="phone" type="text" [(ngModel)]="newUser.phone" name="phone" />
     </div>
-    <button type="submit" class=" btn-save">Thêm người dùng</button>
-    <button type="button" class=" btn-reset" (click)="cancelAdd()">Hủy</button>
+    <button type="submit" class="btn-save">Thêm người dùng</button>
+    <button type="button" class="btn-reset" (click)="cancelAdd()">Hủy</button>
   </form>
 
   <!-- Form chỉnh sửa người dùng -->
@@ -53,7 +55,6 @@
       <input id="id" type="text" [(ngModel)]="newUser.id" name="id" disabled />
     </div>
 
-    <!-- Vai trò sẽ được hiển thị nhưng không thể thay đổi -->
     <div class="form-group">
       <label for="userRole">Vai trò</label>
       <input id="userRole" type="text" [value]="getRoleDisplay(newUser.role)" name="role" disabled />
@@ -72,17 +73,17 @@
       <label for="userEmail">Email</label>
       <input id="userEmail" type="email" [(ngModel)]="newUser.email" name="email" required />
     </div>
- 
-  
+
     <div class="form-group">
       <label for="birthdate">Ngày Sinh</label>
       <input id="birthdate" type="date" [(ngModel)]="newUser.birthdate" name="birthdate" />
     </div>
-  
+
     <div class="form-group">
       <label for="phone">Số Điện Thoại</label>
       <input id="phone" type="text" [(ngModel)]="newUser.phone" name="phone" />
     </div>
+
     <button type="submit" class="btn-save">{{ isEditing ? 'Cập Nhật Người Dùng' : '' }}</button>
     <button type="button" class="btn-reset" (click)="resetForm()">Đặt Lại</button>
   </form>
@@ -108,6 +109,7 @@
         <th>Mã Số Sinh Viên/Giảng Viên</th>
         <th>Vai trò</th>
         <th>Email</th>
+        <th>Phê Duyệt</th> <!-- Cột Phê Duyệt -->
         <th>Thao tác</th>
       </tr>
     </thead>
@@ -119,6 +121,16 @@
         <td>{{ getRoleDisplay(user.role) }}</td>
         <td>{{ user.email }}</td>
         <td>
+          <!-- Nút Phê Duyệt chỉ hiển thị nếu người dùng là giảng viên và chưa được phê duyệt -->
+          <button *ngIf="user.role === 'instructor' && !user.isApproved" 
+                  (click)="approveInstructor(user.id)" 
+                  class="btn btn-success">
+            Phê Duyệt
+          </button>
+          <!-- Hiển thị trạng thái đã phê duyệt -->
+          <span *ngIf="user.isApproved" class="approved-status">Đã Phê Duyệt</span>
+        </td>
+        <td>
           <button (click)="editUser(user)" type="button" class="btn btn-link btn-primary btn-lg" title="Chỉnh Sửa">
             <i class="fa fa-edit"></i>
           </button>
@@ -129,4 +141,5 @@
       </tr>
     </tbody>
   </table>
+  
 </div>
