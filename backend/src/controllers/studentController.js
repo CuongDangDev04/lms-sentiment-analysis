@@ -1,16 +1,18 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const User  = require('../models/user');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 
+// Tạo mới tài khoản student
 exports.createStudent = async (req, res) => {
-  const { id,username, password, fullname, email, avt, birthdate, phone } = req.body;
-  console.log(req.body)
+  const { id, username, password, fullname, email, avt, birthdate, phone } =
+    req.body;
+  console.log(req.body);
 
   try {
     // Kiểm tra nếu người dùng đã tồn tại
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      return res.status(400).json({ message: 'Email already in use.' });
+      return res.status(400).json({ message: "Email already in use." });
     }
 
     // Mã hóa mật khẩu
@@ -30,23 +32,39 @@ exports.createStudent = async (req, res) => {
     });
 
     // Trả về thông báo thành công
-    res.status(201).json({ message: 'Student created successfully', user: newUser });
+    res
+      .status(201)
+      .json({ message: "Student created successfully", user: newUser });
   } catch (error) {
-    console.error('Create student error:', error);
-    res.status(500).json({ message: 'Failed to create student!' });
+    console.error("Create student error:", error);
+    res.status(500).json({ message: "Failed to create student!" });
   }
+
+  // Gọi phương thức register để tạo tài khoản người dùng
+  req.body.role = "student"; // Xác định vai trò là student
+  const registrationResult = await register(req, res); // Gọi register để tạo tài khoản người dùng
+
+  if (registrationResult.status !== 201) {
+    return res.status(500).json({ message: "Failed to register user!" });
+  }
+
+  // Trả về thông báo thành công sau khi đăng ký tài khoản người dùng
+  res.status(201).json({
+    message: "Student created successfully!",
+    user: registrationResult.user,
+  });
 };
 
 exports.getAllStudents = async (req, res) => {
   try {
     // Lấy tất cả người dùng với role là 'student'
     const students = await User.findAll({
-      where: { role: 'student' }
+      where: { role: "student" },
     });
 
     // Trả về danh sách sinh viên
     res.status(200).json({
-      students // Trả về tất cả người dùng có role là 'student'
+      students, // Trả về tất cả người dùng có role là 'student'
     });
   } catch (error) {
     console.error("Get all students error:", error);
@@ -60,7 +78,7 @@ exports.getStudentById = async (req, res) => {
   try {
     // Tìm người dùng theo ID và role là 'student'
     const student = await User.findOne({
-      where: { id, role: 'student' }
+      where: { id, role: "student" },
     });
 
     // Nếu không tìm thấy người dùng, trả về lỗi 404
@@ -70,11 +88,35 @@ exports.getStudentById = async (req, res) => {
 
     // Trả về thông tin sinh viên
     res.status(200).json({
-      student // Trả về thông tin sinh viên theo ID
+      student, // Trả về thông tin sinh viên theo ID
     });
   } catch (error) {
     console.error("Get student by ID error:", error);
     res.status(500).json({ error: "Failed to get student information!" });
+  }
+};
+exports.getStudentByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params; // Lấy userId từ params
+
+    // Kiểm tra nếu userId không tồn tại
+    if (!userId) {
+      return res.status(400).json({ message: "userId is required" });
+    }
+
+    // Tìm sinh viên theo userId
+    const student = await Student.findOne({ where: { userId: userId } });
+
+    // Kiểm tra nếu không tìm thấy sinh viên
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    // Trả về thông tin sinh viên
+    res.status(200).json(student);
+  } catch (error) {
+    console.error("Error fetching student:", error);
+    res.status(500).json({ error: "Failed to retrieve student!" });
   }
 };
 
@@ -85,17 +127,17 @@ exports.updateStudent = async (req, res) => {
     // Kiểm tra và parse `id`
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) {
-      return res.status(400).json({ message: 'Invalid student ID' });
+      return res.status(400).json({ message: "Invalid student ID" });
     }
 
     // Log params để kiểm tra
-    console.log('Params:', req.params);
-    console.log('Parsed ID:', id);
+    console.log("Params:", req.params);
+    console.log("Parsed ID:", id);
 
     // Kiểm tra người dùng tồn tại
-    const user = await User.findOne({ where: { id, role: 'student' } });
+    const user = await User.findOne({ where: { id, role: "student" } });
     if (!user) {
-      return res.status(404).json({ message: 'Student not found' });
+      return res.status(404).json({ message: "Student not found" });
     }
 
     // Cập nhật thông tin người dùng
@@ -107,13 +149,12 @@ exports.updateStudent = async (req, res) => {
 
     await user.save();
 
-    res.status(200).json({ message: 'Student updated successfully', user });
+    res.status(200).json({ message: "Student updated successfully", user });
   } catch (error) {
-    console.error('Update student error:', error.message);
-    res.status(500).json({ message: 'Failed to update student information!' });
+    console.error("Update student error:", error.message);
+    res.status(500).json({ message: "Failed to update student information!" });
   }
 };
-
 
 exports.deleteStudent = async (req, res) => {
   try {
@@ -121,22 +162,78 @@ exports.deleteStudent = async (req, res) => {
     const id = parseInt(req.params.id, 10);
 
     if (isNaN(id)) {
-      return res.status(400).json({ message: 'Invalid student ID' });
+      return res.status(400).json({ message: "Invalid student ID" });
     }
 
     // Kiểm tra người dùng tồn tại
-    const user = await User.findOne({ where: { id, role: 'student' } });
+    const user = await User.findOne({ where: { id, role: "student" } });
     if (!user) {
-      return res.status(404).json({ message: 'Student not found' });
+      return res.status(404).json({ message: "Student not found" });
     }
 
     // Xóa người dùng
     await user.destroy();
 
-    res.status(200).json({ message: 'Student deleted successfully' });
+    res.status(200).json({ message: "Student deleted successfully" });
   } catch (error) {
-    console.error('Delete student error:', error.message);
-    res.status(500).json({ message: 'Failed to delete student!' });
+    console.error("Delete student error:", error.message);
+    res.status(500).json({ message: "Failed to delete student!" });
   }
 };
 
+exports.editStudent = async (req, res) => {
+  const { id } = req.params; // Lấy id từ params
+  const { user, name } = req.body; // Lấy thông tin từ request body
+
+  const username = user?.username; // Trích xuất username từ user
+  const email = user?.email; // Trích xuất email từ user
+  const fullname = name; // Ánh xạ name thành fullname
+
+  // Kiểm tra nếu không có trường nào cần cập nhật
+  if (!username && !email && !fullname) {
+    return res.status(400).json({
+      message: "At least one field is required to update!",
+      fieldsExpected: ["username", "email", "fullname"],
+    });
+  }
+
+  try {
+    // Tìm Student bao gồm User liên kết
+    const student = await Student.findByPk(id, {
+      include: {
+        model: User,
+        as: "user",
+      },
+    });
+
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    // Cập nhật User
+    const userToUpdate = student.user;
+    if (username) userToUpdate.username = username;
+    if (email) userToUpdate.email = email;
+
+    // Cập nhật Student và đồng bộ fullname với User.fullname
+    if (fullname) {
+      student.name = fullname; // Cập nhật Student.name
+      userToUpdate.fullname = fullname; // Đồng bộ fullname với User.fullname
+    }
+
+    // Lưu User trước để đảm bảo tính toàn vẹn dữ liệu
+    await userToUpdate.save();
+
+    // Lưu Student sau khi cập nhật
+    await student.save();
+
+    res.status(200).json({
+      message: "Student updated successfully!",
+      student,
+      user: userToUpdate,
+    });
+  } catch (error) {
+    console.error("Error updating student:", error);
+    res.status(500).json({ error: "Failed to update student!" });
+  }
+};

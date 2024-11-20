@@ -3,7 +3,7 @@ import { Component, HostListener, NgModule, OnInit } from '@angular/core';
 import { CourseService } from '../../services/course.service';
 import { ActivatedRoute } from '@angular/router';
 import { Course } from '../../interfaces/course';
-import { count, firstValueFrom } from 'rxjs';
+import { count, firstValueFrom, forkJoin } from 'rxjs';
 import { Review } from '../../interfaces/review';
 import { Student } from '../../interfaces/student';
 import { AuthService } from '../../../auth/auth.service';
@@ -19,6 +19,7 @@ import { StudentService } from '../../services/student.service';
 })
 export class DetailStudentComponent implements OnInit {
   isLoggedIn: boolean = true;
+  studentLogin: any;
   showOverlay: boolean = false;
   courseId: string | null = null;
   courseDetail: any;
@@ -37,7 +38,9 @@ export class DetailStudentComponent implements OnInit {
     private courseService: CourseService,
     private authService: AuthService,
     private studentService: StudentService
-  ) {}
+  ) {
+    this.isLoggedIn = authService.isLoggedIn();
+  }
 
   showStickyBox = false;
   isMenuFixed = false;
@@ -46,31 +49,23 @@ export class DetailStudentComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       this.courseId = params.get('id');
     });
-
-    this.courseService.getCourseById(Number(this.courseId)).subscribe(
-      (courseDetail: Course) => {
+    forkJoin({
+      studentLogin: this.studentService.getStudentByUserId(321),
+      courseDetail: this.courseService.getCourseById(Number(this.courseId)),
+      reviews: this.courseService.getReviewOfCourse(Number(this.courseId)),
+      students: this.studentService.getAllStudents(),
+    }).subscribe(
+      ({ courseDetail, reviews, students, studentLogin }) => {
+        console.log('Reviews for courseId ' + this.courseId + ':', reviews);
+        this.studentLogin = studentLogin;
         this.courseDetail = courseDetail;
-      },
-      (error) => {
-        console.error('Lỗi khi gọi API:', error);
-      }
-    );
-    console.log(this.courseDetail);
-    this.courseService.getReviewOfCourse(Number(this.courseId)).subscribe(
-      (reviews: Review[]) => {
         this.reviews = reviews;
+        this.studentComment = students;
         this.updateCourseRatings();
         this.totalComment = this.reviews.length;
-        this.studentService.getAllStudents().subscribe(
-          (students: Student[]) => {
-            this.studentComment = students; // Lưu dữ liệu sinh viên vào studentComment
-            console.log(this.studentComment);
-            this.loadComments(); // Sau khi nhận được dữ liệu sinh viên, load comments
-          },
-          (error) => {
-            console.error('Error fetching students:', error);
-          }
-        );
+        console.log(this.studentComment);
+        console.log('Đây là student đang login: ' + this.studentLogin);
+        this.loadComments(); // Chỉ gọi loadComments sau khi tất cả dữ liệu đã được tải xong
       },
       (error) => {
         console.error('Lỗi khi gọi API:', error);
@@ -112,12 +107,12 @@ export class DetailStudentComponent implements OnInit {
     // Kết hợp thông tin của sinh viên với review
     return students
       .filter((student) =>
-        courseReviews.some((review) => review.id === student.id)
+        courseReviews.some((review) => review.studentId === student.id)
       ) // Chỉ lấy sinh viên đã có review trong khóa học này
       .map((student) => {
         // Lấy tất cả review của sinh viên trong khóa học
         const studentReviews = courseReviews.filter(
-          (review) => review.id === student.id
+          (review) => review.studentId === student.id
         );
 
         return {
@@ -147,6 +142,40 @@ export class DetailStudentComponent implements OnInit {
       this.visibleComments.length + this.commentsPerPage
     );
     this.visibleComments = [...this.visibleComments, ...nextComments]; // Cập nhật visibleComments
+  }
+
+  addComment() {
+    if (!this.isLoggedIn) {
+      this.errorMessage = 'Bạn phải đăng nhập để bình luận';
+      return;
+    }
+
+    if (!this.newComment || this.newComment.trim() === '') {
+      this.errorMessage = 'Vui lòng nhập bình luận';
+      return;
+    }
+
+    const commentData = {
+      //studentId: this.studentLogin.id,
+      studentId: 3,
+      courseId: this.courseId,
+      //rating: this.rating,
+      rating: 3,
+      comment: this.newComment,
+    };
+    this.courseService.addComment(commentData).subscribe(
+      (response) => {
+        console.log('Bình luận thành công:', response);
+
+        this.newComment = '';
+        this.errorMessage = '';
+      },
+      (error) => {
+        console.error('Lỗi khi gửi bình luận:', error);
+        this.errorMessage = 'Đã xảy ra lỗi khi thêm bình luận';
+      }
+    );
+    window.location.reload();
   }
   @HostListener('window:scroll', [])
   onWindowScroll() {

@@ -3,5 +3,6 @@ export interface Review {
   courseId: number;
   rating: number;
   comment: string;
+  studentId: number;
   createdAt: Date;
 }

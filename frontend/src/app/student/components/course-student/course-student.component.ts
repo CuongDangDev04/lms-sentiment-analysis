@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { Course } from '../../interfaces/course';
 import { Review } from '../../interfaces/review';
 import { CourseService } from '../../services/course.service';
+import { RouterLink } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-course-student',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './course-student.component.html',
   styleUrls: ['./course-student.component.css'],
 })
@@ -35,15 +37,20 @@ export class CourseStudentComponent implements OnInit {
 
   // Khởi tạo tất cả khóa học
   getAllCourses(): void {
-    this.courseService.getAllCourses().subscribe(
-      (courses) => {
-        this.courses = courses; // Cập nhật courses sau khi lấy được dữ liệu từ API
-        console.log(this.courses); // In ra dữ liệu sau khi đã gán
-        this.updateCourseRatings(); // Cập nhật rating khóa học sau khi có danh sách
-        this.applyFilter(); // Áp dụng bộ lọc nếu có
+    forkJoin({
+      courses: this.courseService.getAllCourses(),
+      reviews: this.courseService.getAllReview(),
+    }).subscribe(
+      ({ courses, reviews }) => {
+        this.courses = courses; // Cập nhật khóa học
+        this.reviews = reviews; // Lưu thông tin khác
+        console.log(this.courses); // In ra khóa học
+        this.updateCourseRatings(); // Cập nhật rating khóa học
+        this.applyFilter(); // Áp dụng bộ lọc
+        // Xử lý dữ liệu khác nếu cần
       },
       (error) => {
-        console.error('Có lỗi xảy ra khi lấy dữ liệu khóa học:', error); // Xử lý lỗi nếu có
+        console.error('Có lỗi xảy ra khi lấy dữ liệu:', error); // Xử lý lỗi
       }
     );
   }
