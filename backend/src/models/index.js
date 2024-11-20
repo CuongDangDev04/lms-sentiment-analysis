@@ -4,8 +4,7 @@ const Course = require("./course");
 const Category = require("./category");
 const StudentCourse = require("./studentcourse");
 const Review = require('./review');
-const ApprovalRequest = require('./ApprovalRequest ');  // Import mô hình ApprovalRequest
-const Review = require("./review");
+const ApprovalRequest = require('./ApprovalRequest ');
 
 // User - Course (Instructor)
 User.hasMany(Course, {
@@ -22,45 +21,48 @@ Course.belongsTo(Category, {
   foreignKey: "categoryId",
   as: "category", // Alias "category" cho mối quan hệ
 });
+
 // Course - User (Students)
 Course.belongsToMany(User, {
-  through: StudentCourse, // Bảng trung gian
-  as: "students", // Alias "students" cho mối quan hệ
-  foreignKey: "courseId", // Khóa ngoại trong bảng trung gian
+  through: StudentCourse,
+  as: "students",
+  foreignKey: "courseId",
 });
 User.belongsToMany(Course, {
-  through: StudentCourse, // Bảng trung gian
-  as: "enrolledCourses", // Alias "enrolledCourses" cho mối quan hệ
-  foreignKey: "userId", // Khóa ngoại trong bảng trung gian
+  through: StudentCourse,
+  as: "enrolledCourses",
+  foreignKey: "userId",
 });
 
 // Thêm mối quan hệ ApprovalRequest - User (Instructor và Admin)
 User.hasMany(ApprovalRequest, {
   foreignKey: "instructorId",
-  as: "approvalRequests", // Alias "approvalRequests" cho mối quan hệ
+  as: "instructorApprovalRequests", // Alias duy nhất cho yêu cầu phê duyệt của instructor
 });
 ApprovalRequest.belongsTo(User, {
   foreignKey: "instructorId",
-  as: "instructor", // Alias "instructor" cho mối quan hệ
+  as: "instructor",
 });
 
 User.hasMany(ApprovalRequest, {
   foreignKey: "adminId",
-  as: "adminApprovalRequests", // Alias "adminApprovalRequests" cho mối quan hệ
+  as: "adminApprovalRequests", // Alias duy nhất cho yêu cầu phê duyệt của admin
 });
 ApprovalRequest.belongsTo(User, {
   foreignKey: "adminId",
-  as: "admin", // Alias "admin" cho mối quan hệ
+  as: "admin",
 });
 
+// Review - User (Student)
 Review.belongsTo(User, {
   foreignKey: "studentId",
-  as: "student",
+  as: "reviewStudent", // Alias "reviewStudent" cho mối quan hệ Review - User (Student)
 });
 
+// Course - Review
 Course.hasMany(Review, {
   foreignKey: "courseId",
-  as: "reviews",
+  as: "courseReviews", // Alias "courseReviews" cho mối quan hệ Course - Review
 });
 
 Review.belongsTo(Course, {
@@ -75,6 +77,5 @@ module.exports = {
   Category,
   StudentCourse,
   Review,
-  ApprovalRequest, 
-  Review,
+  ApprovalRequest,
 };

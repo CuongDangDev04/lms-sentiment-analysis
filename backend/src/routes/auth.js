@@ -10,6 +10,8 @@ router.post('/register', authController.register);
 router.post('/login', authController.login);
 
 router.get('/user', verifyToken, authController.getUser);
+//  Endpoint phê duyệt instructor
+  router.put('/approve-instructor/:requestId', verifyToken, authController.approveInstructor);
 
 module.exports = router;
 

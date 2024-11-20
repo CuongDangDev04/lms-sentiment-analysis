@@ -1,64 +1,40 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
-const User = require("./user");
+const User = require('./user')
 const Course = require("./course");
-
-const Review = sequelize.define(
-  "Review",
-  {
-    courseId: {
-      type: DataTypes.INTEGER,
-      primaryKey: true, // Đặt khóa chính cho cột courseId
-      allowNull: false,
-      references: {
-        model: Course, // Tham chiếu đến bảng Course
-        key: "id", // Khóa chính của bảng Course
-      },
-      onDelete: "CASCADE", // Xóa Review nếu Course bị xóa
+const Review = sequelize.define("Review", {
+  courseId: {
+    type: DataTypes.INTEGER,
+    primaryKey: true, // Đặt khóa chính cho cột courseId
+    allowNull: false,
+    references: {
+      model: Course, // Tham chiếu đến bảng Course
+      key: "id", // Khóa chính của bảng Course
     },
-    studentId: {
-      type: DataTypes.INTEGER,
-      primaryKey: true, // Đặt khóa chính cho cột studentId
-      allowNull: false,
-      references: {
-        model: User, // Tham chiếu đến bảng User
-        key: "id", // Khóa chính của bảng User
-      },
-      onDelete: "CASCADE", // Xóa Review nếu User (Sinh viên) bị xóa
-    },
-    rating: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    comment: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+    onDelete: "CASCADE", // Xóa Review nếu Course bị xóa
   },
-  {
-    timestamps: true, // Thêm trường createdAt và updatedAt tự động
-  }
+  studentId: {
+    type: DataTypes.INTEGER,
+    primaryKey: true, // Đặt khóa chính cho cột studentId
+    allowNull: false,
+    references: {
+      model: User, // Tham chiếu đến bảng User
+      key: "id", // Khóa chính của bảng User
+    },
+    onDelete: "CASCADE", // Xóa Review nếu User (Sinh viên) bị xóa
+  },
+  rating: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  comment: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+},
+{
+  timestamps: true, // Thêm trường createdAt và updatedAt tự động
+}
 );
-
-// Thiết lập mối quan hệ với User và Course
-User.hasMany(Review, {
-  foreignKey: "studentId",
-  as: "reviews",
-});
-
-Review.belongsTo(User, {
-  foreignKey: "studentId",
-  as: "student",
-});
-
-Course.hasMany(Review, {
-  foreignKey: "courseId",
-  as: "reviews",
-});
-
-Review.belongsTo(Course, {
-  foreignKey: "courseId",
-  as: "course",
-});
 
 module.exports = Review;

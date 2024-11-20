@@ -22,14 +22,6 @@ app.use("/api/course", courseRoutes);
 
 const PORT = process.env.PORT || 5000;
 
-// // Kết nối với cơ sở dữ liệu và khởi động server
-// sequelize.sync({ force: false }) // hoặc { alter: true } để tránh việc xóa bảng nếu đã tồn tại
-//   .then(() => {
-//     console.log("Database synced");
-//   })
-//   .catch((err) => {
-//     console.error("Error syncing database:", err);
-//   });
 sequelize
   .sync()
   .then(() => {
