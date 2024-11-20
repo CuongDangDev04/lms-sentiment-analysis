@@ -6,6 +6,7 @@ import { Review } from '../../interfaces/review';
 import { CourseService } from '../../services/course.service';
 import { RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
+import { InstructorService } from '../../services/instructor.service';
 
 @Component({
   selector: 'app-course-student',
@@ -18,12 +19,13 @@ export class CourseStudentComponent implements OnInit {
   courseService: CourseService = inject(CourseService);
   searchTerm: string = '';
   selectedCategory: string = 'all'; // 'all' để hiển thị tất cả các khóa học theo mặc định
+  category_all: string[] = [];
 
   reviews: Review[] = [];
 
   courses: Course[] = [];
 
-  constructor() {}
+  constructor(private instructorService: InstructorService) {}
   filteredCourseList: Course[] = [];
 
   // Phân trang
@@ -40,10 +42,36 @@ export class CourseStudentComponent implements OnInit {
     forkJoin({
       courses: this.courseService.getAllCourses(),
       reviews: this.courseService.getAllReview(),
+      instructors: this.instructorService.getAllInstructor(),
+      categories: this.courseService.getAllCategories(),
     }).subscribe(
-      ({ courses, reviews }) => {
-        this.courses = courses; // Cập nhật khóa học
+      ({ courses, reviews, instructors, categories }) => {
+        // this.courses = courses; // Cập nhật khóa học
         this.reviews = reviews; // Lưu thông tin khác
+        const instructorMap = instructors.reduce((map, instructor) => {
+          map[instructor.id] = instructor.fullname; // Giả sử API giảng viên trả về `id` và `name`
+          return map;
+        }, {} as Record<number, string>);
+
+        const categoryMap = categories.reduce(
+          (
+            map: Record<number, string>,
+            category: { id: number; name: string }
+          ) => {
+            map[category.id] = category.name;
+            return map;
+          },
+          {}
+        );
+
+        this.category_all = categories.map((item) => item.name);
+        console.log(this.category_all);
+        // Gán `instructorName` cho từng khóa học
+        this.courses = courses.map((course) => ({
+          ...course,
+          instructorName: instructorMap[course.instructorId] || 'Unknown', // Tra cứu instructorName
+          category: categoryMap[course.categoryId] || 'Unknown',
+        }));
         console.log(this.courses); // In ra khóa học
         this.updateCourseRatings(); // Cập nhật rating khóa học
         this.applyFilter(); // Áp dụng bộ lọc

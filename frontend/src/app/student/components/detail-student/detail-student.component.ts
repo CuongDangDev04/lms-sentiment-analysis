@@ -49,8 +49,8 @@ export class DetailStudentComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       this.courseId = params.get('id');
     });
-    forkJoin({ 
-      studentLogin: this.studentService.getStudentByUserId(321),
+    forkJoin({
+      studentLogin: this.authService.fetchUserInfo(),
       courseDetail: this.courseService.getCourseById(Number(this.courseId)),
       reviews: this.courseService.getReviewOfCourse(Number(this.courseId)),
       students: this.studentService.getAllStudents(),
@@ -64,7 +64,7 @@ export class DetailStudentComponent implements OnInit {
         this.updateCourseRatings();
         this.totalComment = this.reviews.length;
         console.log(this.studentComment);
-        console.log('Đây là student đang login: ' + this.studentLogin);
+        console.log('Đây là student đang login: ' + this.studentLogin.id);
         this.loadComments(); // Chỉ gọi loadComments sau khi tất cả dữ liệu đã được tải xong
       },
       (error) => {
@@ -72,7 +72,7 @@ export class DetailStudentComponent implements OnInit {
       }
     );
     console.log(this.reviews);
-    console.log("../../../../assets/student/img/course-1.jpg")
+    console.log('../../../../assets/student/img/course-1.jpg');
   }
 
   updateCourseRatings(): void {
@@ -158,10 +158,10 @@ export class DetailStudentComponent implements OnInit {
 
     const commentData = {
       //studentId: this.studentLogin.id,
-      studentId: 3,
+      studentId: this.studentLogin.id,
       courseId: this.courseId,
       //rating: this.rating,
-      rating: 3,
+      rating: 4,
       comment: this.newComment,
     };
     this.courseService.addComment(commentData).subscribe(

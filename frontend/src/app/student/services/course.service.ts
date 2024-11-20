@@ -35,4 +35,8 @@ export class CourseService {
       commentData
     );
   }
+
+  getAllCategories(): Observable<any[]> {
+    return this.http.get<any[]>('http://localhost:5000/api/category/');
+  }
 }
