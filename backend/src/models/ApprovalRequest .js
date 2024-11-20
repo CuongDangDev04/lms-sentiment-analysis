@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
-const User = require("./user"); // Đảm bảo bạn đã định nghĩa mô hình User
+const User = require("./user"); 
 
 const ApprovalRequest = sequelize.define("ApprovalRequest", {
   id: {

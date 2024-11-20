@@ -23,7 +23,6 @@
     "chart.js": "^4.4.6",
     "chartjs-plugin-datalabels": "^2.2.0",
     "rxjs": "~7.8.0",
-    "socket.io-client": "^4.8.1",
     "sweetalert2": "^11.14.5",
     "tslib": "^2.3.0",
     "webfontloader": "^1.6.28",
