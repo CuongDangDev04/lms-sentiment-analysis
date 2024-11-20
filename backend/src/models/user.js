@@ -21,6 +21,11 @@ const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+
+  avt: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   role: {
     type: DataTypes.ENUM("admin", "instructor", "student"),
     allowNull: false,
@@ -37,6 +42,7 @@ const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: true,
   },
+
   birthdate: {
     type: DataTypes.DATE,
     allowNull: true,

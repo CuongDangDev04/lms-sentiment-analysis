@@ -11,9 +11,9 @@ export class StudentService {
   getAllStudents(): Observable<Student[]> {
     return this.http.get<Student[]>('http://localhost:5000/api/student');
   }
-  getStudentByUserId(userId: Number): Observable<Student> {
+  getStudentById(userId: Number): Observable<Student> {
     return this.http.get<Student>(
-      `${'http://localhost:5000/api/student/get-student-by-user'}/${userId}`
+      `${'http://localhost:5000/api/student'}/${userId}`
     );
   }
 }

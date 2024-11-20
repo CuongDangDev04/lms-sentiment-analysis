@@ -53,6 +53,7 @@ const Course = sequelize.define("Course", {
       key: "id",
     },
     onDelete: "CASCADE",
+
   },
 });
 

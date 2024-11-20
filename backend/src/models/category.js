@@ -16,7 +16,7 @@ const Category = sequelize.define(
       allowNull: false,
       unique: true, // Đảm bảo tên thể loại là duy nhất
     },
-  }, 
+  },
   {
     timestamps: true, // Sequelize tự động thêm createdAt và updatedAt
   }

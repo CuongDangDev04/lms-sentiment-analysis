@@ -1,7 +1,13 @@
 const Course = require("../models/course");
 const User = require("../models/user");
 const Category = require("../models/category");
+<<<<<<< HEAD
 const StudentCourse = require("../models/studentcourse")
+=======
+const Review = require("../models/review");
+const sequelize = require("../config/db");
+const { QueryTypes } = require("sequelize");
+>>>>>>> Nam
 // Tạo mới khóa học
 exports.createCourse = async (req, res) => {
   try {

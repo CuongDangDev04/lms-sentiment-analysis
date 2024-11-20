@@ -11,21 +11,7 @@
         (change)="applyFilter()"
       >
         <option value="all">Tất cả</option>
-        <option
-          *ngFor="
-            let category of [
-              'communication',
-              'presentation',
-              'project_management',
-              'design',
-              'marketing',
-              'personal_development',
-              'data_analysis',
-              'programming'
-            ]
-          "
-          [value]="category"
-        >
+        <option *ngFor="let category of category_all" [value]="category">
           {{ category | titlecase }}
         </option>
       </select>

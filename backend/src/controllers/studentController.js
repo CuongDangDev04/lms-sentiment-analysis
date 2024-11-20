@@ -63,9 +63,9 @@ exports.getAllStudents = async (req, res) => {
     });
 
     // Trả về danh sách sinh viên
-    res.status(200).json({
-      students, // Trả về tất cả người dùng có role là 'student'
-    });
+    res.status(200).json(
+      students // Trả về tất cả người dùng có role là 'student'
+    );
   } catch (error) {
     console.error("Get all students error:", error);
     res.status(500).json({ error: "Failed to get student information!" });
@@ -87,36 +87,12 @@ exports.getStudentById = async (req, res) => {
     }
 
     // Trả về thông tin sinh viên
-    res.status(200).json({
-      student, // Trả về thông tin sinh viên theo ID
-    });
+    res.status(200).json(
+      student // Trả về thông tin sinh viên theo ID
+    );
   } catch (error) {
     console.error("Get student by ID error:", error);
     res.status(500).json({ error: "Failed to get student information!" });
-  }
-};
-exports.getStudentByUserId = async (req, res) => {
-  try {
-    const { userId } = req.params; // Lấy userId từ params
-
-    // Kiểm tra nếu userId không tồn tại
-    if (!userId) {
-      return res.status(400).json({ message: "userId is required" });
-    }
-
-    // Tìm sinh viên theo userId
-    const student = await Student.findOne({ where: { userId: userId } });
-
-    // Kiểm tra nếu không tìm thấy sinh viên
-    if (!student) {
-      return res.status(404).json({ message: "Student not found" });
-    }
-
-    // Trả về thông tin sinh viên
-    res.status(200).json(student);
-  } catch (error) {
-    console.error("Error fetching student:", error);
-    res.status(500).json({ error: "Failed to retrieve student!" });
   }
 };
 

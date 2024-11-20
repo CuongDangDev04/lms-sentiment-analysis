@@ -16,10 +16,6 @@ router.post("/", studentController.createStudent);
 
 router.put("/:id", studentController.updateStudent);
 //Endpoint để lấy student từ userId
-router.get(
-  "/get-student-by-user/:userId",
-  studentController.getStudentByUserId
-);
 
 router.put("/:id", studentController.editStudent);
 

@@ -1,15 +1,16 @@
-const bcrypt = require('bcrypt');
-const User = require('../models/user');
+const bcrypt = require("bcrypt");
+const User = require("../models/user");
 
 // Tạo Instructor mới
 exports.createInstructor = async (req, res) => {
-  const { id, username, password, fullname, email, avt, birthdate, phone } = req.body;
+  const { id, username, password, fullname, email, avt, birthdate, phone } =
+    req.body;
 
   try {
     // Kiểm tra nếu người dùng đã tồn tại
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      return res.status(400).json({ message: 'Email already in use.' });
+      return res.status(400).json({ message: "Email already in use." });
     }
 
     // Mã hóa mật khẩu
@@ -25,13 +26,15 @@ exports.createInstructor = async (req, res) => {
       avt,
       birthdate,
       phone,
-      role: 'instructor', // Role là instructor
+      role: "instructor", // Role là instructor
     });
 
-    res.status(201).json({ message: 'Instructor created successfully', user: newUser });
+    res
+      .status(201)
+      .json({ message: "Instructor created successfully", user: newUser });
   } catch (error) {
-    console.error('Create instructor error:', error);
-    res.status(500).json({ message: 'Failed to create instructor!' });
+    console.error("Create instructor error:", error);
+    res.status(500).json({ message: "Failed to create instructor!" });
   }
 };
 
@@ -39,13 +42,13 @@ exports.createInstructor = async (req, res) => {
 exports.getAllInstructors = async (req, res) => {
   try {
     const instructors = await User.findAll({
-      where: { role: 'instructor' },
+      where: { role: "instructor" },
     });
 
-    res.status(200).json({ instructors });
+    res.status(200).json(instructors);
   } catch (error) {
-    console.error('Get all instructors error:', error);
-    res.status(500).json({ error: 'Failed to get instructor information!' });
+    console.error("Get all instructors error:", error);
+    res.status(500).json({ error: "Failed to get instructor information!" });
   }
 };
 
@@ -55,17 +58,17 @@ exports.getInstructorById = async (req, res) => {
 
   try {
     const instructor = await User.findOne({
-      where: { id, role: 'instructor' },
+      where: { id, role: "instructor" },
     });
 
     if (!instructor) {
-      return res.status(404).json({ message: 'Instructor not found!' });
+      return res.status(404).json({ message: "Instructor not found!" });
     }
 
-    res.status(200).json({ instructor });
+    res.status(200).json(instructor);
   } catch (error) {
-    console.error('Get instructor by ID error:', error);
-    res.status(500).json({ error: 'Failed to get instructor information!' });
+    console.error("Get instructor by ID error:", error);
+    res.status(500).json({ error: "Failed to get instructor information!" });
   }
 };
 
@@ -76,12 +79,12 @@ exports.updateInstructor = async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) {
-      return res.status(400).json({ message: 'Invalid instructor ID' });
+      return res.status(400).json({ message: "Invalid instructor ID" });
     }
 
-    const user = await User.findOne({ where: { id, role: 'instructor' } });
+    const user = await User.findOne({ where: { id, role: "instructor" } });
     if (!user) {
-      return res.status(404).json({ message: 'Instructor not found' });
+      return res.status(404).json({ message: "Instructor not found" });
     }
 
     user.fullname = fullname || user.fullname;
@@ -92,10 +95,12 @@ exports.updateInstructor = async (req, res) => {
 
     await user.save();
 
-    res.status(200).json({ message: 'Instructor updated successfully', user });
+    res.status(200).json({ message: "Instructor updated successfully", user });
   } catch (error) {
-    console.error('Update instructor error:', error.message);
-    res.status(500).json({ message: 'Failed to update instructor information!' });
+    console.error("Update instructor error:", error.message);
+    res
+      .status(500)
+      .json({ message: "Failed to update instructor information!" });
   }
 };
 
@@ -105,19 +110,19 @@ exports.deleteInstructor = async (req, res) => {
     const id = parseInt(req.params.id, 10);
 
     if (isNaN(id)) {
-      return res.status(400).json({ message: 'Invalid instructor ID' });
+      return res.status(400).json({ message: "Invalid instructor ID" });
     }
 
-    const user = await User.findOne({ where: { id, role: 'instructor' } });
+    const user = await User.findOne({ where: { id, role: "instructor" } });
     if (!user) {
-      return res.status(404).json({ message: 'Instructor not found' });
+      return res.status(404).json({ message: "Instructor not found" });
     }
 
     await user.destroy();
 
-    res.status(200).json({ message: 'Instructor deleted successfully' });
+    res.status(200).json({ message: "Instructor deleted successfully" });
   } catch (error) {
-    console.error('Delete instructor error:', error.message);
-    res.status(500).json({ message: 'Failed to delete instructor!' });
+    console.error("Delete instructor error:", error.message);
+    res.status(500).json({ message: "Failed to delete instructor!" });
   }
 };

@@ -11,5 +11,6 @@ export interface Course {
   duration: number;
   imageUrl: string;
   studentsCount: number;
+  categoryId: number;
   category: string;
 }

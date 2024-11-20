@@ -5,6 +5,7 @@ const Category = require("./category");
 const StudentCourse = require("./studentcourse");
 const Review = require('./review');
 const ApprovalRequest = require('./ApprovalRequest ');  // Import mô hình ApprovalRequest
+const Review = require("./review");
 
 // User - Course (Instructor)
 User.hasMany(Course, {
@@ -52,7 +53,21 @@ ApprovalRequest.belongsTo(User, {
   as: "admin", // Alias "admin" cho mối quan hệ
 });
 
-// Export tất cả các model và sequelize
+Review.belongsTo(User, {
+  foreignKey: "studentId",
+  as: "student",
+});
+
+Course.hasMany(Review, {
+  foreignKey: "courseId",
+  as: "reviews",
+});
+
+Review.belongsTo(Course, {
+  foreignKey: "courseId",
+  as: "course",
+});
+
 module.exports = {
   sequelize,
   User,
@@ -61,4 +76,5 @@ module.exports = {
   StudentCourse,
   Review,
   ApprovalRequest, 
+  Review,
 };

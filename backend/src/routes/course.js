@@ -8,7 +8,12 @@ router.get("/", courseController.getAllCourses);
 // Endpoint lấy khóa học theo ID
 router.get("/:id", courseController.getCourseById);
 
-// Endpoint tạo khóa học mới
+router.get("/review/all", courseController.getAllReview);
+
+router.get("/review/:courseId", courseController.getReviewOfCourse);
+
+router.post("/review/new", courseController.addComment);
+
 router.post("/", courseController.createCourse);
 
 // Endpoint cập nhật khóa học
