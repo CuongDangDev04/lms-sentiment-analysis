@@ -23,7 +23,7 @@ router.put("/:id", courseController.updateCourse);
 router.delete("/:id", courseController.deleteCourse);
 
 // Thêm sinh viên vào khóa học ok
-router.post("/:id/students", courseController.addStudentToCourse);
+router.post("/:id/students", courseController.  addStudentToCourse);
 
 
 // Lấy danh sách sinh viên trong một khóa học  ok

@@ -125,7 +125,7 @@ exports.getAllReview = async (req, res) => {
         {
           model: User,
           as: "reviewStudent", // Sử dụng alias mới
-          attributes: ["id", "name", "email"], // Chọn các trường của User
+          attributes: ["id", "fullname", "email"], // Chọn các trường của User
         },
         {
           model: Course,
@@ -271,6 +271,8 @@ exports.addStudentToCourse = async (req, res) => {
   try {
       const { id } = req.params; // Đây là courseId
       const { userId } = req.body; // Đây là userId của sinh viên
+    console.log('id',id  )
+    console.log('usid',userId  )
 
       // Kiểm tra xem khóa học có tồn tại không
       const course = await Course.findByPk(id);

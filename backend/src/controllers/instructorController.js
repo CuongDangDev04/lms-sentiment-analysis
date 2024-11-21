@@ -1,22 +1,30 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 
-// Tạo Instructor mới
+// tạo tk gv
 exports.createInstructor = async (req, res) => {
-  const { id, username, password, fullname, email, avt, birthdate, phone } =
-    req.body;
+  const { id, username, password, fullname, email, avt, birthdate, phone } = req.body;
+
+  if (!username || !password || !fullname || !email) {
+    return res.status(400).json({ message: "All required fields must be provided!" });
+  }
 
   try {
-    // Kiểm tra nếu người dùng đã tồn tại
-    const existingUser = await User.findOne({ where: { email } });
-    if (existingUser) {
-      return res.status(400).json({ message: "Email already in use." });
+    // Kiểm tra xem email hoặc username đã tồn tại hay chưa
+    const existingUserByEmail = await User.findOne({ where: { email } });
+    if (existingUserByEmail) {
+      return res.status(400).json({ message: "Email already in use!" });
+    }
+
+    const existingUserByUsername = await User.findOne({ where: { username } });
+    if (existingUserByUsername) {
+      return res.status(400).json({ message: "Username already in use!" });
     }
 
     // Mã hóa mật khẩu
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Tạo người dùng mới với role là 'instructor'
+    // Tạo tài khoản mới với role là 'instructor'
     const newUser = await User.create({
       id,
       username,
@@ -26,17 +34,21 @@ exports.createInstructor = async (req, res) => {
       avt,
       birthdate,
       phone,
-      role: "instructor", // Role là instructor
+      role: 'instructor', // Role mặc định là instructor
+      isApproved: true, // Instructor được phê duyệt mặc định
     });
 
-    res
-      .status(201)
-      .json({ message: "Instructor created successfully", user: newUser });
+    // Trả về thông báo thành công
+    res.status(201).json({
+      message: "Instructor created successfully!",
+      user: newUser,
+    });
   } catch (error) {
     console.error("Create instructor error:", error);
     res.status(500).json({ message: "Failed to create instructor!" });
   }
 };
+
 
 // Lấy danh sách tất cả Instructor
 exports.getAllInstructors = async (req, res) => {

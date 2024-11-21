@@ -10,7 +10,7 @@
         <div class="row instructor">
           <p>
             <span>Intructor: </span
-            ><span>{{ courseDetail.instructorName }}</span>
+            ><span>{{ courseDetail.instructor.name }}</span>
           </p>
         </div>
         <div class="row description">
@@ -20,7 +20,7 @@
         </div>
         <div class="row controller">
           <div class="col-md-3">
-            <button class="btn btn-primary register-button">Register</button>
+            <button class="btn btn-primary register-button" (click)="register()">Register</button>
           </div>
 
           <div class="col-md-2">

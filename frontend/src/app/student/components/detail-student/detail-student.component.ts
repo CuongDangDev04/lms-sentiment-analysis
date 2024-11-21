@@ -178,6 +178,15 @@ export class DetailStudentComponent implements OnInit {
     );
     window.location.reload();
   }
+  register() {
+    const userId = this.studentLogin.id; // lấy userId từ login
+    const courseId = Number(this.courseId); // Convert courseId thành số, nếu chưa
+    this.courseService.registerCourse(courseId, userId).subscribe({
+      next: (response) => console.log('Registration successful:', response),
+      error: (error) => console.error('Registration failed:', error),
+    });
+  }
+  
   @HostListener('window:scroll', [])
   onWindowScroll() {
     const container = document.querySelector('.container-title');

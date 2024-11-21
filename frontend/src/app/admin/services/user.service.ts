@@ -23,16 +23,13 @@ export class UserService {
   }
 
   getAllStudents(): Observable<User[]> {
-    return this.http
-      .get<{ students: User[] }>(this.studentUrl)
-      .pipe(map((response) => response.students));
+    return this.http.get<User[]>(this.studentUrl);
   }
-
+  
   getAllInstructors(): Observable<User[]> {
-    return this.http
-      .get<{ instructors: User[] }>(this.instructorUrl)
-      .pipe(map((response) => response.instructors));
+    return this.http.get<User[]>(this.instructorUrl);
   }
+  
 
   // Lấy học sinh theo ID
   getStudentById(id: number): Observable<User> {

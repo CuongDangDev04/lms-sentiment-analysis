@@ -39,4 +39,10 @@ export class CourseService {
   getAllCategories(): Observable<any[]> {
     return this.http.get<any[]>('http://localhost:5000/api/category/');
   }
+
+  registerCourse(id: number, userId: number): Observable<any> {
+    const body = { userId };  // Gửi us erId trong một đối tượng JSON
+    return this.http.post<any>(`${'http://localhost:5000/api/course'}/${id}/students`, body);
+  }
+  
 }

@@ -7,6 +7,7 @@ import { DashboardAdminComponent } from './components/dashboard-admin/dashboard-
 import { FeedbackManagerAdminComponent } from './components/feedback-manager-admin/feedback-manager-admin.component';
 import { AuthGuard } from '../auth/auth.guard';
 import { Role } from '../auth/interfaces/roles';
+import { ManagerCategoryAdminComponent } from './components/manager-category-admin/manager-category-admin.component';
 
 export const adminRoutes: Routes = [
     {
@@ -29,6 +30,9 @@ export const adminRoutes: Routes = [
             },
             {
                 path: 'feedbackmanger', component: FeedbackManagerAdminComponent
+            },
+            {
+                path: 'quanlydanhmuc' , component:ManagerCategoryAdminComponent
             }
             
         ]
