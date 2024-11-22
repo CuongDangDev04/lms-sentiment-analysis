@@ -21,11 +21,6 @@ const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-
-  avt: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
   role: {
     type: DataTypes.ENUM("admin", "instructor", "student"),
     allowNull: false,
@@ -33,9 +28,9 @@ const User = sequelize.define("User", {
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
+    unique: true, // Đảm bảo email là duy nhất
     validate: {
-      isEmail: true,
+      isEmail: true, // Kiểm tra định dạng email hợp lệ
     },
   },
   avt: {
@@ -51,12 +46,12 @@ const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: true,
   },
+
   isApproved: {
     type: DataTypes.BOOLEAN,
-    defaultValue: true,  // Mặc định là chưa được phê duyệt
+    defaultValue: true, // Mặc định là chưa được phê duyệt
     allowNull: false,
   },
-  
 });
 
 module.exports = User;

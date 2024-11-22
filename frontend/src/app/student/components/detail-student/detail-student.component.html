@@ -20,7 +20,12 @@
         </div>
         <div class="row controller">
           <div class="col-md-3">
-            <button class="btn btn-primary register-button" (click)="register()">Register</button>
+            <button
+              class="btn btn-primary register-button"
+              (click)="register()"
+            >
+              Register
+            </button>
           </div>
 
           <div class="col-md-2">
@@ -374,7 +379,9 @@
         </div>
       </div>
       <div class="row sticky-controller">
-        <button class="btn btn-primary register-button">Register</button>
+        <button class="btn btn-primary register-button" (click)="register()">
+          Register
+        </button>
         <button class="btn btn-primary trial-button">Trial</button>
       </div>
     </div>
@@ -387,6 +394,18 @@
       <!-- Form nhập đánh giá mới -->
       <div class="new-comment">
         <h3>Thêm bình luận của bạn</h3>
+        <div class="rating-input">
+          <label>Đánh giá:</label>
+          <div
+            class="stars"
+            *ngFor="let star of [1, 2, 3, 4, 5]"
+            class="star"
+            [class.filled]="star <= rating"
+            (click)="setRating(star)"
+          >
+            <span>&#9733;</span>
+          </div>
+        </div>
         <div class="comment-form">
           <div class="avatar-input">
             <img
@@ -402,6 +421,7 @@
             class="comment-input"
             [(ngModel)]="newComment"
           ></textarea>
+
           <button
             id="submitComment"
             class="btn btn-primary"
@@ -419,7 +439,17 @@
       <div class="comment" *ngFor="let student of visibleComments">
         <div class="comment-header">
           <img [src]="student.avt" alt="Avatar" class="avatar" />
-          <strong>{{ student.name }}</strong>
+          <strong>{{ student.fullname }}</strong>
+          <div class="comment-rating">
+            <span
+              *ngFor="let star of [1, 2, 3, 4, 5]"
+              [class.filled]="star <= student.reviews[0].rating"
+              class="star"
+            >
+              &#9733;
+              <!-- Sao đầy -->
+            </span>
+          </div>
         </div>
         <div *ngFor="let review of student.reviews">
           <p>{{ review.comment }}</p>
