@@ -5,7 +5,7 @@ const Category = require("./category");
 const StudentCourse = require("./studentcourse");
 const Review = require('./review');
 const ApprovalRequest = require('./ApprovalRequest ');
-
+const SentimentAnalysis = require('./SentimentAnalysis')
 // User - Course (Instructor)
 User.hasMany(Course, {
   foreignKey: "instructorId",
@@ -69,7 +69,17 @@ Review.belongsTo(Course, {
   foreignKey: "courseId",
   as: "course",
 });
+// ReviewSentiment - User (Liên kết ReviewSentiment với User)
+SentimentAnalysis.belongsTo(User, {
+  foreignKey: "userId",  // Liên kết khóa ngoại tới User
+  as: "user", // Alias "user" cho mối quan hệ ReviewSentiment - User
+});
 
+// ReviewSentiment - Course (Liên kết ReviewSentiment với Course)
+SentimentAnalysis.belongsTo(Course, {
+  foreignKey: "courseId", // Liên kết khóa ngoại tới Course
+  as: "course", // Alias "course" cho mối quan hệ ReviewSentiment - Course
+});
 module.exports = {
   sequelize,
   User,
@@ -78,4 +88,5 @@ module.exports = {
   StudentCourse,
   Review,
   ApprovalRequest,
+  SentimentAnalysis
 };

@@ -1,38 +1,54 @@
+<!-- Quản lý Danh mục -->
+<div class="category-management">
+  <h2>Quản lý Danh mục</h2>
 
-  <!-- Quản lý Danh mục -->
-  <div class="category-management">
-    <h2>Quản lý Danh mục</h2>
-    <button class=" btn-add-category" (click)="toggleAddCategoryForm()">
-      {{ isAddingCategory ? 'Đóng Form Thêm Danh mục' : 'Thêm Danh mục' }}
-    </button>
+  <!-- Nút thêm danh mục -->
+  <button class="btn-add-category" (click)="toggleAddCategoryForm()">
+    {{ isAddingCategory ? 'Đóng Form Thêm Danh mục' : 'Thêm Danh mục' }}
+  </button>
 
-    <form *ngIf="isAddingCategory" (ngSubmit)="submitCategory()">
-      <div class="form-group">
-        <label for="categoryName">Tên danh mục</label>
-        <input id="categoryName" type="text" [(ngModel)]="category.name" name="name" required />
-      </div>
-      <button type="submit" class="btn btn-success">Thêm Danh mục</button>
-      <button type="button" class="btn btn-secondary" (click)="toggleAddCategoryForm()">Hủy</button>
-    </form>
+  <!-- Form thêm danh mục -->
+  <form *ngIf="isAddingCategory" (ngSubmit)="submitCategory()">
+    <div class="form-group">
+      <label for="categoryName">Tên danh mục</label>
+      <input id="categoryName" type="text" [(ngModel)]="category.name" name="name" required />
+    </div>
+    <button type="submit" class="btn btn-success">Thêm Danh mục</button>
+    <button type="button" class="btn btn-secondary" (click)="toggleAddCategoryForm()">Hủy</button>
+  </form>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Tên Danh mục</th>
-          <th>Thao tác</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let category of categories">
-          <td>{{ category.name }}</td>
-          <td>
-            <!-- <button (click)="editCourse(course)"
+  <!-- Form sửa danh mục -->
+  <form *ngIf="category.id && !isAddingCategory" (ngSubmit)="updateCategory(category.id)">
+    <div class="form-group">
+      <label for="editCategoryName">Tên danh mục</label>
+      <input id="editCategoryName" type="text" [(ngModel)]="category.name" name="name" required />
+    </div>
+    <button type="submit" class="btn btn-warning">Cập nhật Danh mục</button>
+    <button type="button" class="btn btn-secondary" (click)="category = {}; isAddingCategory = false;">Hủy</button>
+  </form>
+
+  <!-- Danh sách danh mục -->
+  <table>
+    <thead>
+      <tr>
+        <th>Tên Danh mục</th>
+        <th>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let category of categories">
+        <td>{{ category.name }}</td>
+        <td>
+          <!-- Nút chỉnh sửa -->
+          <button (click)="editCategory(category.id)"
             type="button"
-            class="btn btn-link btn-primary btn-lg"
+            class="btn btn-link btn-primary"
             title="Chỉnh sửa"
           >
             <i class="fa fa-edit"></i>
-          </button> -->
+          </button>
+
+          <!-- Nút xóa -->
           <button (click)="deleteCategory(category.id)"
             type="button"
             class="btn btn-link btn-danger"
@@ -40,9 +56,8 @@
           >
             <i class="fa fa-times"></i>
           </button>
-          </td>
-
-        </tr>
-      </tbody>
-    </table>
-  </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

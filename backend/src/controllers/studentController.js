@@ -49,22 +49,6 @@ exports.createStudent = async (req, res) => {
   }
 };
 
-// exports.getAllStudents = async (req, res) => {
-//   try {
-//     // Lấy tất cả người dùng với role là 'student'
-//     const students = await User.findAll({
-//       where: { role: "student" },
-//     });
-
-//     // Trả về danh sách sinh viên
-//     res.status(200).json(
-//       students // Trả về tất cả người dùng có role là 'student'
-//     );
-//   } catch (error) {
-//     console.error("Get all students error:", error);
-//     res.status(500).json({ error: "Failed to get student information!" });
-//   }
-// };
 exports.getAllStudents = async (req, res) => {
   try {
     // Lấy tất cả người dùng với role là 'student'

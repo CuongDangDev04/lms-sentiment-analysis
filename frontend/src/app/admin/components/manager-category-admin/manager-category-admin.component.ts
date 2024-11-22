@@ -16,8 +16,8 @@ export class ManagerCategoryAdminComponent {
   categories: Category[] = []; // Danh sách danh mục
   category: Partial<Category> = {}; // Danh mục hiện tại
   isAddingCategory = false; // Trạng thái thêm danh mục
-  
-  constructor(private courseService: CourseService) {}
+
+  constructor(private courseService: CourseService) { }
   ngOnInit(): void {
     this.loadCategories(); // Gọi API lấy danh sách danh mục
   }
@@ -33,7 +33,7 @@ export class ManagerCategoryAdminComponent {
       },
     });
   }
-// Thêm danh mục mới
+  // Thêm danh mục mới
   addCategory(name: string): void {
     this.courseService.createCategory({ name }).subscribe({
       next: (newCategory) => {
@@ -86,4 +86,30 @@ export class ManagerCategoryAdminComponent {
       this.category = {}; // Reset form khi ẩn form thêm danh mục
     }
   }
+  // Phương thức sửa danh mục
+  updateCategory(id: number): void {
+    if (this.category.name) {
+      this.courseService.updateCategory(id, this.category).subscribe({
+        next: (updatedCategory) => {
+          // Cập nhật lại danh mục trong mảng categories
+          const index = this.categories.findIndex(cat => cat.id === id);
+          if (index !== -1) {
+            this.categories[index] = updatedCategory;
+          }
+          Swal.fire('Cập nhật thành công', 'Danh mục đã được cập nhật.', 'success');
+          this.isAddingCategory = false;
+          this.category = {}; // Reset form
+        },
+        error: () => {
+          Swal.fire('Cập nhật thất bại', 'Không thể cập nhật danh mục.', 'error');
+        },
+      });
+    }
+  }
+  // Chọn danh mục để sửa
+  editCategory(id: number): void {
+    this.category = this.categories.find(cat => cat.id === id) || {}; // Tìm danh mục và gán vào form
+    this.isAddingCategory = false; // Hiển thị form sửa danh mục
+  }
+
 }

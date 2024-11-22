@@ -35,6 +35,4 @@ router.delete("/:id/students", courseController.removeStudentFromCourse);
 // Lấy danh sách khóa học mà một sinh viên tham gia ok
 router.get("/students/:userId", courseController.getCoursesOfStudent);
 
-
-
 module.exports = router;

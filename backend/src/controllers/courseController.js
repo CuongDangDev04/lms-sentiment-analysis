@@ -3,8 +3,6 @@ const User = require("../models/user");
 const Category = require("../models/category");
 const StudentCourse = require("../models/studentcourse");
 const Review = require("../models/review");
-const sequelize = require("../config/db");
-const { QueryTypes } = require("sequelize");
 // Tạo mới khóa học
 exports.createCourse = async (req, res) => {
   try {
@@ -380,6 +378,3 @@ exports.getCoursesOfStudent = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-
-
-
