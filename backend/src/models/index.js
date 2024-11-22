@@ -3,8 +3,8 @@ const User = require("./user");
 const Course = require("./course");
 const Category = require("./category");
 const StudentCourse = require("./studentcourse");
-const Review = require('./review');
-const ApprovalRequest = require('./ApprovalRequest ');
+const Review = require("./review");
+const ApprovalRequest = require("./ApprovalRequest ");
 
 // User - Course (Instructor)
 User.hasMany(Course, {
@@ -69,7 +69,35 @@ Review.belongsTo(Course, {
   foreignKey: "courseId",
   as: "course",
 });
+//cập nhật rating
+Review.afterCreate(async (review) => {
+  await updateCourseRating(review.courseId);
+});
 
+Review.afterUpdate(async (review) => {
+  await updateCourseRating(review.courseId);
+});
+
+Review.afterDestroy(async (review) => {
+  await updateCourseRating(review.courseId);
+});
+
+// Hàm cập nhật rating cho course
+async function updateCourseRating(courseId) {
+  const course = await Course.findByPk(courseId);
+
+  // Tính toán lại trung bình điểm rating của khóa học
+  const reviews = await Review.findAll({
+    where: { courseId: courseId },
+  });
+
+  const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+  const averageRating = reviews.length > 0 ? totalRating / reviews.length : 0;
+
+  // Cập nhật rating cho course
+  course.rating = averageRating;
+  await course.save();
+}
 module.exports = {
   sequelize,
   User,

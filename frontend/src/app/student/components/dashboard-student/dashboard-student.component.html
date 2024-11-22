@@ -3,7 +3,7 @@
   <div class="user-info">
     <div class="user-profile">
       <img
-        [src]="profilePicture"
+        [src]="studentLogin.avt"
         alt="User Profile"
         class="profile-picture"
         (click)="triggerFileInput()"
@@ -14,11 +14,13 @@
         (change)="onFileSelected($event)"
         style="display: none"
       />
-      <h2>DaiNam159</h2>
+      <h2>{{ studentLogin.fullname }}</h2>
     </div>
     <div class="user-details">
-      <p><i class="fas fa-envelope"></i> dainam0974622403</p>
-      <p><i class="fas fa-phone"></i> Số điện thoại</p>
+      <p><i class="fas fa-envelope"></i> {{ studentLogin.email }}</p>
+      <p>
+        <i class="fas fa-phone"></i> {{ studentLogin.phone || "0000000000" }}
+      </p>
       <p><i class="fas fa-calendar"></i> 17/09/2020</p>
     </div>
     <div class="extra-sections">
@@ -62,13 +64,18 @@
 
     <div class="section study">
       <h3>Học Tập ({{ totalCourses }})</h3>
+      <div *ngIf="currentCourses.length === 0" class="no-courses">
+        Bạn chưa đăng ký khóa học nào
+      </div>
       <div class="courses">
         <div class="course" *ngFor="let course of currentCourses">
-          <img
-            [src]="course.imageUrl"
-            [alt]="course.name"
-            class="img-fluid course-image"
-          />
+          <a [routerLink]="['/student/courses', course.id]">
+            <img
+              [src]="course.imageUrl"
+              [alt]="course.name"
+              class="img-fluid course-image"
+            />
+          </a>
           <div class="course-content">
             <h4>{{ course.name }}</h4>
             <!-- Hiển thị mô tả khóa học -->
@@ -87,7 +94,7 @@
                   <i class="fas fa-star-half-alt text-primary"></i>
                 </ng-container>
                 <ng-container *ngFor="let star of getEmptyStars(course.rating)">
-                  <i class="fas fa-star-o text-primary"></i>
+                  <i class="far fa-star text-primary"></i>
                 </ng-container>
               </div>
               <div class="students">
@@ -106,6 +113,7 @@
         <i class="fas fa-arrow-left"></i>
       </button>
       <button
+        *ngIf="currentCourses.length >= 3"
         id="nextCourses"
         class="btn btn-primary mt-3"
         (click)="nextCourses()"
@@ -115,7 +123,7 @@
     </div>
 
     <!-- Phần Cuộc Thi -->
-    <div class="section exam">
+    <div class="section exam" style="padding: 20px">
       <h3>Cuộc Thi (0)</h3>
       <p>Bạn chưa tham gia cuộc thi nào, ấn vào đây để tham gia ngay.</p>
     </div>
@@ -231,10 +239,22 @@
                       circumference - (progressPercentage / 100) * circumference
                     "
                   ></circle>
+                  <text
+                    class="progress-text"
+                    x="60"
+                    y="60"
+                    text-anchor="middle"
+                    dominant-baseline="middle"
+                    font-size="20"
+                    fill="#000"
+                    transform="rotate(90 60 60)"
+                  >
+                    {{ progressPercentage | number : "1.0-0" }}%
+                  </text>
                 </svg>
-                <div class="progress-text mt-3">
+                <!-- <div class="progress-text mt-3">
                   {{ progressCurrent }}/{{ progressTotal }}
-                </div>
+                </div> -->
               </div>
             </div>
           </div>

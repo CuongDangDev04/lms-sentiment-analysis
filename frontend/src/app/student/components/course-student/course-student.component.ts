@@ -104,7 +104,7 @@ export class CourseStudentComponent implements OnInit {
       const courseReviews = this.reviews.filter(
         (review) => review.courseId === course.id
       );
-
+      
       // Tính tổng rating
       const totalRating = courseReviews.reduce(
         (sum, review) => sum + review.rating,
@@ -117,6 +117,18 @@ export class CourseStudentComponent implements OnInit {
       } else {
         course.rating = 0; // Nếu không có review, set rating là 0
       }
+      const data = {
+        categoryId: course.categoryId,
+        rating: course.rating,
+      };
+      this.courseService.updateCourse(course.id, data).subscribe(
+        (response) => {
+          console.log('update thành công: ', response);
+        },
+        (error) => {
+          console.error('Lỗi khi gửi bình luận: ', error);
+        }
+      );
     });
   }
   getFullStars(rating: number): number[] {

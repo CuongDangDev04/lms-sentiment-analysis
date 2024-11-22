@@ -9,101 +9,126 @@ import { Course } from '../../interfaces/course';
 import { CommonModule } from '@angular/common';
 import { Review } from '../../interfaces/review';
 import { CourseService } from '../../services/course.service';
+import { AuthService } from '../../../auth/auth.service';
+import { forkJoin } from 'rxjs';
+import { StudentService } from '../../services/student.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-student',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './dashboard-student.component.html',
   styleUrl: './dashboard-student.component.css',
 })
 export class DashboardStudentComponent implements OnInit {
   courseService: CourseService = inject(CourseService);
-  progressCurrent: number = 100; // Số giờ hoàn thành
-  progressTotal: number = 173; // Tổng số giờ
-  progressPercentage: number = 0; // Tỷ lệ phần trăm
-  radius: number = 54; // Bán kính của vòng tròn
-  circumference: number = 0; // Chu vi của vòng tròn
+  authService: AuthService = inject(AuthService);
+  studentService: StudentService = inject(StudentService);
+
+  progressCurrent: number = 59;
+  progressTotal: number = 173;
+  progressPercentage: number = 0;
+  radius: number = 54;
+  circumference: number = 0;
 
   reviews: Review[] = [];
-
   courses: Course[] = [];
+  studentLogin: any;
+  index: number = 0;
+  currentCourses: Course[] = [];
+  totalCourses: number = 0;
 
   constructor() {}
-  getAllCourses(): void {
-    this.courseService.getAllCourses().subscribe(
-      (courses) => {
-        this.courses = courses; // Gán dữ liệu nhận được vào mảng courses
-      },
-      (error) => {
-        console.error('There was an error!', error); // Xử lý lỗi nếu có
-      }
-    );
-  }
-  totalCourses: number = this.courses.length; // Tổng số khóa học
-  index = 0;
-  currentCourses: Course[] = [
-    this.courses[0 + this.index],
-    this.courses[1 + this.index],
-    this.courses[2 + this.index],
-  ];
 
-  current_courses() {
-    const startIndex = this.index;
-    const endIndex = Math.min(this.courses.length, startIndex + 3); // Đảm bảo không vượt quá độ dài của mảng courses
-    this.currentCourses = this.courses.slice(startIndex, endIndex);
-  }
-  getFullStars(rating: number): number[] {
-    return new Array(Math.floor(rating)); // Sao đầy
-  }
-
-  getHalfStar(rating: number): boolean {
-    return rating % 1 >= 0.5; // Nếu có sao nửa
-  }
-
-  getEmptyStars(rating: number): number[] {
-    return new Array(
-      5 - Math.floor(rating) - (this.getHalfStar(rating) ? 1 : 0)
-    ); // Sao rỗng
-  }
-  nextCourses() {
-    if (this.index + 3 < this.totalCourses) {
-      this.index += 3;
-      console.log(this.index);
-      this.current_courses();
-      console.log(this.currentCourses);
-    }
-  }
-  previousCourses() {
-    if (this.index >= 3) {
-      this.index -= 3;
-      console.log(this.index);
-      this.current_courses();
-      console.log(this.currentCourses);
-    }
-  }
   ngOnInit(): void {
-    this.courseService.getAllReview().subscribe(
-      (reviews: Review[]) => {
+    // Lấy thông tin sinh viên và các khóa học, đánh giá song song bằng forkJoin
+    forkJoin([
+      this.authService.fetchUserInfo(),
+      this.courseService.getAllReview(),
+    ]).subscribe(
+      ([user, reviews]) => {
+        // Gán dữ liệu trả về từ fetchUserInfo và getAllReview
+        this.studentLogin = user;
         this.reviews = reviews;
+        this.getAllCourses();
       },
       (error) => {
         console.error('Lỗi khi gọi API:', error);
       }
     );
-    this.getAllCourses();
-    this.totalCourses = this.courses.length; // Cập nhật tổng số khóa học
-    this.current_courses(); // Khởi tạo lại danh sách khóa học hiển thị
-    this.circumference = 2 * Math.PI * this.radius;
-    this.updateProgress();
-    console.log(this.courses);
   }
 
+  // Lấy khóa học của sinh viên
+  getAllCourses(): void {
+    this.courseService.getCoursesOfStudent(this.studentLogin.id).subscribe(
+      (courses) => {
+        this.courses = courses;
+        this.totalCourses = this.courses.length;
+        this.current_courses(); // Cập nhật lại danh sách khóa học hiển thị
+        console.log('Courses:', this.courses);
+        this.circumference = 2 * Math.PI * this.radius;
+        this.totalProgress();
+        this.updateProgress();
+      },
+      (error) => {
+        console.error('There was an error!', error);
+      }
+    );
+  }
+
+  // Cập nhật danh sách khóa học hiện tại
+  current_courses() {
+    const startIndex = this.index;
+    const endIndex = Math.min(this.courses.length, startIndex + 3); // Đảm bảo không vượt quá độ dài của mảng courses
+    this.currentCourses = this.courses.slice(startIndex, endIndex);
+  }
+
+  // Hàm chuyển đến khóa học tiếp theo
+  nextCourses() {
+    if (this.index + 3 < this.totalCourses) {
+      this.index += 3;
+      this.current_courses();
+    }
+  }
+
+  // Hàm quay lại khóa học trước
+  previousCourses() {
+    if (this.index >= 3) {
+      this.index -= 3;
+      this.current_courses();
+    }
+  }
+  totalProgress() {
+    this.progressTotal = this.courses.reduce(
+      (sum, course) => sum + course.number_of_lessons,
+      0
+    );
+  }
+  // Cập nhật tỷ lệ hoàn thành
   updateProgress(): void {
     this.progressPercentage = (this.progressCurrent / this.progressTotal) * 100;
   }
+  // Lấy số sao đầy
+  getFullStars(rating: number): number[] {
+    return new Array(Math.floor(rating));
+  }
+
+  // Kiểm tra sao nửa
+  getHalfStar(rating: number): boolean {
+    return rating % 1 >= 0.5;
+  }
+
+  // Lấy số sao rỗng
+  getEmptyStars(rating: number): number[] {
+    return new Array(
+      5 - Math.floor(rating) - (this.getHalfStar(rating) ? 1 : 0)
+    );
+  }
+
+  // Quản lý ảnh đại diện
   profilePicture: string = 'assets/student/img/team-1.jpg';
-  //tham chiếu đến thẻ <input type="file"> đã đánh dấu #fileInput trong HTML
+
   @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
 
   // Kích hoạt input file khi click vào ảnh
@@ -114,16 +139,21 @@ export class DashboardStudentComponent implements OnInit {
   // Hàm xử lý khi người dùng chọn ảnh mới
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-
     if (input.files && input.files[0]) {
       const file = input.files[0];
+      const data = { avt: `../../../../assets/student/img/${file.name}` };
       const reader = new FileReader();
 
       reader.onload = (e: any) => {
         this.profilePicture = e.target.result; // Cập nhật ảnh đại diện
+        const avt = data;
+        this.studentService
+          .updateStudent(this.studentLogin.id, avt)
+          .subscribe();
       };
 
       reader.readAsDataURL(file);
     }
+    window.location.reload();
   }
 }

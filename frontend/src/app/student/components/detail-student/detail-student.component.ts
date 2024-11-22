@@ -9,6 +9,7 @@ import { Student } from '../../interfaces/student';
 import { AuthService } from '../../../auth/auth.service';
 import { FormsModule } from '@angular/forms';
 import { StudentService } from '../../services/student.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-detail-student',
@@ -71,8 +72,8 @@ export class DetailStudentComponent implements OnInit {
         console.error('Lỗi khi gọi API:', error);
       }
     );
-    console.log(this.reviews);
-    console.log('../../../../assets/student/img/course-1.jpg');
+
+    this.updateRating();
   }
 
   updateCourseRatings(): void {
@@ -156,37 +157,135 @@ export class DetailStudentComponent implements OnInit {
       return;
     }
 
-    const commentData = {
-      //studentId: this.studentLogin.id,
-      studentId: this.studentLogin.id,
-      courseId: this.courseId,
-      //rating: this.rating,
-      rating: 4,
-      comment: this.newComment,
-    };
-    this.courseService.addComment(commentData).subscribe(
-      (response) => {
-        console.log('Bình luận thành công:', response);
+    this.courseService
+      .isCourseRegistered(Number(this.courseId), this.studentLogin.id)
+      .subscribe(
+        (isRegistered) => {
+          if (!isRegistered) {
+            // Nếu sinh viên chưa đăng ký khóa học, sử dụng SweetAlert2
+            Swal.fire({
+              title: 'Cảnh báo!',
+              text: 'Bạn chưa tham gia khóa học này nên ko thể bình luận',
+              icon: 'warning',
+              confirmButtonText: 'Đồng ý',
+            });
+            return;
+          }
 
-        this.newComment = '';
-        this.errorMessage = '';
-      },
-      (error) => {
-        console.error('Lỗi khi gửi bình luận:', error);
-        this.errorMessage = 'Đã xảy ra lỗi khi thêm bình luận';
-      }
-    );
-    window.location.reload();
+          // Nếu sinh viên đã đăng ký khóa học
+          const commentData = {
+            studentId: this.studentLogin.id,
+            courseId: this.courseId,
+            rating: this.rating,
+            comment: this.newComment,
+          };
+
+          this.courseService.addComment(commentData).subscribe(
+            (response) => {
+              console.log('Bình luận thành công:', response);
+              this.newComment = '';
+              this.errorMessage = '';
+              window.location.reload();
+            },
+            (error) => {
+              console.error('Lỗi khi gửi bình luận:', error);
+              this.errorMessage = 'Đã xảy ra lỗi khi thêm bình luận';
+            }
+          );
+        },
+        (error) => {
+          console.error('Lỗi khi kiểm tra đăng ký khóa học:', error);
+          this.errorMessage = 'Đã xảy ra lỗi khi kiểm tra đăng ký khóa học';
+        }
+      );
   }
   register() {
-    const userId = this.studentLogin.id; // lấy userId từ login
-    const courseId = Number(this.courseId); // Convert courseId thành số, nếu chưa
-    this.courseService.registerCourse(courseId, userId).subscribe({
-      next: (response) => console.log('Registration successful:', response),
-      error: (error) => console.error('Registration failed:', error),
+    const userId = this.studentLogin.id;
+    const courseId = Number(this.courseId);
+
+    this.courseService.isCourseRegistered(courseId, userId).subscribe({
+      next: (isRegistered) => {
+        console.log('asdasdasdasdasiodsad: ' + isRegistered);
+        if (isRegistered) {
+          Swal.fire({
+            title: 'Thông báo',
+            text: 'Bạn đã đăng ký khóa học này.',
+            icon: 'info',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            location.reload();
+          });
+        } else {
+          this.courseService.registerCourse(courseId, userId).subscribe({
+            next: (response) => {
+              Swal.fire({
+                title: 'Đăng ký thành công!',
+                text: 'Bạn đã đăng ký khóa học thành công.',
+                icon: 'success',
+                confirmButtonText: 'OK',
+              }).then(() => {
+                location.reload();
+              });
+            },
+            error: (error) => {
+              Swal.fire({
+                title: 'Đăng ký thất bại',
+                text: 'Đã xảy ra lỗi trong quá trình đăng ký khóa học. Vui lòng thử lại.',
+                icon: 'error',
+                confirmButtonText: 'OK',
+              }).then(() => {
+                location.reload();
+              });
+            },
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error checking registration status:', error);
+        Swal.fire({
+          title: 'Lỗi',
+          text: 'Không thể kiểm tra trạng thái đăng ký. Vui lòng thử lại.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        }).then(() => {
+          location.reload();
+        });
+      },
     });
   }
-  
+
+  setRating(rating: number): void {
+    this.rating = rating;
+  }
+
+  updateRating() {
+    const courseReviews = this.reviews.filter(
+      (review) => review.courseId === this.courseDetail.id
+    );
+    const totalRating = courseReviews.reduce(
+      (sum, review) => sum + review.rating,
+      0
+    );
+
+    // Cập nhật rating trung bình
+    if (courseReviews.length > 0) {
+      this.courseDetail.rating = totalRating / courseReviews.length;
+    } else {
+      this.courseDetail.rating = 0; // Nếu không có review, set rating là 0
+    }
+    const data = {
+      categoryId: this.courseDetail.categoryId,
+      rating: this.courseDetail.rating,
+    };
+    this.courseService.updateCourse(Number(this.courseId), data).subscribe(
+      (response) => {
+        console.log('update thành công: ', response);
+      },
+      (error) => {
+        console.error('Lỗi khi gửi bình luận: ', error);
+      }
+    );
+  }
   @HostListener('window:scroll', [])
   onWindowScroll() {
     const container = document.querySelector('.container-title');
