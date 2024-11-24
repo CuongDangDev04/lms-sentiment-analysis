@@ -1,77 +1,60 @@
-<div class="feedback-manager">
-    <div class="header">
-      <h1>Quản Lý Phản Hồi và Phân Tích Tình Cảm</h1>
-    </div>
-  
-    <!-- Bộ lọc -->
-    <div class="filter-section">
-      <div class="filter-group">
-        <label for="course">Chọn khóa học:</label>
-        <select id="course" [(ngModel)]="selectedCourse" (change)="filterFeedback()">
-          <option value="">Tất cả khóa học</option>
-          <option *ngFor="let course of courses" [ngValue]="course">{{ course.name }}</option>
-        </select>
-      </div>
-  
-      <div class="filter-group">
-        <label for="student">Chọn sinh viên:</label>
-        <select id="student" [(ngModel)]="selectedStudent" (change)="filterFeedback()">
-          <option value="">Tất cả sinh viên</option>
-          <option *ngFor="let student of students" [ngValue]="student">{{ student.name }}</option>
-        </select>
-      </div>
-  
-      <div class="filter-group">
-        <label for="emotion">Chọn cảm xúc:</label>
-        <select id="emotion" [(ngModel)]="selectedEmotion" (change)="filterFeedback()">
-          <option value="">Tất cả cảm xúc</option>
-          <option value="positive">Tích cực</option>
-          <option value="neutral">Trung lập</option>
-          <option value="negative">Tiêu cực</option>
-        </select>
-      </div>
-    </div>
-    <div class="charts-section">
-        <div class="chart-container">
-          <canvas id="barChart"></canvas>
-        </div>
-        <div class="chart-container">
-          <canvas id="pieChart"></canvas>
-        </div>
-        <div class="chart-container">
-          <canvas id="lineChart"></canvas>
-        </div>
-      </div>
-<!-- Giả sử bạn đang dùng courses trong dropdown chọn khóa học -->
-<select [(ngModel)]="selectedCourse">
-    <option *ngFor="let course of courses" [value]="course">{{ course.name }}</option>
-  </select>
-  
+<div class="feedback-container">
+  <h2>Danh Sách Phản Hồi</h2>
+  <div class="filter-container">
+    <input
+      type="text"
+      placeholder="Tên sinh viên"
+      [(ngModel)]="studentNameFilter"
+      class="filter-input"
+    />
+    <input
+      type="date"
+      [(ngModel)]="dateFilter"
+      class="filter-input"
+    />
+    <input
+      type="text"
+      placeholder="Tên khóa học"
+      [(ngModel)]="courseNameFilter"
+      class="filter-input"
+    />
+    <button (click)="applyFilters()">Lọc</button>
+  </div>
   <!-- Bảng dữ liệu phản hồi -->
-  <table>
+  <table class="feedback-table">
     <thead>
       <tr>
-        <th>Student Name</th>
-        <th>Course Name</th>
-        <th>Emotion</th>
-        <th>Comment</th>
+        <th>Khóa học</th>
+        <th>Sinh viên</th>
+        <th>Thời gian phản hồi</th>
+        <th>Cảm xúc</th>
+        <th>Đánh giá</th>
+        <th>Phân tích</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let feedback of pagedFeedback">
-        <td>{{ feedback.studentName }}</td>
-        <td>{{ feedback.courseName }}</td>
-        <td>{{ feedback.emotion }}</td>
-        <td>{{ feedback.comment }}</td>
+      <tr *ngFor="let item of (isFiltering ? filteredFeedback : feedback)">
+        <td>{{ item.course.name }}</td>
+        <td>{{ item.reviewStudent.fullname }}</td>
+        <td >
+          {{item.updatedAt | date: 'dd/MM/yyyy '}}
+        </td>
+        <td class="clickable" (click)="showSentimentDetails(item.sentimentAnalysis)">
+          {{ item.sentimentAnalysis.sentimentLabel }}
+        </td>
+        
+        <td>{{ item.comment }}</td>
+        <td>
+          <button (click)="analyzeFeedbackSentiment(item.courseId, item.reviewStudent.id)" class="btn-analyze">
+            <i class="fas fa-chart-line"></i> 
+          </button>
+        </td>
+        
       </tr>
+      
+      
     </tbody>
   </table>
-  
-  <!-- Điều khiển phân trang -->
-  <div class="pagination">
-    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
-    <span>Page {{ currentPage }} of {{ totalPages }}</span>
-    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
-  </div>
-  
-  
+
+   
+</div>

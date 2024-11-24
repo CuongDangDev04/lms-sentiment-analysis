@@ -33,9 +33,10 @@ for review in raw_inputs:
         outputs = model(**inputs)
         predictions = torch.nn.functional.softmax(outputs.logits, dim=-1)
 
-        positive_score = predictions[0][2].item()
         negative_score = predictions[0][0].item()
-        neutral_score = predictions[0][1].item()
+        positive_score = predictions[0][1].item()
+        neutral_score  = predictions[0][2].item()
+
 
         if positive_score > max(negative_score, neutral_score):
             sentiment_label = "Tích cực"

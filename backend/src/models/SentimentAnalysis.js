@@ -50,7 +50,12 @@ const SentimentAnalysis = sequelize.define("SentimentAnalysis", {
   }
 },
 {
-  timestamps: true,  // Thêm các trường createdAt và updatedAt tự động
+  timestamps: true, 
+  uniqueKeys: {
+    unique_user_course: {
+      fields: ['userId', 'courseId'], // Đảm bảo cặp userId và courseId là duy nhất
+    },
+  },
 });
 
 module.exports = SentimentAnalysis;

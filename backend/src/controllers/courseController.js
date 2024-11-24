@@ -3,6 +3,8 @@ const User = require("../models/user");
 const Category = require("../models/category");
 const StudentCourse = require("../models/studentcourse");
 const Review = require("../models/review");
+const { SentimentAnalysis } = require("../models");
+const { Sequelize } = require("sequelize");
 // Tạo mới khóa học
 exports.createCourse = async (req, res) => {
   try {
@@ -130,18 +132,31 @@ exports.getAllReview = async (req, res) => {
           as: "course", // Sử dụng alias mới
           attributes: ["id", "name"], // Chọn các trường của Course
         },
+        {
+          model: SentimentAnalysis,
+          as: "sentimentAnalysis", // Alias cho SentimentAnalysis
+          required: false, // Không yêu cầu có dữ liệu SentimentAnalysis
+          where: {
+            id: {
+              [Sequelize.Op.eq]: Sequelize.col('Review.sentimentAnalysisId') // So sánh với sentimentAnalysisId trong Review
+            }
+          },
+          
+        }
       ],
     });
 
     if (!reviews || reviews.length === 0) {
       return res.status(404).json({ message: "No reviews found" });
     }
+
     res.status(200).json(reviews);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error fetching review", error: error.message });
   }
 };
+
 
 exports.getReviewOfCourse = async (req, res) => {
   try {
@@ -153,6 +168,16 @@ exports.getReviewOfCourse = async (req, res) => {
           model: User,
           as: "reviewStudent", // Sử dụng alias mới
         },
+        {
+          model: SentimentAnalysis,
+          as: "sentimentAnalysis", // Alias cho SentimentAnalysis
+          required: false, // Không yêu cầu có dữ liệu SentimentAnalysis
+          where: {
+            id: {
+              [Sequelize.Op.eq]: Sequelize.col('Review.sentimentAnalysisId') // So sánh với sentimentAnalysisId trong Review
+            }
+          },
+        }
       ],
     });
 

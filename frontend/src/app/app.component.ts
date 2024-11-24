@@ -10,9 +10,6 @@ import { FeedbackManagerAdminComponent } from './admin/components/feedback-manag
   standalone: true,
   imports: [
     RouterOutlet,
-    RouterLink,
-    DashboardAdminComponent,
-    FeedbackManagerAdminComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',

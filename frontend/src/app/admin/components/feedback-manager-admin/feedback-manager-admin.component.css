@@ -1,170 +1,140 @@
-
-
-/* Main container */
-.feedback-manager {
-    width: 82.5%;
-    float: right;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    box-sizing: border-box;
-}
-
-/* Header section */
-.header {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.header h1 {
-    font-size: 30px;
-    color: #333;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-/* Filter section */
-.filter-section {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.filter-group {
-    display: flex;
-    flex-direction: column;
-    width: 30%;
-}
-
-.filter-group label {
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #555;
-}
-
-.filter-group select {
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    background-color: #fff;
-    color: #333;
-}
-
-.filter-group select:focus {
-    outline: none;
-    border-color: #4CAF50;
-}
-
-/* Charts section */
-.charts-section {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
-}
-
-.chart-container {
-    width: 32%;
-    background-color: #f9f9f9;
+/* feedback-manager-admin.component.css */
+.feedback-container {
     padding: 20px;
+    background-color: #f9f9f9;
     border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.chart-container canvas {
-    width: 100% !important;
-    height: 300px !important;
-    border-radius: 8px;
-}
-
-/* Table section */
-table {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 83%;
+    float: right;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .feedback-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    background-color: #fff;
-    /* Màu nền bảng */
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    color: #333;
-    /* Màu chữ */
-}
-
-table th,
-table td {
-    padding: 12px;
+  }
+  
+  .feedback-table th,
+  .feedback-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
     text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-table th {
-    background-color: #007bff;
-    /* Màu xanh dương cho phần đầu bảng */
-    color: white;
-    /* Chữ trắng trong phần đầu bảng */
-    font-weight: bold;
-}
-
-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-    /* Màu nền cho các dòng chẵn */
-}
-
-table tbody tr:hover {
-    background-color: #f1f1f1;
-    /* Màu nền khi hover trên dòng */
-    cursor: pointer;
-}
-
-/* Pagination */
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.pagination button {
-    padding: 12px 20px;
-    margin: 0 10px;
+    color: black;
+  }
+  
+  .feedback-table th {
     background-color: #007bff;
     color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.pagination button:disabled {
-    background-color: #ddd;
-    cursor: not-allowed;
-}
-
-.pagination span {
     font-weight: bold;
-    font-size: 16px;
-    color: #555;
+  }
+  
+  .feedback-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .feedback-table tr:hover {
+    background-color: #e9f7e9;
+  }
+  
+  .feedback-table td {
+    word-wrap: break-word;
+  }
+/* Button styling */
+.btn-analyze {
+    background-color: #4CAF50;  /* Màu nền xanh */
+    color: white;  /* Màu chữ trắng */
+    font-size: 16px;  /* Kích thước chữ */
+    padding: 10px 20px;  /* Cách điệu padding cho button */
+    border: none;  /* Không có viền */
+    border-radius: 5px;  /* Bo góc cho button */
+    display: flex;  /* Đảm bảo nội dung được căn giữa */
+    align-items: center;  /* Căn giữa nội dung */
+    justify-content: center;  /* Căn giữa nội dung */
+    cursor: pointer;  /* Hiển thị con trỏ chuột khi hover */
+    transition: background-color 0.3s ease, transform 0.3s ease;  /* Thêm hiệu ứng chuyển màu nền */
+  }
+  
+  /* Thêm hiệu ứng hover */
+  .btn-analyze:hover {
+    background-color: #45a049;  /* Màu nền khi hover */
+    transform: scale(1.05);  /* Tăng kích thước một chút khi hover */
+  }
+  
+  /* Điều chỉnh vị trí của icon */
+  .btn-analyze i {
+    margin-right: 10px;  /* Cách chữ và icon một chút */
+    font-size: 18px;  /* Kích thước của icon */
+  }
+  
+  /* Điều chỉnh kích thước khi nhỏ màn hình */
+  @media (max-width: 600px) {
+    .btn-analyze {
+      font-size: 14px;  /* Kích thước chữ nhỏ hơn khi màn hình nhỏ */
+    }
+  
+    .btn-analyze i {
+      font-size: 16px;  /* Kích thước icon nhỏ hơn */
+    }
+  }
+  /* Thêm lớp CSS này vào file CSS của component */
+.clickable {
+  cursor: pointer;
+}
+.clickable:hover{
+  color: blue;
+  font-weight: 200;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-    .filter-section {
-        flex-direction: column;
-    }
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-    .filter-group {
-        width: 100%;
-        margin-bottom: 15px;
-    }
+.filter-input {
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 200px;
+  transition: all 0.3s ease-in-out;
+}
 
-    .charts-section {
-        flex-direction: column;
-        gap: 20px;
-    }
+.filter-input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
 
-    .chart-container {
-        width: 100%;
-    }
+button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+button:active {
+  background-color: #003d82;
 }

@@ -2,6 +2,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 const User = require("./user");
 const Course = require("./course");
+const SentimentAnalysis = require("./SentimentAnalysis");
 
 const Review = sequelize.define(
   "Review",
@@ -33,6 +34,20 @@ const Review = sequelize.define(
     comment: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    isAnalyzed: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false, // Mặc định là false, tức là chưa phân tích
+      allowNull: false,
+    },
+    sentimentAnalysisId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: SentimentAnalysis, // Tham chiếu đến bảng SentimentAnalysis
+        key: "id", // Khóa chính của bảng SentimentAnalysis
+      },
+      onDelete: "SET NULL", // Nếu SentimentAnalysis bị xóa, trường này sẽ là NULL
     },
   },
   {

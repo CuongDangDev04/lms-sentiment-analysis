@@ -70,6 +70,20 @@
       </select>
     </div>
 
+    <div class="form-group">
+      <label for="number_of_lessons">Số lượng bài học</label>
+      <input id="number_of_lessons" type="text" [(ngModel)]="course.number_of_lessons" name="number_of_lessons"/>
+    </div>
+    <div class="form-group">
+      <label for="number_of_students">Số lượng học viên tối đa</label>
+      <input id="number_of_students" type="text" [(ngModel)]="course.number_of_students" name="number_of_students"/>
+    </div>
+    <div class="form-group">
+      <label for="duration">Thời gian khóa học (giờ)</label>
+      <input id="duration" type="number" [(ngModel)]="course.duration" name="duration"/>
+    </div>
+    
+
     <button type="submit" class="btn-save">{{ isEditing ? 'Cập Nhật' : 'Thêm Khóa Học' }}</button>
     <button type="button" class="btn-reset" (click)="resetForm()">Đặt Lại</button>
   </form>

@@ -5,7 +5,7 @@ const Category = require("./category");
 const StudentCourse = require("./studentcourse");
 const Review = require('./review');
 const ApprovalRequest = require('./ApprovalRequest ');
-const SentimentAnalysis = require('./SentimentAnalysis')
+const SentimentAnalysis = require('./SentimentAnalysis');
 
 // User - Course (Instructor)
 User.hasMany(Course, {
@@ -70,6 +70,7 @@ Review.belongsTo(Course, {
   foreignKey: "courseId",
   as: "course",
 });
+
 // ReviewSentiment - User (Liên kết ReviewSentiment với User)
 SentimentAnalysis.belongsTo(User, {
   foreignKey: "userId",  // Liên kết khóa ngoại tới User
@@ -81,7 +82,20 @@ SentimentAnalysis.belongsTo(Course, {
   foreignKey: "courseId", // Liên kết khóa ngoại tới Course
   as: "course", // Alias "course" cho mối quan hệ ReviewSentiment - Course
 });
-//cập nhật rating
+
+
+// Thêm mối quan hệ Review và SentimentAnalysis
+Review.hasOne(SentimentAnalysis, {
+  foreignKey: "courseId", // Liên kết khóa ngoại tới Course trong SentimentAnalysis
+  onDelete: "SET NULL", // Nếu SentimentAnalysis bị xóa, trường này sẽ là NULL
+  as: "sentimentAnalysis", // Alias cho mối quan hệ này
+});
+SentimentAnalysis.belongsTo(Review, {
+  foreignKey: "courseId",
+  targetKey: "courseId", // Tham chiếu đến khóa ngoại courseId trong bảng Review
+});
+
+// Cập nhật rating khi tạo, cập nhật hoặc xóa Review
 Review.afterCreate(async (review) => {
   await updateCourseRating(review.courseId);
 });
@@ -110,6 +124,7 @@ async function updateCourseRating(courseId) {
   course.rating = averageRating;
   await course.save();
 }
+
 module.exports = {
   sequelize,
   User,
