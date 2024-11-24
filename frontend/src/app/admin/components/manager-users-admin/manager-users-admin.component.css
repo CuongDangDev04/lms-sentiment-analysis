@@ -15,42 +15,54 @@
   font-size: 24px;
   margin-bottom: 20px;
 }
-
-.filter-search {
+.filter-container {
   display: flex;
-  gap: 20px; /* Khoảng cách giữa hai div */
-  justify-content: space-between; /* Cân đối khoảng cách giữa hai div */
-  margin-bottom: 20px; /* Khoảng cách dưới giữa phần tìm kiếm và các phần khác */
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.filter-search .form-group {
-  flex: 1; /* Chiếm đều không gian */
-}
-
-.filter-search .form-group label {
-  font-weight: bold;
-  color: #555;
-  display: block; /* Đảm bảo nhãn sẽ không bị chồng lên input */
-  margin-bottom: 5px;
-}
-
-.filter-search .form-group input {
-  width: 100%; /* Chiếm toàn bộ chiều rộng của form-group */
-  padding: 10px;
+.filter-input {
+  padding: 10px 15px;
   font-size: 16px;
-  background-color: #f5f5f5;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  outline: none;
-  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  width: 200px;
+  transition: all 0.3s ease-in-out;
 }
 
-.filter-search .form-group input:focus {
-  background-color: #fff;
+.filter-input:focus {
   border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
+
+button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+button:active {
+  background-color: #003d82;
+}
+
 
 .user-management h2 {
   text-align: center;
@@ -228,9 +240,11 @@ table tbody tr:hover {
   transform: translateY(-2px); /* Hiệu ứng nổi lên */
 }
 
-.btn-add-user:focus {
-  outline: none; /* Bỏ outline khi nút được nhấn */
+/* Hiệu ứng khi nhấn nút */
+.btn-add-user:active {
+  background-color: #003d82;
 }
+
 
 .btn-add-user i {
   margin-right: 8px; /* Khoảng cách giữa icon và text */
@@ -240,3 +254,17 @@ table tbody tr:hover {
 .btn-add-user i.fa {
   font-size: 18px;
 }
+
+
+/* Icon Phê Duyệt */
+.fa-regular {
+  font-size: 24px;
+  color: #28a745;  /* Màu xanh cho Phê Duyệt */
+  cursor: pointer;
+  margin-right: 10px;
+  transition: color 0.3s ease;
+}
+
+
+
+

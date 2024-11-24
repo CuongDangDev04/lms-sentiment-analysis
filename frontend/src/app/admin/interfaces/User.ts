@@ -9,4 +9,5 @@ export interface User {
     birthdate?: string;  
     phone?: string;  
     isApproved: Boolean;
+    isRejected: boolean;
 }

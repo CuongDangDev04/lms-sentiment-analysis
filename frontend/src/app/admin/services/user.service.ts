@@ -1,6 +1,6 @@
 // src/app/services/user.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { map, Observable } from 'rxjs';
 import { User } from '../interfaces/User'; // Import interface User
@@ -13,23 +13,24 @@ export class UserService {
   private studentUrl = 'http://localhost:5000/api/student';
   private instructorUrl = 'http://localhost:5000/api/instructor';
   private approvalUrl = 'http://localhost:5000/api/auth/approve-instructor';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-   // Phê duyệt giảng viên
-   approveInstructor(requestId: number): Observable<any> {
-    return this.http.put(`${this.approvalUrl}/${requestId}`, {}).pipe(
-      map((response) => response)
-    );
+  // Phê duyệt giảng viên
+  approveInstructor(userId: number, action: string): Observable<any> {
+    const token = localStorage.getItem('token');  // Lấy token từ localStorage
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);  // Thêm token vào header
+    return this.http.put(`${this.approvalUrl}/${userId}`, { action }, { headers });
   }
+  
 
   getAllStudents(): Observable<User[]> {
     return this.http.get<User[]>(this.studentUrl);
   }
-  
+
   getAllInstructors(): Observable<User[]> {
     return this.http.get<User[]>(this.instructorUrl);
   }
-  
+
 
   // Lấy học sinh theo ID
   getStudentById(id: number): Observable<User> {

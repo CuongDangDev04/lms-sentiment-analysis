@@ -51,23 +51,21 @@ exports.register = async (req, res) => {
   }
 };
 exports.approveInstructor = async (req, res) => {
-  const { requestId } = req.params;  // Lấy requestId từ URL params
+  const { userId } = req.params;  // Lấy userId từ URL params
+  const { action } = req.body;  // Lấy hành động từ request body (approve hoặc reject)
 
   try {
-    // Lấy yêu cầu phê duyệt từ requestId
-    const approvalRequest = await ApprovalRequest.findByPk(requestId);
+    // Tìm yêu cầu phê duyệt theo userId
+    const approvalRequest = await ApprovalRequest.findOne({
+      where: { instructorId: userId, status: "pending" }
+    });
 
     if (!approvalRequest) {
       return res.status(404).json({ message: "Approval request not found!" });
     }
 
-    // Kiểm tra trạng thái yêu cầu phê duyệt
-    if (approvalRequest.status !== "pending") {
-      return res.status(400).json({ message: "This request has already been processed." });
-    }
-
     // Lấy thông tin giảng viên (instructor) liên quan đến yêu cầu phê duyệt
-    const instructor = await User.findByPk(approvalRequest.instructorId, {
+    const instructor = await User.findByPk(userId, {
       attributes: { exclude: ['password'] }  // Loại bỏ mật khẩu
     });
 
@@ -75,26 +73,41 @@ exports.approveInstructor = async (req, res) => {
       return res.status(404).json({ message: "Instructor not found!" });
     }
 
-    // Trả về thông tin giảng viên và yêu cầu phê duyệt
-    res.status(200).json({
-      message: "Instructor details retrieved successfully!",
-      approvalRequest,
-      instructor,  // Trả về thông tin giảng viên trừ mật khẩu
-    });
+    if (action === 'approve') {
+      // Phê duyệt giảng viên
+      instructor.isApproved = true;
+      await instructor.save();
 
-    // Cập nhật trạng thái phê duyệt
-    instructor.isApproved = true;
-    await instructor.save();
+      // Cập nhật trạng thái yêu cầu phê duyệt thành approved
+      approvalRequest.status = "approved";
+      await approvalRequest.save();
 
-    // Cập nhật trạng thái yêu cầu phê duyệt
-    approvalRequest.status = "approved";
-    await approvalRequest.save();
+      return res.status(200).json({
+        message: "Instructor approved successfully!",
+        approvalRequest,
+        instructor,
+      });
+    } else if (action === 'reject') {
+      // Từ chối giảng viên và xóa tài khoản
+      approvalRequest.status = "rejected";
+      await approvalRequest.save();
 
+      // Xóa tài khoản giảng viên
+      await instructor.destroy();
+
+      return res.status(200).json({
+        message: "Instructor rejected and account deleted successfully.",
+      });
+    } else {
+      return res.status(400).json({ message: "Invalid action!" });
+    }
   } catch (error) {
     console.error("Approval error:", error);
-    res.status(500).json({ error: "Failed to approve instructor." });
+    res.status(500).json({ error: "Failed to approve or reject instructor." });
   }
 };
+
+
 
 
 

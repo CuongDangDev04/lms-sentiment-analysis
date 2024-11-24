@@ -14,7 +14,7 @@ import { UserService } from '../../services/user.service';
   styleUrls: ['./manager-courses-admin.component.css']
 })
 export class ManagerCoursesAdminComponent implements OnInit {
-  
+
   courses: Course[] = []; // Danh sách khóa học
   course: Partial<Course> = {}; // Khóa học hiện tại
   categories: Category[] = []; // Danh sách danh mục
@@ -23,7 +23,10 @@ export class ManagerCoursesAdminComponent implements OnInit {
 
   isEditing = false; // Trạng thái chỉnh sửa khóa học
   isAdding = false; // Trạng thái thêm khóa học
-  
+  filteredCourses: Course[] = []; // Danh sách khóa học đã lọc
+  searchCourseName: string = ''; // Tìm kiếm theo tên khóa học
+  selectedInstructor: string = ''; // Giảng viên đã chọn
+  selectedCategory: string = ''; // Danh mục đã chọn
 
   constructor(private courseService: CourseService, private userService: UserService) {}
 
@@ -32,39 +35,54 @@ export class ManagerCoursesAdminComponent implements OnInit {
     this.loadCategories();
     this.loadInstructors();
   }
+
   loadCategories(): void {
     this.courseService.getAllCategories().subscribe({
       next: (data) => {
-        this.categories = data; // Gán dữ liệu danh mục vào mảng
+        this.categories = data;
       },
       error: () => {
-        console.error('Lỗi khi tải danh sách danh mục.');
+        console.error('Lỗi khi tải danh mục.');
       },
     });
   }
-  // Lấy danh sách khóa học
+
   loadCourses(): void {
     this.courseService.getAllCourses().subscribe({
       next: (data) => {
-        this.courses = data; // Gán dữ liệu khóa học vào mảng
+        this.courses = data;
+        this.filteredCourses = [...data]; // Gán danh sách khóa học ban đầu vào filteredCourses
       },
       error: () => {
         console.error('Lỗi khi tải danh sách khóa học.');
       },
     });
   }
+
   loadInstructors(): void {
     this.userService.getAllInstructors().subscribe({
       next: (data) => {
-        this.instructors = data; // Gán dữ liệu giảng viên vào mảng instructors
+        this.instructors = data;
       },
       error: () => {
         console.error('Lỗi khi tải danh sách giảng viên.');
       },
     });
   }
-  
 
+  applySearch(): void {
+    this.filteredCourses = this.courses.filter(course => {
+      const matchesName = course.name.toLowerCase().includes(this.searchCourseName.toLowerCase());
+      const matchesInstructor = this.selectedInstructor
+        ? course.instructorId === Number(this.selectedInstructor)
+        : true;
+      const matchesCategory = this.selectedCategory
+        ? course.categoryId === Number(this.selectedCategory)
+        : true;
+      
+      return matchesName && matchesInstructor && matchesCategory;
+    });
+  }
   // Chỉnh sửa khóa học
   editCourse(course: Course): void {
     this.course = { ...course };

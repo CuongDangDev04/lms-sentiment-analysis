@@ -14,8 +14,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./manager-users-admin.component.css'],
 })
 export class ManagerUsersAdminComponent implements OnInit {
-  
   users: User[] = [];
+  filteredUsers: User[] = []; // Lưu danh sách sau khi lọc
   newUser: User = {
     id: 0,
     username: '',
@@ -26,39 +26,48 @@ export class ManagerUsersAdminComponent implements OnInit {
     avt: '',
     birthdate: '',
     phone: '',
-    isApproved:true
+    isApproved: true,
+    isRejected: true
   };
   isEditing = false;
+  isAdding = false; // Kiểm soát hiển thị form thêm
 
-  searchName = '';
-  searchEmail = '';
-  filterRole = '';
-  isAdding = false; // Biến để kiểm soát hiển thị form thêm
+  // Tiêu chí tìm kiếm
+  searchCriteria = {
+    name: '',
+    email: '',
+    id: '',
+    role: '',
+  };
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit() {
     this.loadUsers();
   }
 
+  // Tải danh sách người dùng
   loadUsers() {
     this.userService.getAllStudents().subscribe((students) => {
       this.users = [...students];
       this.userService.getAllInstructors().subscribe((instructors) => {
         this.users = [...this.users, ...instructors];
+        this.filteredUsers = [...this.users]; // Gán danh sách ban đầu
       });
     });
   }
-  
 
-  get filteredUsers() {
-    return this.users.filter((user) => {
+  // Phương thức tìm kiếm
+  searchUsers() {
+    this.filteredUsers = this.users.filter((user) => {
       return (
-        (!this.searchName ||
-          user.fullname.toLowerCase().includes(this.searchName.toLowerCase())) &&
-        (!this.searchEmail ||
-          user.email.toLowerCase().includes(this.searchEmail.toLowerCase())) &&
-        (!this.filterRole || user.role === this.filterRole)
+        (!this.searchCriteria.name ||
+          user.fullname.toLowerCase().includes(this.searchCriteria.name.toLowerCase())) &&
+        (!this.searchCriteria.email ||
+          user.email.toLowerCase().includes(this.searchCriteria.email.toLowerCase())) &&
+        (!this.searchCriteria.id ||
+          user.id.toString().includes(this.searchCriteria.id)) &&
+        (!this.searchCriteria.role || user.role === this.searchCriteria.role)
       );
     });
   }
@@ -74,9 +83,7 @@ export class ManagerUsersAdminComponent implements OnInit {
     }
   }
 
-  selectRole(role: string) {
-    this.filterRole = role;
-  }
+
 
   isFormValid(): boolean {
     return (
@@ -199,7 +206,8 @@ export class ManagerUsersAdminComponent implements OnInit {
       avt: '',
       birthdate: '',
       phone: '',
-      isApproved:true
+      isApproved:true,
+      isRejected: true
     };
     this.isEditing = false;
   }
@@ -279,34 +287,52 @@ export class ManagerUsersAdminComponent implements OnInit {
     this.resetForm();
   }
 
-  approveInstructor(requestId: number) {
-    this.userService.approveInstructor(requestId).subscribe(
-      (response) => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Phê duyệt thành công!',
-          text: 'Giảng viên đã được phê duyệt.',
-          confirmButtonText: 'OK',
-          customClass: {
-            confirmButton: 'btn btn-success',
-          },
-        });
-        // Tải lại danh sách người dùng sau khi phê duyệt
-        this.loadUsers();
+  approveInstructor(userId: number, action: string) {
+    Swal.fire({
+      title: 'Xác nhận hành động',
+      text: action === 'approve' ? 'Bạn chắc chắn muốn phê duyệt giảng viên này?' : 'Bạn chắc chắn muốn từ chối giảng viên này và xóa tài khoản của họ?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Đồng ý',
+      cancelButtonText: 'Hủy',
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger',
       },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Lỗi!',
-          text: 'Đã xảy ra lỗi khi phê duyệt giảng viên.',
-          confirmButtonText: 'OK',
-          customClass: {
-            confirmButton: 'btn btn-danger',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Tiến hành phê duyệt hoặc từ chối nếu người dùng xác nhận
+        this.userService.approveInstructor(userId, action).subscribe(
+          (response) => {
+            Swal.fire({
+              icon: 'success',
+              title: action === 'approve' ? 'Phê duyệt thành công!' : 'Từ chối thành công!',
+              text: action === 'approve' ? 'Giảng viên đã được phê duyệt.' : 'Giảng viên đã bị từ chối và tài khoản đã bị xóa.',
+              confirmButtonText: 'OK',
+              customClass: {
+                confirmButton: 'btn btn-success',
+              },
+            });
+            // Tải lại danh sách người dùng sau khi phê duyệt hoặc từ chối
+            this.loadUsers();
           },
-        });
+          (error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Lỗi!',
+              text: 'Đã xảy ra lỗi khi phê duyệt hoặc từ chối giảng viên.',
+              confirmButtonText: 'OK',
+              customClass: {
+                confirmButton: 'btn btn-danger',
+              },
+            });
+          }
+        );
       }
-    );
+    });
   }
+  
+  
   
   
 }

@@ -4,6 +4,45 @@
   <button class="btn-add-course" (click)="toggleAddCourseForm()">
     {{ isAdding ? 'Đóng Form Thêm Khóa học' : 'Thêm Khóa học' }}
   </button>
+  <div class="filter-container">
+    <div class="form-group">
+      <input
+        id="searchName"
+        type="text"
+        [(ngModel)]="searchCourseName"
+        placeholder="Tên khóa học"
+        class="filter-input"
+      />
+    </div>
+  
+    <div class="form-group">
+      <select
+        id="instructorFilter"
+        [(ngModel)]="selectedInstructor"
+        class="filter-input"
+      >
+        <option value="">Giảng viên</option>
+        <option *ngFor="let instructor of instructors" [value]="instructor.id">
+          {{ instructor.fullname }}
+        </option>
+      </select>
+    </div>
+  
+    <div class="form-group">
+      <select
+        id="categoryFilter"
+        [(ngModel)]="selectedCategory"
+        class="filter-input"
+      >
+        <option value="">Danh mục</option>
+        <option *ngFor="let category of categories" [value]="category.id">
+          {{ category.name }}
+        </option>
+      </select>
+    </div>
+    
+    <button (click)="applySearch()">Tìm kiếm</button>
+  </div>
   <!-- Form thêm khóa học -->
   <form class="course-form" *ngIf="isAdding" (ngSubmit)="onSubmit()">
     <div class="form-group">
@@ -100,7 +139,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let course of courses">
+      <tr *ngFor="let course of filteredCourses">
         <td>{{ course.name }}</td>
         <td>{{ course.description }}</td>
         <td>{{ course.instructor.fullname }}</td>
