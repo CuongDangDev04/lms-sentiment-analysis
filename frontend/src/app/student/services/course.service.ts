@@ -61,6 +61,9 @@ export class CourseService {
         })
       );
   }
+  getStudentInCourse(id: Number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/${id}/students`);
+  }
   getCoursesOfStudent(userId: Number): Observable<Course[]> {
     return this.http.get<Course[]>(`${this.baseUrl}/students/${userId}`);
   }

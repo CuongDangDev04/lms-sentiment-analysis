@@ -1,4 +1,5 @@
-const Category = require("../models/category");  // Import model Category
+const { Course } = require("../models");
+const Category = require("../models/category"); // Import model Category
 
 // Tạo mới thể loại
 exports.createCategory = async (req, res) => {
@@ -31,9 +32,9 @@ exports.getAllCategories = async (req, res) => {
 
 // Lấy thể loại theo ID
 exports.getCategoryById = async (req, res) => {
-  const { id } = req.params;  
+  const { id } = req.params;
   try {
-    const category = await Category.findByPk(id); 
+    const category = await Category.findByPk(id);
     if (!category) {
       return res.status(404).json({ error: "Category not found" });
     }
@@ -45,11 +46,11 @@ exports.getCategoryById = async (req, res) => {
 
 // Cập nhật thể loại
 exports.updateCategory = async (req, res) => {
-  const { id } = req.params;  
+  const { id } = req.params;
   const { name } = req.body;
 
   try {
-    const category = await Category.findByPk(id);  
+    const category = await Category.findByPk(id);
     if (!category) {
       return res.status(404).json({ error: "Category not found" });
     }
@@ -73,14 +74,23 @@ exports.updateCategory = async (req, res) => {
 
 // Xóa thể loại
 exports.deleteCategory = async (req, res) => {
-  const { id } = req.params;  
+  const { id } = req.params;
   try {
-    const category = await Category.findByPk(id);  
+    const category = await Category.findByPk(id);
     if (!category) {
       return res.status(404).json({ error: "Category not found" });
     }
     await category.destroy();
     res.status(200).json({ message: "Category deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+exports.courseOfCategory = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const courses = await Course.findAll({ where: { categoryId: id } });
+    res.status(200).json(courses);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

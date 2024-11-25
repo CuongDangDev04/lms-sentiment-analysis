@@ -1,9 +1,8 @@
 const SentimentAnalysis = require("../models/SentimentAnalysis");
 const Review = require("../models/review");
-const User = require("../models/user")
-const path = require('path');
-const { spawn } = require('child_process');
-const Course = require('../models/course')
+const User = require("../models/user");
+const Course = require("../models/course");
+
 //phân tích cả khóa học
 // exports.analyzeCourseReviews = async (req, res) => {
 //   try {
@@ -68,7 +67,7 @@ const Course = require('../models/course')
 
 //         // Tạo các bản ghi sentiment để lưu vào cơ sở dữ liệu
 //         const sentimentRecords = reviews.map((review, i) => ({
-          
+
 //           userId: review.studentId,
 //           courseId: courseId,
 //           sentimentScorePositive: analysisResults[i].positive,
@@ -77,7 +76,6 @@ const Course = require('../models/course')
 //           sentimentLabel: analysisResults[i].label,
 //           reviewText: review.comment,
 //         }));
-
 
 //         try {
 //           // Lưu các kết quả phân tích vào cơ sở dữ liệu
@@ -105,17 +103,25 @@ const Course = require('../models/course')
 // };
 
 // phân tích thep courseId và UserId
+//===================================================================================================================
+
+// Worker xử lý phân tích cảm xúc
+
+//===================================================================================================================
+
 exports.analyzeUserCourseReviews = async (req, res) => {
   try {
     const { userId, courseId } = req.params;
 
     // Kiểm tra xem đã có phân tích cảm xúc cho userId và courseId này chưa
     const existingAnalysis = await SentimentAnalysis.findOne({
-      where: { userId, courseId }
+      where: { userId, courseId },
     });
 
     if (existingAnalysis) {
-      return res.status(400).send({ message: 'Sentiment analysis already exists for this user and course.' });
+      return res.status(400).send({
+        message: "Sentiment analysis already exists for this user and course.",
+      });
     }
 
     // Lấy các review từ cơ sở dữ liệu theo userId và courseId
@@ -124,51 +130,67 @@ exports.analyzeUserCourseReviews = async (req, res) => {
       include: [
         {
           model: User,
-          as: 'reviewStudent',
+          as: "reviewStudent",
         },
       ],
     });
 
     // Nếu không có review, trả về lỗi
     if (!reviews.length) {
-      console.log(`No reviews found for courseId: ${courseId}, userId: ${userId}`);
-      return res.status(404).send({ message: 'No reviews found for this user and course.' });
+      console.log(
+        `No reviews found for courseId: ${courseId}, userId: ${userId}`
+      );
+      return res
+        .status(404)
+        .send({ message: "No reviews found for this user and course." });
     }
 
     // Tạo mảng các bình luận từ reviews
     const reviewTexts = reviews.map((review) => review.comment);
 
     // Đường dẫn tới script Python
-    const scriptPath = path.join(__dirname, '..', '..', 'src', 'scriptspy', 'sentiment_analysis.py');
+    const scriptPath = path.join(
+      __dirname,
+      "..",
+      "..",
+      "src",
+      "scriptspy",
+      "sentiment_analysis.py"
+    );
 
     // Cấu hình tham số đầu vào cho script Python
-    const pythonProcess = spawn('python', [scriptPath, JSON.stringify(reviewTexts)]);
+    const pythonProcess = spawn("python", [
+      scriptPath,
+      JSON.stringify(reviewTexts),
+    ]);
 
-    let scriptOutput = '';
-    let scriptError = '';
+    let scriptOutput = "";
+    let scriptError = "";
 
     // Lắng nghe dữ liệu trả về từ Python
-    pythonProcess.stdout.on('data', (data) => {
+    pythonProcess.stdout.on("data", (data) => {
       scriptOutput += data.toString();
     });
 
     // Xử lý lỗi khi chạy Python
-    pythonProcess.stderr.on('data', (data) => {
+    pythonProcess.stderr.on("data", (data) => {
       scriptError += data.toString();
     });
 
     // Khi Python script hoàn thành
-    pythonProcess.on('close', async (code) => {
+    pythonProcess.on("close", async (code) => {
       if (code !== 0) {
         console.error(`Python script exited with code ${code}`);
-        console.error('Python script stderr:', scriptError);
-        return res.status(500).send({ error: 'Error in Python script execution' });
+        console.error("Python script stderr:", scriptError);
+        return res
+          .status(500)
+          .send({ error: "Error in Python script execution" });
       }
 
       // Kiểm tra kết quả trả về từ Python
       if (!scriptOutput || scriptOutput.length === 0) {
-        console.error('No output from Python script');
-        return res.status(500).send({ error: 'No output from Python script' });
+        console.error("No output from Python script");
+        return res.status(500).send({ error: "No output from Python script" });
       }
 
       try {
@@ -187,8 +209,10 @@ exports.analyzeUserCourseReviews = async (req, res) => {
         }));
 
         // Lưu các kết quả phân tích vào cơ sở dữ liệu
-        const savedSentimentRecords = await SentimentAnalysis.bulkCreate(sentimentRecords);
-        console.log('Sentiment records saved successfully.');
+        const savedSentimentRecords = await SentimentAnalysis.bulkCreate(
+          sentimentRecords
+        );
+        console.log("Sentiment records saved successfully.");
 
         // Cập nhật bảng Review với `isAnalyzed = true` và `sentimentAnalysisId`
         await Promise.all(
@@ -202,21 +226,23 @@ exports.analyzeUserCourseReviews = async (req, res) => {
         );
 
         return res.status(200).send({
-          message: 'Sentiment analysis completed and saved successfully.',
+          message: "Sentiment analysis completed and saved successfully.",
           sentimentRecords: savedSentimentRecords,
         });
       } catch (saveError) {
-        console.error('Error saving sentiment records:', saveError);
-        return res.status(500).send({ error: 'Error saving sentiment records' });
+        console.error("Error saving sentiment records:", saveError);
+        return res
+          .status(500)
+          .send({ error: "Error saving sentiment records" });
       }
     });
-
   } catch (err) {
-    console.error('Error in analyzeUserCourseReviews:', err);
-    return res.status(500).send({ error: 'An error occurred while processing the reviews.' });
+    console.error("Error in analyzeUserCourseReviews:", err);
+    return res
+      .status(500)
+      .send({ error: "An error occurred while processing the reviews." });
   }
 };
-
 
 // lấy kq phân tích theo courseId và userId
 exports.getSentimentAnalysisByCourseAndUser = async (req, res) => {
@@ -228,31 +254,34 @@ exports.getSentimentAnalysisByCourseAndUser = async (req, res) => {
       where: { courseId, userId },
       include: [
         {
-          model: User,  
-          as: 'user',
-          attributes: ['id', 'fullname'], 
+          model: User,
+          as: "user",
+          attributes: ["id", "fullname"],
         },
         {
-          model: Course,  // Kết nối với model Course để lấy thông tin khóa học
-          as: 'course',
-          attributes: ['id', 'name'],  // Chỉ lấy các trường cần thiết
-        }
-      ]
+          model: Course, // Kết nối với model Course để lấy thông tin khóa học
+          as: "course",
+          attributes: ["id", "name"], // Chỉ lấy các trường cần thiết
+        },
+      ],
     });
 
     // Kiểm tra nếu không có dữ liệu
     if (!sentimentData.length) {
-      return res.status(404).send({ message: 'No sentiment analysis found for this user and course.' });
+      return res.status(404).send({
+        message: "No sentiment analysis found for this user and course.",
+      });
     }
 
     // Trả về dữ liệu sentiment analysis
     return res.status(200).json(sentimentData);
   } catch (err) {
-    console.error('Error in getSentimentAnalysisByCourseAndUser:', err);
-    return res.status(500).send({ error: 'An error occurred while retrieving sentiment analysis data.' });
+    console.error("Error in getSentimentAnalysisByCourseAndUser:", err);
+    return res.status(500).send({
+      error: "An error occurred while retrieving sentiment analysis data.",
+    });
   }
 };
-
 
 // lấy kq phân tích theo courseId
 exports.getSentimentAnalysisByCourse = async (req, res) => {
@@ -264,27 +293,31 @@ exports.getSentimentAnalysisByCourse = async (req, res) => {
       where: { courseId },
       include: [
         {
-          model: User,  // Kết nối với model User để lấy thông tin người dùng
-          as: 'user', 
-          attributes: ['id', 'username'],  // Chỉ lấy các trường cần thiết
+          model: User, // Kết nối với model User để lấy thông tin người dùng
+          as: "user",
+          attributes: ["id", "username"], // Chỉ lấy các trường cần thiết
         },
         {
-          model: Course,  // Kết nối với model Course để lấy thông tin khóa học
-          as: 'course',
-          attributes: ['id', 'name'],  // Chỉ lấy các trường cần thiết
-        }
-      ]
+          model: Course, // Kết nối với model Course để lấy thông tin khóa học
+          as: "course",
+          attributes: ["id", "name"], // Chỉ lấy các trường cần thiết
+        },
+      ],
     });
 
     // Kiểm tra nếu không có dữ liệu
     if (!sentimentData.length) {
-      return res.status(404).send({ message: 'No sentiment analysis found for this course.' });
+      return res
+        .status(404)
+        .send({ message: "No sentiment analysis found for this course." });
     }
 
     // Trả về dữ liệu sentiment analysis
     return res.status(200).json(sentimentData);
   } catch (err) {
-    console.error('Error in getSentimentAnalysisByCourse:', err);
-    return res.status(500).send({ error: 'An error occurred while retrieving sentiment analysis data.' });
+    console.error("Error in getSentimentAnalysisByCourse:", err);
+    return res.status(500).send({
+      error: "An error occurred while retrieving sentiment analysis data.",
+    });
   }
 };

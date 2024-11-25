@@ -26,7 +26,7 @@ export class DetailStudentComponent implements OnInit {
   courseDetail: any;
   reviews: Review[] = [];
   studentComment: any[] = [];
-  comments: any[] = [];
+  comments: any[] = []; 
   totalComment: number = 0;
   visibleComments: any[] = [];
   commentsPerPage = 3; // Số lượng bình luận hiển thị mỗi lần
@@ -147,14 +147,13 @@ export class DetailStudentComponent implements OnInit {
   }
 
   addComment() {
-    if (!this.isLoggedIn) {
-      this.errorMessage = 'Bạn phải đăng nhập để bình luận';
-      return;
-    }
-
     if (!this.newComment || this.newComment.trim() === '') {
-      this.errorMessage = 'Vui lòng nhập bình luận';
-      return;
+      Swal.fire({
+        title: 'Cảnh báo!',
+        text: 'Vui lòng nhập bình luận',
+        icon: 'warning',
+        confirmButtonText: 'Đồng ý',
+      });
     }
 
     this.courseService

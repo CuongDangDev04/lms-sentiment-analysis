@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Course } from '../../interfaces/course';
 import { Review } from '../../interfaces/review';
 import { CourseService } from '../../services/course.service';
-import { RouterLink } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { catchError, forkJoin } from 'rxjs';
 import { InstructorService } from '../../services/instructor.service';
 
 @Component({
@@ -23,9 +23,12 @@ export class CourseStudentComponent implements OnInit {
 
   reviews: Review[] = [];
 
-  courses: Course[] = [];
+  courses: any[] = [];
 
-  constructor(private instructorService: InstructorService) {}
+  constructor(
+    private instructorService: InstructorService,
+    private route: ActivatedRoute
+  ) {}
   filteredCourseList: Course[] = [];
 
   // Phân trang
@@ -34,48 +37,57 @@ export class CourseStudentComponent implements OnInit {
 
   //Khởi tạo tất cả khóa học
   ngOnInit(): void {
-    this.getAllCourses(); // Gọi API để lấy dữ liệu khóa học
+    this.route.queryParams.subscribe((params) => {
+      this.selectedCategory = params['category'] || 'all'; // Lấy searchTerm từ queryParams
+      this.getAllCourses(); // Lấy dữ liệu khóa học và áp dụng bộ lọc
+    });
   }
 
   // Khởi tạo tất cả khóa học
+  // getAllCourses(): void {
+  //   forkJoin({
+  //     courses: this.courseService.getAllCourses(),
+  //     reviews: this.courseService.getAllReview().pipe(
+  //       catchError((error) => {
+  //         if (error.status === 404) {
+  //           console.error('Không tìm thấy review');
+  //           return []; // Trả về một mảng rỗng nếu API trả về 404
+  //         }
+  //         return []; // Xử lý các lỗi khác và trả về một mảng rỗng
+  //       })
+  //     ),
+  //     instructors: this.instructorService.getAllInstructor(),
+  //     categories: this.courseService.getAllCategories(),
+  //   }).subscribe(
+  //     ({ courses, reviews, instructors, categories }) => {
+  //       // this.courses = courses; // Cập nhật khóa học
+  //       this.reviews = reviews; // Lưu thông tin khác.
+  //       this.courses = courses;
+  //       if (this.reviews) {
+  //         this.updateCourseRatings();
+  //       } // Cập nhật rating khóa học
+  //       this.applyFilter(); // Áp dụng bộ lọc
+  //       // Xử lý dữ liệu khác nếu cần
+  //     },
+  //     (error) => {
+  //       console.error('Có lỗi xảy ra khi lấy dữ liệu:', error); // Xử lý lỗi
+  //     }
+  //   );
+  // }
+
   getAllCourses(): void {
     forkJoin({
       courses: this.courseService.getAllCourses(),
       reviews: this.courseService.getAllReview(),
-      instructors: this.instructorService.getAllInstructor(),
       categories: this.courseService.getAllCategories(),
     }).subscribe(
-      ({ courses, reviews, instructors, categories }) => {
-        // this.courses = courses; // Cập nhật khóa học
-        this.reviews = reviews; // Lưu thông tin khác
-        const instructorMap = instructors.reduce((map, instructor) => {
-          map[instructor.id] = instructor.fullname; // Giả sử API giảng viên trả về `id` và `name`
-          return map;
-        }, {} as Record<number, string>);
-
-        const categoryMap = categories.reduce(
-          (
-            map: Record<number, string>,
-            category: { id: number; name: string }
-          ) => {
-            map[category.id] = category.name;
-            return map;
-          },
-          {}
-        );
-
-        this.category_all = categories.map((item) => item.name);
-        console.log(this.category_all);
-        // Gán `instructorName` cho từng khóa học
-        this.courses = courses.map((course) => ({
-          ...course,
-          instructorName: instructorMap[course.instructorId] || 'Unknown', // Tra cứu instructorName
-          category: categoryMap[course.categoryId] || 'Unknown',
-        }));
-        console.log(this.courses); // In ra khóa học
-        this.updateCourseRatings(); // Cập nhật rating khóa học
+      ({ courses, reviews, categories }) => {
+        console.log('Courses:', courses); // Kiểm tra dữ liệu khóa học
+        this.reviews = reviews;
+        this.courses = courses;
+        this.category_all = categories.map((category) => category.name);
+        this.updateCourseRatings();
         this.applyFilter(); // Áp dụng bộ lọc
-        // Xử lý dữ liệu khác nếu cần
       },
       (error) => {
         console.error('Có lỗi xảy ra khi lấy dữ liệu:', error); // Xử lý lỗi
@@ -83,12 +95,11 @@ export class CourseStudentComponent implements OnInit {
     );
   }
 
-  // Phương thức lọc chung
   applyFilter(): void {
     this.filteredCourseList = this.courses.filter((course) => {
       const matchesCategory =
         this.selectedCategory === 'all' ||
-        course.category === this.selectedCategory;
+        course.category.name === this.selectedCategory;
       const matchesSearchTerm = course.name
         .toLowerCase()
         .includes(this.searchTerm.toLowerCase());
@@ -96,6 +107,7 @@ export class CourseStudentComponent implements OnInit {
     });
     this.currentPage = 1; // Đặt lại trang hiện tại khi thay đổi bộ lọc
   }
+
   // Rating
   updateCourseRatings(): void {
     // Tính toán rating trung bình cho từng khóa học
@@ -104,7 +116,7 @@ export class CourseStudentComponent implements OnInit {
       const courseReviews = this.reviews.filter(
         (review) => review.courseId === course.id
       );
-      
+
       // Tính tổng rating
       const totalRating = courseReviews.reduce(
         (sum, review) => sum + review.rating,
@@ -145,7 +157,7 @@ export class CourseStudentComponent implements OnInit {
     return new Array(5 - fullStars - halfStar); // Trả về số sao rỗng (5 sao - sao đầy - sao nửa)
   }
   // Các phương thức phân trang
-  get paginatedCourses(): Course[] {
+  get paginatedCourses(): any[] {
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = startIndex + this.pageSize;
 
