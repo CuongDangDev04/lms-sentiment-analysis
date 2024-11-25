@@ -220,7 +220,7 @@ exports.addComment = async (req, res) => {
       });
       await commentAnalysisQueue.add("analyzeComment", {
         courseId,
-        userId,
+        userId: studentId,  
         comment,
       });
       res.status(existingReview ? 200 : 201).json(review);
@@ -233,6 +233,7 @@ exports.addComment = async (req, res) => {
     });
   }
 };
+
 
 // Cập nhật khóa học
 exports.updateCourse = async (req, res) => {

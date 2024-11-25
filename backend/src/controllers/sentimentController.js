@@ -2,8 +2,9 @@ const SentimentAnalysis = require("../models/SentimentAnalysis");
 const Review = require("../models/review");
 const User = require("../models/user");
 const Course = require("../models/course");
-
-//phân tích cả khóa học
+const path = require('path');
+const { spawn } = require('child_process');
+// phân tích cả khóa học
 // exports.analyzeCourseReviews = async (req, res) => {
 //   try {
 //     const { courseId } = req.params;
@@ -103,11 +104,9 @@ const Course = require("../models/course");
 // };
 
 // phân tích thep courseId và UserId
-//===================================================================================================================
 
 // Worker xử lý phân tích cảm xúc
 
-//===================================================================================================================
 
 exports.analyzeUserCourseReviews = async (req, res) => {
   try {

@@ -1,17 +1,17 @@
 const { Queue, Worker } = require("bullmq");
+const fetch = require("node-fetch");
+
 const redisOptions = {
-  port: 30868, // Cổng Redis của bạn
-  host: "gusc1-cute-louse-30868.upstash.io", // Địa chỉ Redis
-  password: "84be501a1396498a89050f325305097a", // Mật khẩu Redis
+  port: 30868,
+  host: "gusc1-cute-louse-30868.upstash.io",
+  password: "84be501a1396498a89050f325305097a",
   tls: true,
 };
 
-// Tạo queue phân tích bình luận
 const commentAnalysisQueue = new Queue("commentAnalysis", {
   connection: redisOptions,
 });
 
-// Worker xử lý phân tích bình luận
 const worker = new Worker(
   "commentAnalysis",
   async (job) => {
@@ -19,6 +19,11 @@ const worker = new Worker(
 
     // Thực hiện phân tích bình luận (ví dụ: phân tích cảm xúc)
     const analysisResult = await analyzeComment(courseId, userId, comment); // Function phân tích bình luận của bạn
+
+    if (!analysisResult) {
+      console.log("No analysis result returned");
+      return null; // Trả về null nếu không có kết quả phân tích
+    }
 
     // Lưu kết quả phân tích vào cơ sở dữ liệu hoặc thực hiện các hành động khác
     await saveAnalysisResult(analysisResult, userId, courseId);
@@ -28,24 +33,24 @@ const worker = new Worker(
   },
   { connection: redisOptions }
 );
+
+
 worker.on("completed", (job, result) => {
   console.log(`Job completed: ${job.id}, analysis result: ${result}`);
-  // Bạn có thể gửi email thông báo hoặc lưu kết quả phân tích vào cơ sở dữ liệu
+});
+
+worker.on("failed", (job, error) => {
+  console.error(`Job failed after retries: ${job.id}, error: ${error.message}`);
 });
 
 async function analyzeComment(courseId, userId, comment) {
   try {
-    // Gọi API để phân tích cảm xúc của bình luận
     const response = await fetch(
-      `/api/sentiment/analyze/${courseId}/${userId}`,
+      `http://localhost:5000/api/sentiment/analyze/${courseId}/${userId}`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          comment: comment, // Gửi bình luận để phân tích
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ comment: comment }),
       }
     );
 
@@ -57,16 +62,14 @@ async function analyzeComment(courseId, userId, comment) {
 
     const result = await response.json();
     console.log("Sentiment analysis result:", result);
-    alert("Sentiment analysis completed successfully!");
+    return result;
   } catch (error) {
     console.error("Error in analyzeComment function:", error);
   }
 }
+
 async function saveAnalysisResult(result, studentId, courseId) {
-  // Lưu kết quả phân tích vào cơ sở dữ liệu
-  console.log(
-    `Saving analysis for student ${studentId} on course ${courseId}: ${result}`
-  );
+  console.log(`Saving analysis for student ${studentId} on course ${courseId}: ${result}`);
 }
 
 module.exports = { commentAnalysisQueue };
