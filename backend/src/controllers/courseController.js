@@ -403,3 +403,40 @@ exports.getCoursesOfStudent = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// Lấy danh sách khóa học mà một giảng viên phụ trách
+exports.getCoursesByInstructor = async (req, res) => {
+  const { instructorId } = req.params;
+
+  try {
+    // Kiểm tra xem giảng viên có tồn tại không
+    const instructor = await User.findOne({ where: { id: instructorId, role: "instructor" } });
+    if (!instructor) {
+      return res.status(404).json({ error: "Instructor not found" });
+    }
+
+    // Lấy danh sách khóa học mà giảng viên phụ trách
+    const courses = await Course.findAll({
+      where: { instructorId },
+      include: [
+        {
+          model: Category,
+          as: "category",
+          attributes: ["id", "name"], // Chọn các trường của Category
+        },
+        {
+          model: User,
+          as: "students", // Đảm bảo bạn đã định nghĩa mối quan hệ này trong Sequelize
+          attributes: ["id", "fullname", "email"], // Chỉ lấy các trường cần thiết của sinh viên
+          through: { attributes: [] }, // Bỏ qua các trường trong bảng trung gian nếu có
+        },
+      ],
+    });
+
+    res.status(200).json(courses);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+};
+

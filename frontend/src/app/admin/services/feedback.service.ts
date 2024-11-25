@@ -21,4 +21,10 @@ export class FeedbackService {
   analyzeSentiment(courseId: number, userId: number): Observable<any> {
     return this.http.post(`${this.Url}/analyze/${courseId}/${userId}`, {});
   }
+  // Phân tích cảm xúc cho toàn bộ khóa học
+  analyzeCourseReviews(courseId: number): Observable<any> {
+    return this.http.post(`${this.Url}/analyze/${courseId}`, {});
+  }
+  
+
 }

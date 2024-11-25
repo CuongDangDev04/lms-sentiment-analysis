@@ -5,104 +5,104 @@ const path = require('path');
 const { spawn } = require('child_process');
 const Course = require('../models/course')
 //phân tích cả khóa học
-// exports.analyzeCourseReviews = async (req, res) => {
-//   try {
-//     const { courseId } = req.params;
+exports.analyzeCourseReviews = async (req, res) => {
+  try {
+    const { courseId } = req.params;
 
-//     // Lấy các review từ cơ sở dữ liệu
-//     const reviews = await Review.findAll({
-//       where: { courseId },
-//       include: [
-//         {
-//           model: User,
-//           as: 'reviewStudent',
-//         },
-//       ],
-//     });
+    // Lấy các review từ cơ sở dữ liệu
+    const reviews = await Review.findAll({
+      where: { courseId },
+      include: [
+        {
+          model: User,
+          as: 'reviewStudent',
+        },
+      ],
+    });
 
-//     // Nếu không có review, trả về lỗi
-//     if (!reviews.length) {
-//       console.log('No comment found for courseId:', courseId);
-//       return res.status(404).send({ message: 'No reviews found for this course.' });
-//     }
+    // Nếu không có review, trả về lỗi
+    if (!reviews.length) {
+      console.log('No comment found for courseId:', courseId);
+      return res.status(404).send({ message: 'No reviews found for this course.' });
+    }
 
-//     // Tạo mảng các bình luận từ reviews
-//     const reviewTexts = reviews.map((review) => review.comment);
+    // Tạo mảng các bình luận từ reviews
+    const reviewTexts = reviews.map((review) => review.comment);
 
-//     //  đường dẫn tới script Python
-//     const scriptPath = path.join(__dirname, '..', '..', 'src', 'scriptspy', 'sentiment_analysis.py');
+    //  đường dẫn tới script Python
+    const scriptPath = path.join(__dirname, '..', '..', 'src', 'scriptspy', 'sentiment_analysis.py');
 
-//     // Cấu hình tham số đầu vào cho script Python
-//     const pythonProcess = spawn('python', [scriptPath, JSON.stringify(reviewTexts)]);
+    // Cấu hình tham số đầu vào cho script Python
+    const pythonProcess = spawn('python', [scriptPath, JSON.stringify(reviewTexts)]);
 
-//     let scriptOutput = '';
-//     let scriptError = '';
+    let scriptOutput = '';
+    let scriptError = '';
 
-//     // Lắng nghe dữ liệu trả về từ Python
-//     pythonProcess.stdout.on('data', (data) => {
-//       scriptOutput += data.toString();
-//     });
+    // Lắng nghe dữ liệu trả về từ Python
+    pythonProcess.stdout.on('data', (data) => {
+      scriptOutput += data.toString();
+    });
 
-//     // Xử lý lỗi khi chạy Python
-//     pythonProcess.stderr.on('data', (data) => {
-//       scriptError += data.toString();
-//     });
+    // Xử lý lỗi khi chạy Python
+    pythonProcess.stderr.on('data', (data) => {
+      scriptError += data.toString();
+    });
 
-//     // Khi Python script hoàn thành
-//     pythonProcess.on('close', async (code) => {
-//       if (code !== 0) {
-//         console.error(`Python script exited with code ${code}`);
-//         console.error('Python script stderr:', scriptError);
-//         return res.status(500).send({ error: 'Error in Python script execution' });
-//       }
+    // Khi Python script hoàn thành
+    pythonProcess.on('close', async (code) => {
+      if (code !== 0) {
+        console.error(`Python script exited with code ${code}`);
+        console.error('Python script stderr:', scriptError);
+        return res.status(500).send({ error: 'Error in Python script execution' });
+      }
 
-//       // Kiểm tra kết quả trả về từ Python
-//       if (!scriptOutput || scriptOutput.length === 0) {
-//         console.error('No output from Python script');
-//         return res.status(500).send({ error: 'No output from Python script' });
-//       }
+      // Kiểm tra kết quả trả về từ Python
+      if (!scriptOutput || scriptOutput.length === 0) {
+        console.error('No output from Python script');
+        return res.status(500).send({ error: 'No output from Python script' });
+      }
 
-//       try {
-//         // Parse kết quả trả về từ Python (dự kiến là JSON)
-//         const analysisResults = JSON.parse(scriptOutput);
+      try {
+        // Parse kết quả trả về từ Python (dự kiến là JSON)
+        const analysisResults = JSON.parse(scriptOutput);
 
-//         // Tạo các bản ghi sentiment để lưu vào cơ sở dữ liệu
-//         const sentimentRecords = reviews.map((review, i) => ({
+        // Tạo các bản ghi sentiment để lưu vào cơ sở dữ liệu
+        const sentimentRecords = reviews.map((review, i) => ({
           
-//           userId: review.studentId,
-//           courseId: courseId,
-//           sentimentScorePositive: analysisResults[i].positive,
-//           sentimentScoreNegative: analysisResults[i].negative,
-//           sentimentScoreNeutral: analysisResults[i].neutral,
-//           sentimentLabel: analysisResults[i].label,
-//           reviewText: review.comment,
-//         }));
+          userId: review.studentId,
+          courseId: courseId,
+          sentimentScorePositive: analysisResults[i].positive,
+          sentimentScoreNegative: analysisResults[i].negative,
+          sentimentScoreNeutral: analysisResults[i].neutral,
+          sentimentLabel: analysisResults[i].label,
+          reviewText: review.comment,
+        }));
 
 
-//         try {
-//           // Lưu các kết quả phân tích vào cơ sở dữ liệu
-//           await SentimentAnalysis.bulkCreate(sentimentRecords);
-//           console.log('Sentiment records saved successfully.');
+        try {
+          // Lưu các kết quả phân tích vào cơ sở dữ liệu
+          await SentimentAnalysis.bulkCreate(sentimentRecords);
+          console.log('Sentiment records saved successfully.');
 
-//           return res.status(200).send({
-//             message: 'Sentiment analysis completed and saved successfully.',
-//             sentimentRecords,
-//           });
-//         } catch (saveError) {
-//           console.error('Error saving sentiment records:', saveError);
-//           return res.status(500).send({ error: 'Error saving sentiment records' });
-//         }
-//       } catch (parseError) {
-//         console.error('Error parsing Python script output:', parseError);
-//         return res.status(500).send({ error: 'Error parsing Python script output' });
-//       }
-//     });
+          return res.status(200).send({
+            message: 'Sentiment analysis completed and saved successfully.',
+            sentimentRecords,
+          });
+        } catch (saveError) {
+          console.error('Error saving sentiment records:', saveError);
+          return res.status(500).send({ error: 'Error saving sentiment records' });
+        }
+      } catch (parseError) {
+        console.error('Error parsing Python script output:', parseError);
+        return res.status(500).send({ error: 'Error parsing Python script output' });
+      }
+    });
 
-//   } catch (err) {
-//     console.error('Error in analyzeCourseReviews:', err);
-//     return res.status(500).send({ error: 'An error occurred while processing the reviews.' });
-//   }
-// };
+  } catch (err) {
+    console.error('Error in analyzeCourseReviews:', err);
+    return res.status(500).send({ error: 'An error occurred while processing the reviews.' });
+  }
+};
 
 // phân tích thep courseId và UserId
 exports.analyzeUserCourseReviews = async (req, res) => {

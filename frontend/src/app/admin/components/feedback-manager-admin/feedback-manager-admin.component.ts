@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FeedbackService } from '../../services/feedback.service';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { Observable } from 'rxjs';
 import Swal from 'sweetalert2';  // Import SweetAlert2
-import { Review } from '../../interfaces/ReviewStudent';
+import { Review, SentimentAnalysis } from '../../interfaces/ReviewStudent';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 @Component({
@@ -16,7 +16,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class FeedbackManagerAdminComponent implements OnInit {
   feedback: Review[] = []; // Dữ liệu phản hồi từ API
-  sentimentAnalysis: any[] = []; // Dữ liệu phân tích cảm xúc
+  sentimentAnalysis: SentimentAnalysis[] = []; // Dữ liệu phân tích cảm xúc
   courseId: string = ''; // Để lưu courseId từ phản hồi
   userId: string = ''; // Để lưu userId từ phản hồi
   loading: boolean = false; // Biến trạng thái loading
@@ -25,6 +25,7 @@ export class FeedbackManagerAdminComponent implements OnInit {
   studentNameFilter: string = ''; // Lọc theo tên sinh viên
   dateFilter: string = '';
   isFiltering: boolean = false;
+
   constructor(private feedbackService: FeedbackService, private datePipe: DatePipe) { }
 
   ngOnInit(): void {
@@ -57,21 +58,16 @@ export class FeedbackManagerAdminComponent implements OnInit {
         this.feedback = data.map((item: Review) => {
           if (!item.sentimentAnalysis) {
             item.sentimentAnalysis = {
-              id: 0,  
+              id: 0,
+              reviewText: '',
               sentimentLabel: 'Chưa phân tích',
               sentimentScorePositive: 0,
               sentimentScoreNegative: 0,
               sentimentScoreNeutral: 0,
-              reviewText: '',
             };
           }
           return item;
         });
-
-        if (data.length > 0) {  
-          this.courseId = data[0].courseId;
-          this.userId = data[0].userId;
-        }
       },
       (error) => {
         console.error('Error fetching feedback:', error);
@@ -80,8 +76,8 @@ export class FeedbackManagerAdminComponent implements OnInit {
   }
 
   analyzeFeedbackSentiment(courseId: number, userId: number): void {
-    this.loading = true;  // Bắt đầu loading
-
+    this.loading = true; // Bắt đầu loading
+  
     // Hiển thị SweetAlert loading
     Swal.fire({
       title: 'Đang phân tích...',
@@ -89,15 +85,30 @@ export class FeedbackManagerAdminComponent implements OnInit {
       allowOutsideClick: false,
       didOpen: () => {
         Swal.showLoading();
-      }
+      },
     });
-
+  
     // Gọi API phân tích cảm xúc
     this.feedbackService.analyzeSentiment(courseId, userId).subscribe(
       (response) => {
         // Kiểm tra dữ liệu phân tích cảm xúc
         if (response.sentimentRecords && response.sentimentRecords.length > 0) {
           const analysis = response.sentimentRecords[0]; // Lấy kết quả đầu tiên
+  
+          // Tìm phản hồi phù hợp trong danh sách và cập nhật sentimentLabel
+          const feedbackItem = this.feedback.find(
+            (item) => item.course.id === courseId && item.reviewStudent.id === userId
+          );
+          if (feedbackItem && feedbackItem.sentimentAnalysis) {
+            feedbackItem.sentimentAnalysis.sentimentLabel = analysis.sentimentLabel;
+  
+            // Cập nhật các điểm phân tích khác nếu cần
+            feedbackItem.sentimentAnalysis.sentimentScorePositive = analysis.sentimentScorePositive;
+            feedbackItem.sentimentAnalysis.sentimentScoreNegative = analysis.sentimentScoreNegative;
+            feedbackItem.sentimentAnalysis.sentimentScoreNeutral = analysis.sentimentScoreNeutral;
+          }
+  
+          // Hiển thị thông báo thành công
           Swal.fire({
             title: 'Phân tích tình cảm thành công!',
             html: `
@@ -110,7 +121,7 @@ export class FeedbackManagerAdminComponent implements OnInit {
             icon: 'success',
             confirmButtonText: 'Đóng',
           });
-          window.location.reload()
+          
         } else {
           Swal.fire({
             title: 'Không có dữ liệu phân tích',
@@ -119,6 +130,8 @@ export class FeedbackManagerAdminComponent implements OnInit {
             confirmButtonText: 'Đóng',
           });
         }
+  
+        this.loading = false; // Kết thúc loading
       },
       (error) => {
         console.error('Error analyzing sentiment:', error);
@@ -128,10 +141,11 @@ export class FeedbackManagerAdminComponent implements OnInit {
           icon: 'error',
           confirmButtonText: 'Đóng',
         });
+        this.loading = false; // Kết thúc loading
       }
     );
-
   }
+  
   showSentimentDetails(sentimentAnalysis: any): void {
     Swal.fire({
       title: 'Chi tiết phân tích cảm xúc',
