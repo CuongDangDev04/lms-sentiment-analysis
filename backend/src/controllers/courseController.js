@@ -221,6 +221,7 @@ exports.addComment = async (req, res) => {
         comment,
         studentId,
       });
+
       await addCommentToQueue(studentId, courseId, comment);
       return res.status(201).json(review);
     }
