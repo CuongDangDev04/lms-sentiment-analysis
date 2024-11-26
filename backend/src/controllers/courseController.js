@@ -6,7 +6,8 @@ const Review = require("../models/review");
 const { SentimentAnalysis } = require("../models");
 const { Sequelize } = require("sequelize");
 const { analyzeUserCourseReviews } = require("./sentimentController");
-const { commentAnalysisQueue } = require("../jobs/queue");
+const { commentAnalysisQueue } = require("../jobs/sentimentAnalysis");
+const { addCommentToQueue } = require("./commentQueueController");
 // Tạo mới khóa học
 exports.createCourse = async (req, res) => {
   try {
@@ -207,9 +208,11 @@ exports.addComment = async (req, res) => {
       // Cập nhật review cũ
       existingReview.rating = rating;
       existingReview.comment = comment;
+      existingReview.isAnalyzed = false;
       await existingReview.save();
       review = existingReview;
-      // return res.status(200).json(existingReview);
+      await addCommentToQueue(studentId, courseId, comment);
+      return res.status(200).json(existingReview);
     } else {
       // Tạo mới review
       review = await Review.create({
@@ -218,12 +221,8 @@ exports.addComment = async (req, res) => {
         comment,
         studentId,
       });
-      await commentAnalysisQueue.add("analyzeComment", {
-        courseId,
-        userId,
-        comment,
-      });
-      res.status(existingReview ? 200 : 201).json(review);
+      await addCommentToQueue(studentId, courseId, comment);
+      return res.status(201).json(review);
     }
   } catch (error) {
     console.error("Lỗi khi thêm hoặc cập nhật comment:", error);
