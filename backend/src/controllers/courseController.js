@@ -298,9 +298,6 @@ exports.addStudentToCourse = async (req, res) => {
   try {
     const { id } = req.params; // Đây là courseId
     const { userId } = req.body; // Đây là userId của sinh viên
-    console.log("id", id);
-    console.log("usid", userId);
-
     // Kiểm tra xem khóa học có tồn tại không
     const course = await Course.findByPk(id);
     if (!course) {
@@ -340,24 +337,30 @@ exports.getStudentsInCourse = async (req, res) => {
 
   try {
     // Tìm khóa học bằng `id`
-    const course = await Course.findByPk(id);
-    if (!course) {
-      return res.status(404).json({ error: "Course not found" });
-    }
+    // const course = await Course.findByPk(id);
+    // if (!course) {
+    //   return res.status(404).json({ error: "Course not found" });
+    // }
 
-    // Lấy danh sách sinh viên trong khóa học
-    const students = await Course.findAll({
-      where: { id },
+    // // Lấy danh sách sinh viên trong khóa học
+    // const students = await Course.findAll({
+    //   where: { id },
+    //   include: {
+    //     model: User,
+    //     as: "students",
+    //     attributes: ["id", "fullname", "email", "phone", "birthdate"],
+    //   },
+    // });
+    const course = await Course.findByPk(id, {
       include: [
         {
           model: User,
           as: "students",
-          attributes: ["id", "fullname", "email", "phone", "birthdate"],
+          attributes: ["id", "fullname", "email", "phone", "birthdate"], // Lấy các thuộc tính cần thiết của sinh viên
         },
       ],
     });
-
-    res.status(200).json(students);
+    res.status(200).json(course);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

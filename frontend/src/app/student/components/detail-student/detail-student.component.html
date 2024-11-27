@@ -19,18 +19,24 @@
           </p>
         </div>
         <div class="row controller">
-          <div class="col-md-3">
-            <button
-              class="btn btn-primary register-button"
-              (click)="register()"
-            >
-              Register
+          <div
+            class="col-md-3"
+            *ngIf="isRegistrationCourse; else closedRegistration"
+          >
+            <button class="btn btn-primary register-button" disabled>
+              Registered
             </button>
           </div>
-
-          <div class="col-md-2">
-            <button class="btn btn-primary trial-button">Trial</button>
-          </div>
+          <ng-template #closedRegistration>
+            <div class="col-md-3">
+              <button
+                class="btn btn-primary register-button"
+                (click)="register()"
+              >
+                Register
+              </button>
+            </div>
+          </ng-template>
         </div>
         <div
           class="row information min-h-[68px] max-w-[440px] flex flex-wrap gap-2 my-5"
@@ -379,12 +385,22 @@
           />{{ courseDetail.rating }} ( {{ reviews.length }} đánh giá)
         </div>
       </div>
-      <div class="row sticky-controller">
+      <div
+        class="row sticky-controller"
+        *ngIf="isRegistrationCourse; else closedRegistrationInBox"
+      >
+        <button
+          class="btn btn-primary register-button"
+          [disabled]="isRegistrationCourse"
+        >
+          Registered
+        </button>
+      </div>
+      <ng-template #closedRegistrationInBox>
         <button class="btn btn-primary register-button" (click)="register()">
           Register
         </button>
-        <button class="btn btn-primary trial-button">Trial</button>
-      </div>
+      </ng-template>
     </div>
   </div>
 </div>
@@ -409,11 +425,7 @@
         </div>
         <div class="comment-form">
           <div class="avatar-input">
-            <img
-              src="../../../../assets/student/img/team-1.jpg"
-              alt="User Avatar"
-              class="avatar"
-            />
+            <img [src]="studentLogin.avt" alt="User Avatar" class="avatar" />
           </div>
           <textarea
             id="commentText"

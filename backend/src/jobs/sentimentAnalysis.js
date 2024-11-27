@@ -1,57 +1,114 @@
-const { analyzeUserReviews } = require("../controllers/sentimentController");
-const { SentimentAnalysis } = require("../models");
+// const { analyzeUserReviews } = require("../controllers/sentimentController");
+const { SentimentAnalysis, sequelize } = require("../models");
 const CommentQueue = require("../models/commentQueue");
+// const SentimentAnalysis = require("../models/SentimentAnalysis");
+const Review = require("../models/review");
+const path = require("path");
+const { spawn } = require("child_process");
+
+// Chỉnh sửa analyzeUserReviews để gọi nội bộ
+async function analyzeUserReviews({ userId, courseId, reviewTexts }) {
+  try {
+    // Thực hiện phân tích (gọi Python script như cũ)
+    const scriptPath = path.join(
+      __dirname,
+      "..",
+      "..",
+      "src",
+      "scriptspy",
+      "sentiment_analysis.py"
+    );
+    const pythonProcess = spawn("python", [
+      scriptPath,
+      JSON.stringify(reviewTexts),
+    ]);
+
+    let scriptOutput = "";
+    let scriptError = "";
+
+    pythonProcess.stdout.on("data", (data) => {
+      scriptOutput += data.toString();
+    });
+
+    pythonProcess.stderr.on("data", (data) => {
+      scriptError += data.toString();
+    });
+    return new Promise((resolve, reject) => {
+      pythonProcess.on("close", (code) => {
+        if (code !== 0) {
+          reject(new Error(`Python script exited with code ${code}`));
+        }
+        try {
+          const analysisResults = JSON.parse(scriptOutput);
+          resolve(analysisResults);
+        } catch (parseError) {
+          reject(parseError);
+        }
+      });
+    });
+  } catch (error) {
+    throw new Error(`Error in analyzeUserReviews: ${error.message}`);
+  }
+}
 
 async function processCommentQueue() {
   try {
-    // Lấy các review chưa xử lý
     const reviews = await CommentQueue.findAll({ limit: 10 });
 
     if (!reviews.length) {
-      console.log("No reviews to process.");
       return;
     }
 
-    // Phân tích từng review theo courseId và userId
-    for (const review of reviews) {
-      const { id, studentId, courseId, comment } = review;
+    // Xử lý tất cả các reviews song song
+    await Promise.all(
+      reviews.map(async (review) => {
+        try {
+          const analysisResults = await analyzeUserReviews({
+            userId: review.studentId,
+            courseId: review.courseId,
+            reviewTexts: [review.commentText],
+          });
 
-      try {
-        // Gọi phương thức phân tích cảm xúc
-        const result = await analyzeUserReviews({
-          params: { userId: studentId, courseId },
-        });
+          const sentimentRecord = {
+            userId: review.studentId,
+            courseId: review.courseId,
+            sentimentScorePositive: analysisResults[0].positive,
+            sentimentScoreNegative: analysisResults[0].negative,
+            sentimentScoreNeutral: analysisResults[0].neutral,
+            sentimentLabel: analysisResults[0].label,
+            reviewText: review.commentText,
+          };
 
-        // Lưu kết quả phân tích vào bảng SentimentAnalysis
-        const sentimentRecord = {
-          userId: studentId,
-          courseId: courseId,
-          sentimentScorePositive: result.sentimentScorePositive,
-          sentimentScoreNegative: result.sentimentScoreNegative,
-          sentimentScoreNeutral: result.sentimentScoreNeutral,
-          sentimentLabel: result.sentimentLabel,
-          reviewText: comment,
-        };
+          const existingRecord = await SentimentAnalysis.findOne({
+            where: { userId: review.studentId, courseId: review.courseId },
+          });
 
-        await SentimentAnalysis.create(sentimentRecord);
-        const reviewRecord = await Review.findOne({ where: { id: review.id } });
+          let sentiment;
+          if (existingRecord) {
+            await existingRecord.update(sentimentRecord);
+            sentiment = existingRecord;
+          } else {
+            sentiment = await SentimentAnalysis.create(sentimentRecord);
+          }
 
-        if (reviewRecord) {
-          await reviewRecord.update({ isAnalyzed: true });
-          console.log(`Successfully processed review ID: ${id}`);
-        } else {
-          console.log(`Review with ID: ${id} not found in the Review table.`);
+          const reviewRecord = await Review.findOne({
+            where: { courseId: review.courseId, studentId: review.studentId },
+          });
+
+          if (reviewRecord && sentiment) {
+            await reviewRecord.update({
+              isAnalyzed: true,
+              sentimentAnalysisId: sentiment.id,
+            });
+          }
+
+          // Xóa bản ghi trong CommentQueue
+          await review.destroy();
+        } catch (error) {
+          console.error(`Error processing review ID: ${review.id}`, error);
         }
-        // Đánh dấu review là đã phân tích hoặc xóa nó khỏi bảng Review
-        await review.destroy(); // Xóa bản ghi đã xử lý
-        console.log(`Successfully processed review ID: ${id}`);
-      } catch (error) {
-        console.error(
-          `Error analyzing review for user ${studentId} and course ${courseId}:`,
-          error
-        );
-      }
-    }
+      })
+    );
 
     console.log("All reviews processed successfully.");
   } catch (error) {
@@ -59,4 +116,4 @@ async function processCommentQueue() {
   }
 }
 
-setInterval(processCommentQueue, 60000);
+setInterval(processCommentQueue, 15000);

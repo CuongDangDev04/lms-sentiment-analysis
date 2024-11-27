@@ -7,7 +7,7 @@ import { count, firstValueFrom, forkJoin } from 'rxjs';
 import { Review } from '../../interfaces/review';
 import { Student } from '../../interfaces/student';
 import { AuthService } from '../../../auth/auth.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NumberValueAccessor } from '@angular/forms';
 import { StudentService } from '../../services/student.service';
 import Swal from 'sweetalert2';
 
@@ -24,9 +24,10 @@ export class DetailStudentComponent implements OnInit {
   showOverlay: boolean = false;
   courseId: string | null = null;
   courseDetail: any;
+  coursesOfStudent: any;
   reviews: Review[] = [];
   studentComment: any[] = [];
-  comments: any[] = []; 
+  comments: any[] = [];
   totalComment: number = 0;
   visibleComments: any[] = [];
   commentsPerPage = 3; // Số lượng bình luận hiển thị mỗi lần
@@ -34,6 +35,7 @@ export class DetailStudentComponent implements OnInit {
   newComment: string = '';
   rating: number = 5; // Hoặc có thể lấy giá trị rating từ giao diện người dùng
   errorMessage: string = '';
+  isRegistrationCourse: boolean = false;
   constructor(
     private route: ActivatedRoute,
     private courseService: CourseService,
@@ -55,18 +57,38 @@ export class DetailStudentComponent implements OnInit {
       courseDetail: this.courseService.getCourseById(Number(this.courseId)),
       reviews: this.courseService.getReviewOfCourse(Number(this.courseId)),
       students: this.studentService.getAllStudents(),
+      studentRegisterCourse: this.courseService.getStudentInCourse(
+        Number(this.courseId)
+      ),
     }).subscribe(
-      ({ courseDetail, reviews, students, studentLogin }) => {
+      ({
+        courseDetail,
+        reviews,
+        students,
+        studentLogin,
+        studentRegisterCourse,
+      }) => {
         console.log('Reviews for courseId ' + this.courseId + ':', reviews);
         this.studentLogin = studentLogin;
         this.courseDetail = courseDetail;
         this.reviews = reviews;
         this.studentComment = students;
+        console.log('hdhehehdhdhdhd: ', studentRegisterCourse);
+        const studentsInCourse = studentRegisterCourse.map(
+          (student) => student.students
+        );
+        console.log('Students in this course c:', studentsInCourse);
+        const studentRegister = studentRegisterCourse.find(
+          (course) => course.students.id === studentLogin.id
+        );
+        // const studentRegister =  stude
+        console.log('Sinh viên đã đăng ký khóa học:', studentRegister);
+
         this.updateCourseRatings();
         this.totalComment = this.reviews.length;
         console.log(this.studentComment);
         console.log('Đây là student đang login: ' + this.studentLogin.id);
-        this.loadComments(); // Chỉ gọi loadComments sau khi tất cả dữ liệu đã được tải xong
+        this.loadComments(); // Chỉ gọi loadComment sau khi tất cả dữ liệu đã được tải xong
       },
       (error) => {
         console.error('Lỗi khi gọi API:', error);
@@ -75,7 +97,6 @@ export class DetailStudentComponent implements OnInit {
 
     this.updateRating();
   }
-
   updateCourseRatings(): void {
     if (Array.isArray(this.reviews)) {
       const courseReviews = this.reviews.filter(
