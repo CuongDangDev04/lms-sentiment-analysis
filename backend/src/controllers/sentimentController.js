@@ -434,4 +434,3 @@ exports.getSentimentAnalysisByCourse = async (req, res) => {
     });
   }
 };
->>>>>>> Nam
