@@ -61,7 +61,7 @@
 }
 .sticky-controller {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   border-top: 1px solid rgba(211, 211, 211, 0.5);
   padding: 1rem 0;
 }

@@ -16,5 +16,5 @@ router.put("/:id", categoryController.updateCategory);
 
 // Xóa thể loại
 router.delete("/:id", categoryController.deleteCategory);
-
+router.get("/courseOfCategory/:id", categoryController.courseOfCategory);
 module.exports = router;

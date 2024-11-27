@@ -1,9 +1,19 @@
 <!-- Navbar Start -->
-<nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
-  <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+<nav
+  class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0"
+>
+  <a
+    [routerLink]="['/student/']"
+    class="navbar-brand d-flex align-items-center px-4 px-lg-5"
+  >
     <img src="../../../../assets/student/img/sv_logo_dashboard.png" alt="" />
   </a>
-  <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+  <button
+    type="button"
+    class="navbar-toggler me-4"
+    data-bs-toggle="collapse"
+    data-bs-target="#navbarCollapse"
+  >
     <span class="navbar-toggler-icon"></span>
   </button>
   <!-- <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -35,49 +45,78 @@
   </div> -->
   <div class="collapse navbar-collapse" id="navbarCollapse">
     <div class="navbar-nav ms-auto p-4 p-lg-0">
-      <a [routerLink]="['/student/']" class="nav-item nav-link" [ngClass]="{
+      <a
+        [routerLink]="['/student/']"
+        class="nav-item nav-link"
+        [ngClass]="{
           active: isHomePage
-        }">Home</a>
-      <a [routerLink]="['about']" class="nav-item nav-link" [ngClass]="{
+        }"
+        >Home</a
+      >
+      <a
+        [routerLink]="['about']"
+        class="nav-item nav-link"
+        [ngClass]="{
           active: isAboutPage
-        }">About</a>
-      <a [routerLink]="['courses']" href="courses.html" class="nav-item nav-link" [ngClass]="{
+        }"
+        >About</a
+      >
+      <a
+        [routerLink]="['courses']"
+        href="courses.html"
+        class="nav-item nav-link"
+        [ngClass]="{
           active: isCoursesPage
-        }">Courses</a>
+        }"
+        >Courses</a
+      >
 
-      <a [routerLink]="['contact']" class="nav-item nav-link" [ngClass]="{
+      <a
+        [routerLink]="['contact']"
+        class="nav-item nav-link"
+        [ngClass]="{
           active: isContactPage
-        }">Contact</a>
+        }"
+        >Contact</a
+      >
     </div>
     <div class="nav-item dropdown">
-      <a href="#" [routerLink]="['dashboard']" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+      <a
+        href="#"
+        [routerLink]="['dashboard']"
+        class="nav-link dropdown-toggle"
+        data-bs-toggle="dropdown"
+      >
         <i class="fa fa-user text-primary"></i>
       </a>
       <div class="dropdown-menu fade-down m-0">
-
-          <div class="dropdown-user-scroll scrollbar-outer">
-            <li>
-              <div class="user-box">
-                <div class="avatar-lg">
-                  <img src="assets/lecture_admin/img/profile.jpg" alt="image profile" class="avatar-img rounded" />
-                </div>
-                <div class="u-text">
-                  <h4>Hizrian</h4>
-                  <p class="text-muted">hello.com</p>
-                </div>
+        <div class="dropdown-user-scroll scrollbar-outer">
+          <li>
+            <div class="user-box">
+              <div class="avatar-lg">
+                <img
+                  src="assets/lecture_admin/img/profile.jpg"
+                  alt="image profile"
+                  class="avatar-img rounded"
+                />
               </div>
-            </li>
-            <li>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" >My Profile</a>
-              <a class="dropdown-item" href="#">My Balance</a>
-              <a class="dropdown-item" href="#">Inbox</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Account Setting</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" (click)="logOut()">Logout</a>
-            </li>
-          </div>
+              <div class="u-text">
+                <h4>Hizrian</h4>
+                <p class="text-muted">hello.com</p>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item">My Profile</a>
+            <a class="dropdown-item" href="#">My Balance</a>
+            <a class="dropdown-item" href="#">Inbox</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Account Setting</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" (click)="logOut()">Logout</a>
+          </li>
+        </div>
       </div>
     </div>
   </div>
@@ -94,10 +133,18 @@
             Unlock limitless learning opportunities from experts around the
             world. Join us and expand your knowledge today!
           </p>
-          <a href="#courses" class="btn btn-lg btn-light text-primary mt-3">Explore Courses</a>
+          <a
+            [routerLink]="['courses']"
+            class="btn btn-lg btn-light text-primary mt-3"
+            >Explore Courses</a
+          >
         </div>
         <div class="col-md-6 text-center">
-          <img src="../../../../assets/student/img/carousel-1.jpg" alt="Elearning Image" class="img-fluid rounded" />
+          <img
+            src="../../../../assets/student/img/carousel-1.jpg"
+            alt="Elearning Image"
+            class="img-fluid rounded"
+          />
         </div>
       </div>
     </div>

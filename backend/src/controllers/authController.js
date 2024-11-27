@@ -171,3 +171,6 @@ exports.getUser = async (req, res) => {
     res.status(500).json({ error: "Failed to get user information!" });
   }
 };
+exports.uploadAvt = async (req, res)=>{
+  
+}

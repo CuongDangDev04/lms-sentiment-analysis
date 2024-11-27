@@ -7,7 +7,7 @@ import { count, firstValueFrom, forkJoin } from 'rxjs';
 import { Review } from '../../interfaces/review';
 import { Student } from '../../interfaces/student';
 import { AuthService } from '../../../auth/auth.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NumberValueAccessor } from '@angular/forms';
 import { StudentService } from '../../services/student.service';
 import Swal from 'sweetalert2';
 
@@ -24,6 +24,7 @@ export class DetailStudentComponent implements OnInit {
   showOverlay: boolean = false;
   courseId: string | null = null;
   courseDetail: any;
+  coursesOfStudent: any;
   reviews: Review[] = [];
   studentComment: any[] = [];
   comments: any[] = [];
@@ -34,6 +35,7 @@ export class DetailStudentComponent implements OnInit {
   newComment: string = '';
   rating: number = 5; // Hoặc có thể lấy giá trị rating từ giao diện người dùng
   errorMessage: string = '';
+  isRegistrationCourse: boolean = false;
   constructor(
     private route: ActivatedRoute,
     private courseService: CourseService,
@@ -46,35 +48,93 @@ export class DetailStudentComponent implements OnInit {
   showStickyBox = false;
   isMenuFixed = false;
 
-  ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      this.courseId = params.get('id');
-    });
-    forkJoin({
-      studentLogin: this.authService.fetchUserInfo(),
-      courseDetail: this.courseService.getCourseById(Number(this.courseId)),
-      reviews: this.courseService.getReviewOfCourse(Number(this.courseId)),
-      students: this.studentService.getAllStudents(),
-    }).subscribe(
-      ({ courseDetail, reviews, students, studentLogin }) => {
-        console.log('Reviews for courseId ' + this.courseId + ':', reviews);
-        this.studentLogin = studentLogin;
-        this.courseDetail = courseDetail;
-        this.reviews = reviews;
-        this.studentComment = students;
-        this.updateCourseRatings();
-        this.totalComment = this.reviews.length;
-        console.log(this.studentComment);
-        console.log('Đây là student đang login: ' + this.studentLogin.id);
-        this.loadComments(); // Chỉ gọi loadComments sau khi tất cả dữ liệu đã được tải xong
-      },
-      (error) => {
-        console.error('Lỗi khi gọi API:', error);
-      }
-    );
+  // ngOnInit(): void {
+  //   this.route.paramMap.subscribe((params) => {
+  //     this.courseId = params.get('id');
+  //   });
+  //   forkJoin({
+  //     studentLogin: this.authService.fetchUserInfo(),
+  //     courseDetail: this.courseService.getCourseById(Number(this.courseId)),
+  //     reviews: this.courseService.getReviewOfCourse(Number(this.courseId)),
+  //     students: this.studentService.getAllStudents(),
+  //     studentRegisterCourse: this.courseService.getStudentInCourse(
+  //       Number(this.courseId)
+  //     ),
+  //   }).subscribe(
+  //     ({
+  //       courseDetail,
+  //       reviews,
+  //       students,
+  //       studentLogin,
+  //       studentRegisterCourse,
+  //     }) => {
+  //       console.log('Reviews for courseId ' + this.courseId + ':', reviews);
+  //       this.studentLogin = studentLogin;
+  //       this.courseDetail = courseDetail;
+  //       this.reviews = reviews;
+  //       this.studentComment = students;
+  //       console.log('hdhehehdhdhdhd: ', studentRegisterCourse);
+  //       const studentsInCourse = studentRegisterCourse.map(
+  //         (student) => student.students
+  //       );
+  //       console.log('Students in this course c:', studentsInCourse);
+  //       const studentRegister = studentRegisterCourse.find(
+  //         (course) => course.students.id === studentLogin.id
+  //       );
+  //       // const studentRegister =  stude
+  //       console.log('Sinh viên đã đăng ký khóa học:', studentRegister);
 
-    this.updateRating();
+  //       this.updateCourseRatings();
+  //       this.totalComment = this.reviews.length;
+  //       console.log(this.studentComment);
+  //       console.log('Đây là student đang login: ' + this.studentLogin.id);
+  //       this.loadComments(); // Chỉ gọi loadComment sau khi tất cả dữ liệu đã được tải xong
+  //     },
+  //     (error) => {
+  //       console.error('Lỗi khi gọi API:', error);
+  //     }
+  //   );
+
+  //   this.updateRating();
+  // }
+
+  //========================================================================================================
+  async ngOnInit(): Promise<void> {
+    try {
+      this.route.paramMap.subscribe((params) => {
+        this.courseId = params.get('id');
+      });
+      const {
+        studentLogin,
+        courseDetail,
+        reviews,
+        students,
+        studentRegisterCourse,
+      } = await firstValueFrom(
+        forkJoin({
+          studentLogin: this.authService.fetchUserInfo(),
+          courseDetail: this.courseService.getCourseById(Number(this.courseId)),
+          reviews: this.courseService.getReviewOfCourse(Number(this.courseId)),
+          students: this.studentService.getAllStudents(),
+          studentRegisterCourse: this.courseService.getStudentInCourse(
+            Number(this.courseId)
+          ),
+        })
+      );
+
+      this.studentLogin = studentLogin;
+      this.courseDetail = courseDetail;
+      this.reviews = reviews;
+      this.studentComment = students;
+      this.totalComment = this.reviews.length;
+
+      this.updateCourseRatings();
+      this.loadComments();
+    } catch (error) {
+      console.error('Lỗi khi gọi API:', error);
+    }
   }
+  //========================================================================================================
 
   updateCourseRatings(): void {
     if (Array.isArray(this.reviews)) {
@@ -147,14 +207,13 @@ export class DetailStudentComponent implements OnInit {
   }
 
   addComment() {
-    if (!this.isLoggedIn) {
-      this.errorMessage = 'Bạn phải đăng nhập để bình luận';
-      return;
-    }
-
     if (!this.newComment || this.newComment.trim() === '') {
-      this.errorMessage = 'Vui lòng nhập bình luận';
-      return;
+      Swal.fire({
+        title: 'Cảnh báo!',
+        text: 'Vui lòng nhập bình luận',
+        icon: 'warning',
+        confirmButtonText: 'Đồng ý',
+      });
     }
 
     this.courseService
