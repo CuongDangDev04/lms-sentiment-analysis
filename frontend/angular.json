@@ -26,7 +26,6 @@
               "src/assets/lecture_admin/css/plugins.min.css",
               "src/assets/lecture_admin/css/kaiadmin.min.css",
               "src/assets/lecture_admin/css/demo.css",
-
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "src/assets/student/lib/animate/animate.min.css",
@@ -35,7 +34,6 @@
               "src/assets/student/css/style.css"
             ],
             "scripts": [
-
               "src/assets/lecture_admin/js/core/jquery-3.7.1.min.js",
               "src/assets/lecture_admin/js/core/popper.min.js",
               "src/assets/lecture_admin/js/core/bootstrap.min.js",
@@ -51,7 +49,6 @@
               "src/assets/lecture_admin/js/kaiadmin.min.js",
               "src/assets/lecture_admin/js/setting-demo.js",
               "src/assets/lecture_admin/js/demo.js",
-
               "src/assets/student/js/main.js",
               "src/assets/student/lib/wow/wow.min.js",
               "src/assets/student/lib/easing/easing.min.js",
@@ -104,9 +101,15 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": ["zone.js", "zone.js/testing"],
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "tsConfig": "tsconfig.spec.json",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
             "styles": [
               "src/styles.css",
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
