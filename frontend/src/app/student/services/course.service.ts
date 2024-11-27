@@ -3,7 +3,7 @@ import { Review } from '../interfaces/review';
 import { Course } from '../interfaces/course';
 import { Student } from '../interfaces/student';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom, map, Observable } from 'rxjs';
+import { catchError, firstValueFrom, map, Observable, of } from 'rxjs';
 import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 
 @Injectable({
@@ -50,10 +50,8 @@ export class CourseService {
       .get<any>(`http://localhost:5000/api/course/${courseId}/students`)
       .pipe(
         map((response) => {
-          // Kiểm tra trong danh sách sinh viên
-          const course = response.find((c: any) => c.id === courseId);
-          if (course && course.students) {
-            return course.students.some(
+          if (response.students && Array.isArray(response.students)) {
+            return response.students.some(
               (student: any) => student.id === userId
             );
           }

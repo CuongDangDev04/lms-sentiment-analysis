@@ -19,24 +19,14 @@
           </p>
         </div>
         <div class="row controller">
-          <div
-            class="col-md-3"
-            *ngIf="isRegistrationCourse; else closedRegistration"
-          >
-            <button class="btn btn-primary register-button" disabled>
-              Registered
+          <div class="col-md-3">
+            <button
+              class="btn btn-primary register-button"
+              (click)="register()"
+            >
+              Register
             </button>
           </div>
-          <ng-template #closedRegistration>
-            <div class="col-md-3">
-              <button
-                class="btn btn-primary register-button"
-                (click)="register()"
-              >
-                Register
-              </button>
-            </div>
-          </ng-template>
         </div>
         <div
           class="row information min-h-[68px] max-w-[440px] flex flex-wrap gap-2 my-5"

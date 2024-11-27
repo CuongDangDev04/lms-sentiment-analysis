@@ -48,55 +48,94 @@ export class DetailStudentComponent implements OnInit {
   showStickyBox = false;
   isMenuFixed = false;
 
-  ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      this.courseId = params.get('id');
-    });
-    forkJoin({
-      studentLogin: this.authService.fetchUserInfo(),
-      courseDetail: this.courseService.getCourseById(Number(this.courseId)),
-      reviews: this.courseService.getReviewOfCourse(Number(this.courseId)),
-      students: this.studentService.getAllStudents(),
-      studentRegisterCourse: this.courseService.getStudentInCourse(
-        Number(this.courseId)
-      ),
-    }).subscribe(
-      ({
+  // ngOnInit(): void {
+  //   this.route.paramMap.subscribe((params) => {
+  //     this.courseId = params.get('id');
+  //   });
+  //   forkJoin({
+  //     studentLogin: this.authService.fetchUserInfo(),
+  //     courseDetail: this.courseService.getCourseById(Number(this.courseId)),
+  //     reviews: this.courseService.getReviewOfCourse(Number(this.courseId)),
+  //     students: this.studentService.getAllStudents(),
+  //     studentRegisterCourse: this.courseService.getStudentInCourse(
+  //       Number(this.courseId)
+  //     ),
+  //   }).subscribe(
+  //     ({
+  //       courseDetail,
+  //       reviews,
+  //       students,
+  //       studentLogin,
+  //       studentRegisterCourse,
+  //     }) => {
+  //       console.log('Reviews for courseId ' + this.courseId + ':', reviews);
+  //       this.studentLogin = studentLogin;
+  //       this.courseDetail = courseDetail;
+  //       this.reviews = reviews;
+  //       this.studentComment = students;
+  //       console.log('hdhehehdhdhdhd: ', studentRegisterCourse);
+  //       const studentsInCourse = studentRegisterCourse.map(
+  //         (student) => student.students
+  //       );
+  //       console.log('Students in this course c:', studentsInCourse);
+  //       const studentRegister = studentRegisterCourse.find(
+  //         (course) => course.students.id === studentLogin.id
+  //       );
+  //       // const studentRegister =  stude
+  //       console.log('Sinh viên đã đăng ký khóa học:', studentRegister);
+
+  //       this.updateCourseRatings();
+  //       this.totalComment = this.reviews.length;
+  //       console.log(this.studentComment);
+  //       console.log('Đây là student đang login: ' + this.studentLogin.id);
+  //       this.loadComments(); // Chỉ gọi loadComment sau khi tất cả dữ liệu đã được tải xong
+  //     },
+  //     (error) => {
+  //       console.error('Lỗi khi gọi API:', error);
+  //     }
+  //   );
+
+  //   this.updateRating();
+  // }
+
+  //========================================================================================================
+  async ngOnInit(): Promise<void> {
+    try {
+      this.route.paramMap.subscribe((params) => {
+        this.courseId = params.get('id');
+      });
+      const {
+        studentLogin,
         courseDetail,
         reviews,
         students,
-        studentLogin,
         studentRegisterCourse,
-      }) => {
-        console.log('Reviews for courseId ' + this.courseId + ':', reviews);
-        this.studentLogin = studentLogin;
-        this.courseDetail = courseDetail;
-        this.reviews = reviews;
-        this.studentComment = students;
-        console.log('hdhehehdhdhdhd: ', studentRegisterCourse);
-        const studentsInCourse = studentRegisterCourse.map(
-          (student) => student.students
-        );
-        console.log('Students in this course c:', studentsInCourse);
-        const studentRegister = studentRegisterCourse.find(
-          (course) => course.students.id === studentLogin.id
-        );
-        // const studentRegister =  stude
-        console.log('Sinh viên đã đăng ký khóa học:', studentRegister);
+      } = await firstValueFrom(
+        forkJoin({
+          studentLogin: this.authService.fetchUserInfo(),
+          courseDetail: this.courseService.getCourseById(Number(this.courseId)),
+          reviews: this.courseService.getReviewOfCourse(Number(this.courseId)),
+          students: this.studentService.getAllStudents(),
+          studentRegisterCourse: this.courseService.getStudentInCourse(
+            Number(this.courseId)
+          ),
+        })
+      );
 
-        this.updateCourseRatings();
-        this.totalComment = this.reviews.length;
-        console.log(this.studentComment);
-        console.log('Đây là student đang login: ' + this.studentLogin.id);
-        this.loadComments(); // Chỉ gọi loadComment sau khi tất cả dữ liệu đã được tải xong
-      },
-      (error) => {
-        console.error('Lỗi khi gọi API:', error);
-      }
-    );
+      this.studentLogin = studentLogin;
+      this.courseDetail = courseDetail;
+      this.reviews = reviews;
+      this.studentComment = students;
+      this.totalComment = this.reviews.length;
 
-    this.updateRating();
+      this.updateCourseRatings();
+      this.loadComments();
+    } catch (error) {
+      console.error('Lỗi khi gọi API:', error);
+    }
   }
+  //========================================================================================================
+
   updateCourseRatings(): void {
     if (Array.isArray(this.reviews)) {
       const courseReviews = this.reviews.filter(
