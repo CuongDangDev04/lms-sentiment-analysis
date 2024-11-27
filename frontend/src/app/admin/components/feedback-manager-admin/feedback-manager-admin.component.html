@@ -32,7 +32,6 @@
         <th>Thời gian phản hồi</th>
         <th>Cảm xúc</th>
         <th>Đánh giá</th>
-        <th>Phân tích</th>
       </tr>
     </thead>
     <tbody>
@@ -47,11 +46,7 @@
         </td>
         
         <td>{{ item.comment }}</td>
-        <td>
-          <button (click)="analyzeFeedbackSentiment(item.courseId, item.reviewStudent.id)" class="btn-analyze">
-            <i class="fas fa-chart-line"></i> 
-          </button>
-        </td>
+        
         
       </tr>
       

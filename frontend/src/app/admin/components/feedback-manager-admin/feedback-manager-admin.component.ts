@@ -75,76 +75,7 @@ export class FeedbackManagerAdminComponent implements OnInit {
     );
   }
 
-  analyzeFeedbackSentiment(courseId: number, userId: number): void {
-    this.loading = true; // Bắt đầu loading
-  
-    // Hiển thị SweetAlert loading
-    Swal.fire({
-      title: 'Đang phân tích...',
-      text: 'Vui lòng đợi trong giây lát.',
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
-  
-    // Gọi API phân tích cảm xúc
-    this.feedbackService.analyzeSentiment(courseId, userId).subscribe(
-      (response) => {
-        // Kiểm tra dữ liệu phân tích cảm xúc
-        if (response.sentimentRecords && response.sentimentRecords.length > 0) {
-          const analysis = response.sentimentRecords[0]; // Lấy kết quả đầu tiên
-  
-          // Tìm phản hồi phù hợp trong danh sách và cập nhật sentimentLabel
-          const feedbackItem = this.feedback.find(
-            (item) => item.course.id === courseId && item.reviewStudent.id === userId
-          );
-          if (feedbackItem && feedbackItem.sentimentAnalysis) {
-            feedbackItem.sentimentAnalysis.sentimentLabel = analysis.sentimentLabel;
-  
-            // Cập nhật các điểm phân tích khác nếu cần
-            feedbackItem.sentimentAnalysis.sentimentScorePositive = analysis.sentimentScorePositive;
-            feedbackItem.sentimentAnalysis.sentimentScoreNegative = analysis.sentimentScoreNegative;
-            feedbackItem.sentimentAnalysis.sentimentScoreNeutral = analysis.sentimentScoreNeutral;
-          }
-  
-          // Hiển thị thông báo thành công
-          Swal.fire({
-            title: 'Phân tích tình cảm thành công!',
-            html: `
-              <strong>Bình luận:</strong> ${analysis.reviewText} <br />
-              <strong>Điểm tích cực:</strong> ${analysis.sentimentScorePositive} <br />
-              <strong>Điểm tiêu cực:</strong> ${analysis.sentimentScoreNegative} <br />
-              <strong>Điểm trung tính:</strong> ${analysis.sentimentScoreNeutral} <br />
-              <strong>Cảm xúc:</strong> ${analysis.sentimentLabel} <br />
-            `,
-            icon: 'success',
-            confirmButtonText: 'Đóng',
-          });
-          
-        } else {
-          Swal.fire({
-            title: 'Không có dữ liệu phân tích',
-            text: 'Không tìm thấy kết quả phân tích tình cảm.',
-            icon: 'warning',
-            confirmButtonText: 'Đóng',
-          });
-        }
-  
-        this.loading = false; // Kết thúc loading
-      },
-      (error) => {
-        console.error('Error analyzing sentiment:', error);
-        Swal.fire({
-          title: 'Có lỗi xảy ra',
-          text: 'Không thể phân tích tình cảm tại thời điểm này.',
-          icon: 'error',
-          confirmButtonText: 'Đóng',
-        });
-        this.loading = false; // Kết thúc loading
-      }
-    );
-  }
+
   
   showSentimentDetails(sentimentAnalysis: any): void {
     Swal.fire({

@@ -1,69 +1,138 @@
-import { NgFor, NgIf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Course } from '../../interfaces/course'; // Import the Course interface
+import { AuthService } from '../../../auth/auth.service'; // Import AuthService
+import Swal from 'sweetalert2'; // Import SweetAlert2
 import { FormsModule } from '@angular/forms';
-import Swal from 'sweetalert2';
-
-interface Student {
-  name: string;
-  email: string;
-  feedback: string;
-}
+import { CommonModule } from '@angular/common';
+import { CourseService } from '../../services/course.service';
 
 @Component({
   selector: 'app-manager-student-instructor',
   standalone: true,
-  imports:[FormsModule,NgFor,NgIf],
+  imports: [FormsModule, CommonModule],
   templateUrl: './manager-student-instructor.component.html',
   styleUrls: ['./manager-student-instructor.component.css']
 })
-export class ManagerStudentInstructorComponent {
-  students: Student[] = [
-    { name: 'Nguyễn Văn A', email: 'nguyenvna@example.com', feedback: 'Tham gia tích cực' },
-    { name: 'Trần Thị B', email: 'tranthib@example.com', feedback: 'Hoàn thành bài tập đúng hạn' },
-    { name: 'Lê Văn C', email: 'levanc@example.com', feedback: 'Cần cải thiện tham gia lớp' }
-  ];
+export class ManagerStudentInstructorComponent implements OnInit {
+  courses: Course[] = []; // List of courses
+  students: any[] = []; // List of students (flattened)
+  isLoading: boolean = true; // Loading state
+  errorMessage: string = ''; // Error message
+  searchName: string = ''; // Search keyword for student name
+  searchEmail: string = ''; // Search keyword for student email
+  selectedCourse: Course | null = null; // Selected course
+  instructorId: string = ''; // Instructor ID from AuthService
+  filteredStudents: any[] = []; // Lưu danh sách sinh viên đã lọc
 
-  selectedStudent: Student | null = null;
-  searchName: string = '';
-  searchEmail: string = '';
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private courseService: CourseService,
+  ) {}
 
-  viewStudentDetails(student: Student): void {
-    Swal.fire({
-      title: `Thông tin chi tiết của ${student.name}`,
-      html: `
-        <p><strong>Email:</strong> ${student.email}</p>
-        <p><strong>Phản hồi:</strong> ${student.feedback}</p>
-      `,
-      icon: 'info',
-      confirmButtonText: 'Đóng'
-    });
+  ngOnInit(): void {
+    // Retrieve instructorId from AuthService if the user is an instructor
+    const user = this.authService.getUser();
+    if (user && user.role === 'instructor') {
+      this.instructorId = user.id.toString();
+    }
+
+    this.fetchCourses(); // Fetch courses on component initialization
   }
 
-  deleteStudent(student: Student): void {
-    Swal.fire({
-      title: 'Xóa sinh viên',
-      text: `Bạn chắc chắn muốn xóa sinh viên ${student.name}?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Xóa',
-      cancelButtonText: 'Hủy'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Logic xóa sinh viên khỏi danh sách
-        this.students = this.students.filter(s => s !== student);
-        Swal.fire('Đã xóa!', `${student.name} đã được xóa khỏi danh sách.`, 'success');
+  // Fetch the courses for the instructor
+  fetchCourses(): void {
+    if (!this.instructorId) {
+      this.errorMessage = 'Instructor ID is missing.';
+      this.isLoading = false;
+      return;
+    }
+
+    this.courseService.getCoursesByInstructor(this.instructorId).subscribe(
+      (data) => {
+        this.courses = data || [];
+        this.isLoading = false;
+
+        // Calculate the number of students for each course
+        this.courses.forEach(course => {
+          course.studentsCount = course.students ? course.students.length : 0;
+        });
+
+        // Log the fetched courses for debugging
+        console.log('Fetched courses:', this.courses);
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load courses. Please try again.';
+        console.error('Error fetching courses:', error);
+        this.isLoading = false;
       }
-    });
+    );
+  }
+  
+  // View students in the selected course
+  viewStudentsInCourse(course: Course): void {
+    this.selectedCourse = course;
+    this.fetchStudentsFromCourse(course);
   }
 
-  closeModal(): void {
-    this.selectedStudent = null;
+  // Flatten students list from selected course
+  fetchStudentsFromCourse(course: Course): void {
+    if (!course || !Array.isArray(course.students)) {
+      console.warn('No students found in course:', course);
+      return;
+    }
+
+    // Flatten the student data by adding course name
+    const flattenedStudents = course.students.map(student => ({
+      ...student,
+      courseName: course.name
+    }));
+
+    this.students = flattenedStudents; // Assign the flattened list to students
   }
 
-  getFilteredStudents(): Student[] {
-    return this.students.filter(student => 
-      student.name.toLowerCase().includes(this.searchName.toLowerCase()) &&
+  // Filter students based on search criteria (name and email)
+  getFilteredStudents(): any[] {
+    return this.students.filter((student) =>
+      student.fullname.toLowerCase().includes(this.searchName.toLowerCase()) &&
       student.email.toLowerCase().includes(this.searchEmail.toLowerCase())
     );
   }
-}
+
+  // Show student details in a SweetAlert
+  viewStudentDetails(student: any): void {
+    Swal.fire({
+      title: 'Student Details',
+      html: `
+        <strong>ID:</strong> ${student.id} <br>
+        <strong>Name:</strong> ${student.fullname} <br>
+        <strong>Email:</strong> ${student.email} <br>
+        <strong>Course:</strong> ${student.courseName} <br>
+      `,
+      icon: 'info',
+      confirmButtonText: 'Close',
+    });
+  }
+
+  // View students list of a specific course
+  viewStudents(course: Course): void {
+    this.selectedCourse = course;
+    this.students = course.students || []; // Set students from selected course
+  }
+
+  // Close the student list and go back to the course list
+  closeStudentList(): void {
+    this.selectedCourse = null;
+    this.students = [];
+  }
+
+  // Apply search filter to the students
+  // Phương thức áp dụng tìm kiếm
+applySearch(): void {
+  // Lọc sinh viên khi người dùng nhấn vào nút tìm kiếm
+  if (this.selectedCourse) {
+    this.fetchStudentsFromCourse(this.selectedCourse);
+  }
+
+  }}
