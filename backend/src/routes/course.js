@@ -13,7 +13,8 @@ router.get("/review/all", courseController.getAllReview);
 router.get("/review/:courseId", courseController.getReviewOfCourse);
 
 router.post("/review/new", courseController.addComment);
-
+router.delete("/review/:courseId/:studentId", courseController.deleteComment);
+router.put("/review/:courseId/:studentId", courseController.updateComment);
 router.post("/", courseController.createCourse);
 
 // Endpoint cập nhật khóa học
@@ -23,8 +24,7 @@ router.put("/:id", courseController.updateCourse);
 router.delete("/:id", courseController.deleteCourse);
 
 // Thêm sinh viên vào khóa học ok
-router.post("/:id/students", courseController.  addStudentToCourse);
-
+router.post("/:id/students", courseController.addStudentToCourse);
 
 // Lấy danh sách sinh viên trong một khóa học  ok
 router.get("/:id/students", courseController.getStudentsInCourse);
@@ -35,6 +35,9 @@ router.delete("/:id/students", courseController.removeStudentFromCourse);
 // Lấy danh sách khóa học mà một sinh viên tham gia ok
 router.get("/students/:userId", courseController.getCoursesOfStudent);
 
-router.get("/instructor/:instructorId", courseController.getCoursesByInstructor)
+router.get(
+  "/instructor/:instructorId",
+  courseController.getCoursesByInstructor
+);
 
 module.exports = router;

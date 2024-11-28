@@ -13,8 +13,8 @@ export class CourseService {
   private baseUrl = 'http://localhost:5000/api/course';
   constructor(private http: HttpClient) {}
 
-  getAllReview(): Observable<Review[]> {
-    return this.http.get<Review[]>(`${this.baseUrl}/review/all`);
+  getAllReview(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/review/all`);
   }
   getReviewOfCourse(id: number): Observable<Review[]> {
     return this.http.get<Review[]>(`${this.baseUrl}/review/${id}`);
@@ -33,7 +33,21 @@ export class CourseService {
       commentData
     );
   }
-
+  deleteComment(courseId: Number, studentId: Number): Observable<any> {
+    return this.http.delete<any>(
+      `${this.baseUrl}/review/${courseId}/${studentId}`
+    );
+  }
+  updateComment(
+    courseId: Number,
+    studentId: Number,
+    reviewData: any
+  ): Observable<any> {
+    return this.http.put(
+      `${this.baseUrl}/review/${courseId}/${studentId}`,
+      reviewData
+    );
+  }
   getAllCategories(): Observable<any[]> {
     return this.http.get<any[]>('http://localhost:5000/api/category/');
   }
@@ -59,11 +73,11 @@ export class CourseService {
         })
       );
   }
-  getStudentInCourse(id: Number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/${id}/students`);
+  getStudentInCourse(id: Number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/${id}/students`);
   }
-  getCoursesOfStudent(userId: Number): Observable<Course[]> {
-    return this.http.get<Course[]>(`${this.baseUrl}/students/${userId}`);
+  getCoursesOfStudent(userId: Number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/students/${userId}`);
   }
 
   updateCourse(id: number, data: any): Observable<any> {

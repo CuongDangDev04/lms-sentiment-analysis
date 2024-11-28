@@ -1,1 +1,88 @@
-<p>contact-student works!</p>
+<!-- Contact Start -->
+<div class="container-xxl py-5">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
+        <h6 class="section-title bg-white text-start text-primary pe-3">
+          Liên Hệ Với Chúng Tôi
+        </h6>
+        <h1 class="mb-4">Chúng Tôi Sẵn Sàng Giải Đáp Thắc Mắc Của Bạn</h1>
+        <p class="mb-4">
+          Nếu bạn có bất kỳ câu hỏi nào về khóa học, dịch vụ hoặc muốn nhận sự
+          tư vấn, hãy để lại thông tin trong form dưới đây và chúng tôi sẽ liên
+          hệ lại với bạn trong thời gian sớm nhất.
+        </p>
+        <ul>
+          <li>
+            <i class="fa fa-map-marker-alt me-3"></i>331 QL1A, An Phú Đông, Quận
+            12, Hồ Chí Minh
+          </li>
+
+          <li><i class="fa fa-phone-alt me-3"></i>+84 123 456 789</li>
+          <li><i class="fa fa-envelope me-3"></i>dainam15986&#64;gmail.com</li>
+        </ul>
+      </div>
+      <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
+        <!-- Form Liên Hệ -->
+        <form (ngSubmit)="onSubmit(contactForm)" #contactForm="ngForm">
+          <div class="mb-3">
+            <label for="name" class="form-label">Tên của bạn</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              name="name"
+              ngModel
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              ngModel
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="message" class="form-label">Lời nhắn</label>
+            <textarea
+              class="form-control"
+              id="message"
+              name="message"
+              rows="4"
+              ngModel
+              required
+            ></textarea>
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary py-3 px-5"
+            [disabled]="!contactForm.valid"
+          >
+            Gửi Lời Nhắn
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Google Map -->
+    <div class="row">
+      <div class="col-12">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2615.1950223430376!2d106.69366942487135!3d10.859812683787343!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317529c17978287d%3A0xec48f5a17b7d5741!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBOZ3V54buFbiBU4bqldCBUaMOgbmggLSBDxqEgc-G7nyBxdeG6rW4gMTI!5e0!3m2!1svi!2s!4v1732805460570!5m2!1svi!2s"
+          width="600"
+          height="450"
+          style="border: 0"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Contact End -->

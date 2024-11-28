@@ -10,6 +10,7 @@ import { AuthService } from '../../../auth/auth.service';
 import { FormsModule, NumberValueAccessor } from '@angular/forms';
 import { StudentService } from '../../services/student.service';
 import Swal from 'sweetalert2';
+import { SentimentService } from '../../services/sentiment.service';
 
 @Component({
   selector: 'app-detail-student',
@@ -33,14 +34,19 @@ export class DetailStudentComponent implements OnInit {
   commentsPerPage = 3; // Số lượng bình luận hiển thị mỗi lần
   currentPage = 1;
   newComment: string = '';
+  updateCommentText: string = '';
   rating: number = 5; // Hoặc có thể lấy giá trị rating từ giao diện người dùng
+  updateRatingNumber: number = 5;
   errorMessage: string = '';
   isRegistrationCourse: boolean = false;
+  studentRegisterCourse: { students: any[] } = { students: [] };
+  isEditing: boolean = false;
   constructor(
     private route: ActivatedRoute,
     private courseService: CourseService,
     private authService: AuthService,
-    private studentService: StudentService
+    private studentService: StudentService,
+    private sentimentService: SentimentService
   ) {
     this.isLoggedIn = authService.isLoggedIn();
   }
@@ -48,57 +54,6 @@ export class DetailStudentComponent implements OnInit {
   showStickyBox = false;
   isMenuFixed = false;
 
-  // ngOnInit(): void {
-  //   this.route.paramMap.subscribe((params) => {
-  //     this.courseId = params.get('id');
-  //   });
-  //   forkJoin({
-  //     studentLogin: this.authService.fetchUserInfo(),
-  //     courseDetail: this.courseService.getCourseById(Number(this.courseId)),
-  //     reviews: this.courseService.getReviewOfCourse(Number(this.courseId)),
-  //     students: this.studentService.getAllStudents(),
-  //     studentRegisterCourse: this.courseService.getStudentInCourse(
-  //       Number(this.courseId)
-  //     ),
-  //   }).subscribe(
-  //     ({
-  //       courseDetail,
-  //       reviews,
-  //       students,
-  //       studentLogin,
-  //       studentRegisterCourse,
-  //     }) => {
-  //       console.log('Reviews for courseId ' + this.courseId + ':', reviews);
-  //       this.studentLogin = studentLogin;
-  //       this.courseDetail = courseDetail;
-  //       this.reviews = reviews;
-  //       this.studentComment = students;
-  //       console.log('hdhehehdhdhdhd: ', studentRegisterCourse);
-  //       const studentsInCourse = studentRegisterCourse.map(
-  //         (student) => student.students
-  //       );
-  //       console.log('Students in this course c:', studentsInCourse);
-  //       const studentRegister = studentRegisterCourse.find(
-  //         (course) => course.students.id === studentLogin.id
-  //       );
-  //       // const studentRegister =  stude
-  //       console.log('Sinh viên đã đăng ký khóa học:', studentRegister);
-
-  //       this.updateCourseRatings();
-  //       this.totalComment = this.reviews.length;
-  //       console.log(this.studentComment);
-  //       console.log('Đây là student đang login: ' + this.studentLogin.id);
-  //       this.loadComments(); // Chỉ gọi loadComment sau khi tất cả dữ liệu đã được tải xong
-  //     },
-  //     (error) => {
-  //       console.error('Lỗi khi gọi API:', error);
-  //     }
-  //   );
-
-  //   this.updateRating();
-  // }
-
-  //========================================================================================================
   async ngOnInit(): Promise<void> {
     try {
       this.route.paramMap.subscribe((params) => {
@@ -128,13 +83,16 @@ export class DetailStudentComponent implements OnInit {
       this.studentComment = students;
       this.totalComment = this.reviews.length;
 
+      const studentRegister = studentRegisterCourse.students.find(
+        (student: any) => student.id === studentLogin.id
+      );
+      this.isRegistrationCourse = !!studentRegister;
       this.updateCourseRatings();
       this.loadComments();
     } catch (error) {
       console.error('Lỗi khi gọi API:', error);
     }
   }
-  //========================================================================================================
 
   updateCourseRatings(): void {
     if (Array.isArray(this.reviews)) {
@@ -193,8 +151,19 @@ export class DetailStudentComponent implements OnInit {
       this.reviews,
       Number(this.courseId)
     );
-    this.visibleComments = combinedData.slice(0, this.commentsPerPage); // Lấy 3 bình luận đầu tiên
-    this.comments = combinedData; // Lưu toàn bộ dữ liệu để load thêm sau này
+    const currentUserComment = combinedData.find(
+      (comment) => comment.id === this.studentLogin.id
+    );
+
+    if (currentUserComment) {
+      const otherComments = combinedData.filter(
+        (comment) => comment.id !== this.studentLogin.id
+      );
+      this.visibleComments = [currentUserComment, ...otherComments];
+    } else {
+      this.visibleComments = combinedData.slice(0, this.commentsPerPage);
+    }
+    this.comments = combinedData;
   }
 
   loadMoreComments(): void {
@@ -258,6 +227,58 @@ export class DetailStudentComponent implements OnInit {
         }
       );
   }
+  deleteComment(): void {
+    Swal.fire({
+      title: 'Bạn có chắc chắn muốn xóa bình luận này?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Xóa',
+      cancelButtonText: 'Hủy',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.courseService
+          .deleteComment(Number(this.courseId), this.studentLogin.id)
+          .subscribe(
+            (response) => {
+              Swal.fire('Đã xóa!', 'Bình luận đã bị xóa', 'success').then(
+                () => {
+                  window.location.reload();
+                }
+              );
+            },
+            (error) => {
+              console.error('Lỗi khi xóa bình luận:', error);
+              Swal.fire('Lỗi', 'Đã xảy ra lỗi khi xóa bình luận', 'error');
+            }
+          );
+      }
+    });
+  }
+  updateComment() {
+    const commentData = {
+      rating: this.updateRatingNumber,
+      comment: this.updateCommentText,
+    };
+    this.courseService
+      .updateComment(Number(this.courseId), this.studentLogin.id, commentData)
+      .subscribe(
+        (response) => {
+          console.log('Sửa bình luận thành công:', response);
+          this.enableEditMode();
+          window.location.reload();
+        },
+        (error) => {
+          console.error('Lỗi khi gửi bình luận:', error);
+          this.errorMessage = 'Đã xảy ra lỗi khi thêm bình luận';
+        }
+      );
+  }
+  enableEditMode() {
+    this.isEditing = !this.isEditing;
+    this.updateRatingNumber = this.visibleComments[0].reviews[0].rating;
+    this.updateCommentText = this.visibleComments[0].reviews[0].comment;
+  }
+
   register() {
     const userId = this.studentLogin.id;
     const courseId = Number(this.courseId);
@@ -314,7 +335,13 @@ export class DetailStudentComponent implements OnInit {
   }
 
   setRating(rating: number): void {
-    this.rating = rating;
+    if (!this.isEditing) {
+      this.rating = rating;
+    } else {
+      this.updateRatingNumber = rating;
+    }
+    console.log('rating: ', this.rating);
+    console.log('update rating: ', this.updateRatingNumber);
   }
 
   updateRating() {
@@ -344,6 +371,44 @@ export class DetailStudentComponent implements OnInit {
         console.error('Lỗi khi gửi bình luận: ', error);
       }
     );
+  }
+  getMySentimentAnalyze() {
+    const myReview: any = this.reviews.find(
+      (review) =>
+        review.studentId === this.studentLogin.id &&
+        review.courseId === Number(this.courseId)
+    );
+    if (myReview.isAnalyzed) {
+      this.sentimentService
+        .getSentimentAnalysisByCourseAndUser(
+          Number(this.courseId),
+          this.studentLogin.id
+        )
+        .subscribe((response) => {
+          Swal.fire({
+            title: 'Kết quả phân tích cảm xúc',
+            html: `
+              <strong>Bình luận:</strong> ${response[0].reviewText} <br />
+              <strong>Điểm tích cực:</strong> ${response[0].sentimentScorePositive} <br />
+              <strong>Điểm tiêu cực:</strong> ${response[0].sentimentScoreNegative} <br />
+              <strong>Điểm trung tính:</strong> ${response[0].sentimentScoreNeutral} <br />
+              <strong>Cảm xúc:</strong> ${response[0].sentimentLabel} <br />
+              
+          `,
+            icon: 'info',
+            confirmButtonText: 'Đồng ý',
+          });
+        });
+    } else {
+      Swal.fire({
+        title: 'Kết quả phân tích cảm xúc',
+        text: 'Bình luận của bạn chưa được phân tích',
+        icon: 'warning',
+        confirmButtonText: 'Đồng ý',
+      }).then(() => {
+        window.location.reload();
+      });
+    }
   }
   @HostListener('window:scroll', [])
   onWindowScroll() {

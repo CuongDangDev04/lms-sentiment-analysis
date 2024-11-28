@@ -1,7 +1,7 @@
-const {User} = require("../models");
+const { User } = require("../models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const ApprovalRequest = require('../models/ApprovalRequest ')
+const ApprovalRequest = require("../models/ApprovalRequest ");
 exports.register = async (req, res) => {
   const { id, username, password, fullname, role, email } = req.body;
 
@@ -32,7 +32,7 @@ exports.register = async (req, res) => {
       fullname,
       role,
       email,
-      isApproved,  // Gán giá trị isApproved tùy theo role
+      isApproved, // Gán giá trị isApproved tùy theo role
     });
 
     if (role === "instructor") {
@@ -51,13 +51,13 @@ exports.register = async (req, res) => {
   }
 };
 exports.approveInstructor = async (req, res) => {
-  const { userId } = req.params;  // Lấy userId từ URL params
-  const { action } = req.body;  // Lấy hành động từ request body (approve hoặc reject)
+  const { userId } = req.params; // Lấy userId từ URL params
+  const { action } = req.body; // Lấy hành động từ request body (approve hoặc reject)
 
   try {
     // Tìm yêu cầu phê duyệt theo userId
     const approvalRequest = await ApprovalRequest.findOne({
-      where: { instructorId: userId, status: "pending" }
+      where: { instructorId: userId, status: "pending" },
     });
 
     if (!approvalRequest) {
@@ -66,14 +66,14 @@ exports.approveInstructor = async (req, res) => {
 
     // Lấy thông tin giảng viên (instructor) liên quan đến yêu cầu phê duyệt
     const instructor = await User.findByPk(userId, {
-      attributes: { exclude: ['password'] }  // Loại bỏ mật khẩu
+      attributes: { exclude: ["password"] }, // Loại bỏ mật khẩu
     });
 
     if (!instructor) {
       return res.status(404).json({ message: "Instructor not found!" });
     }
 
-    if (action === 'approve') {
+    if (action === "approve") {
       // Phê duyệt giảng viên
       instructor.isApproved = true;
       await instructor.save();
@@ -87,7 +87,7 @@ exports.approveInstructor = async (req, res) => {
         approvalRequest,
         instructor,
       });
-    } else if (action === 'reject') {
+    } else if (action === "reject") {
       // Từ chối giảng viên và xóa tài khoản
       approvalRequest.status = "rejected";
       await approvalRequest.save();
@@ -107,16 +107,14 @@ exports.approveInstructor = async (req, res) => {
   }
 };
 
-
-
-
-
 exports.login = async (req, res) => {
   const { username, password } = req.body;
 
   // Kiểm tra nếu thiếu thông tin đăng nhập
   if (!username || !password) {
-    return res.status(400).json({ message: "Username and password are required!" });
+    return res
+      .status(400)
+      .json({ message: "Username and password are required!" });
   }
 
   try {
@@ -124,9 +122,11 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ where: { username } });
     if (!user) return res.status(404).json({ message: "User not found!" });
 
-     // Kiểm tra xem người dùng đã được phê duyệt chưa
-     if (!user.isApproved) {
-      return res.status(403).json({ message: "Your account has not been approved yet!" });
+    // Kiểm tra xem người dùng đã được phê duyệt chưa
+    if (!user.isApproved) {
+      return res
+        .status(403)
+        .json({ message: "Your account has not been approved yet!" });
     }
     // Kiểm tra mật khẩu
     const isMatch = await bcrypt.compare(password, user.password);
@@ -136,14 +136,14 @@ exports.login = async (req, res) => {
     const token = jwt.sign(
       { id: user.id, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "4h" }
     );
 
     // Trả về toàn bộ thông tin người dùng và token
     res.status(200).json({
       message: "Login successful!",
       token,
-      user: user // Trả về tất cả thuộc tính của người dùng
+      user: user, // Trả về tất cả thuộc tính của người dùng
     });
   } catch (error) {
     console.error("Login error:", error);
@@ -154,7 +154,7 @@ exports.getUser = async (req, res) => {
   try {
     // Lấy thông tin người dùng từ req.userId (được xác thực từ middleware)
     const user = await User.findOne({
-      where: { id: req.userId }  // Tìm người dùng theo ID
+      where: { id: req.userId }, // Tìm người dùng theo ID
     });
 
     // Nếu không tìm thấy người dùng, trả về lỗi 404
@@ -164,13 +164,11 @@ exports.getUser = async (req, res) => {
 
     // Trả về tất cả thông tin người dùng
     res.status(200).json({
-      user: user // Trả về toàn bộ thông tin của người dùng
+      user: user, // Trả về toàn bộ thông tin của người dùng
     });
   } catch (error) {
     console.error("Get user error:", error);
     res.status(500).json({ error: "Failed to get user information!" });
   }
 };
-exports.uploadAvt = async (req, res)=>{
-  
-}
+exports.uploadAvt = async (req, res) => {};
