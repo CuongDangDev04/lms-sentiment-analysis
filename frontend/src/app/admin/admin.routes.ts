@@ -8,6 +8,7 @@ import { FeedbackManagerAdminComponent } from './components/feedback-manager-adm
 import { AuthGuard } from '../auth/auth.guard';
 import { Role } from '../auth/interfaces/roles';
 import { ManagerCategoryAdminComponent } from './components/manager-category-admin/manager-category-admin.component';
+import { SentimentAnalystisAdminComponent } from './components/sentiment-analystis-admin/sentiment-analystis-admin.component';
 
 export const adminRoutes: Routes = [
     {
@@ -33,6 +34,9 @@ export const adminRoutes: Routes = [
             },
             {
                 path: 'quanlydanhmuc' , component:ManagerCategoryAdminComponent
+            },
+            {
+                path: 'sentiment', component:SentimentAnalystisAdminComponent
             }
             
         ]

@@ -1,21 +1,22 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FeedbackService } from '../../services/feedback.service';
-import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { Observable } from 'rxjs';
-import Swal from 'sweetalert2';  // Import SweetAlert2
-import { Review, SentimentAnalysis } from '../../interfaces/ReviewStudent';
-import { DatePipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { SentimentAnalystisAdminComponent } from "../sentiment-analystis-admin/sentiment-analystis-admin.component";
+import { Component } from '@angular/core';
+import { Review, SentimentAnalysis } from '../../interfaces/reviewStudent';
+import { CourseService } from '../../services/course.service';
+import { CommonModule, DatePipe } from '@angular/common';
+import Swal from 'sweetalert2';
+import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../../auth/auth.service';
+import { FormGroup, FormsModule } from '@angular/forms';
+
 @Component({
-  selector: 'app-feedback-manager-admin',
+  selector: 'app-feedback-manager-instructor',
   standalone: true,
-  imports: [NgFor, CommonModule, FormsModule, SentimentAnalystisAdminComponent],
-  templateUrl: './feedback-manager-admin.component.html',
-  styleUrls: ['./feedback-manager-admin.component.css'],
+  imports: [CommonModule,FormsModule],
+  templateUrl: './feedback-manager-instructor.component.html',
+  styleUrl: './feedback-manager-instructor.component.css',
   providers: [DatePipe]
 })
-export class FeedbackManagerAdminComponent implements OnInit {
+export class FeedbackManagerInstructorComponent {
+  instructorId: string ='';
   feedback: Review[] = []; // Dữ liệu phản hồi từ API
   sentimentAnalysis: SentimentAnalysis[] = []; // Dữ liệu phân tích cảm xúc
   courseId: string = ''; // Để lưu courseId từ phản hồi
@@ -27,10 +28,20 @@ export class FeedbackManagerAdminComponent implements OnInit {
   dateFilter: string = '';
   isFiltering: boolean = false;
 
-  constructor(private feedbackService: FeedbackService, private datePipe: DatePipe) { }
+  constructor(
+    private courseService: CourseService, 
+    private datePipe: DatePipe,
+    private route: ActivatedRoute,
+    private authService: AuthService,
+  ) { }
 
   ngOnInit(): void {
-    this.fetchFeedback(); // Lấy dữ liệu phản hồi khi component khởi tạo
+    const user = this.authService.getUser();
+    if (user && user.role === 'instructor') {
+      this.instructorId = user.id.toString();
+    }
+      this.fetchFeedback(this.instructorId);
+    ;
   }
   applyFilters(): void {
     this.filteredFeedback = this.feedback.filter((item) => {
@@ -53,8 +64,8 @@ export class FeedbackManagerAdminComponent implements OnInit {
     this.isFiltering = this.studentNameFilter || this.dateFilter || this.courseNameFilter ? true : false;
   }
   // Lấy dữ liệu phản hồi và courseId, userId
-  fetchFeedback(): void {
-    this.feedbackService.getAllFeedback().subscribe(
+  fetchFeedback(instructorId: string): void {
+    this.courseService.getAllReviewsByInstructor(this.instructorId).subscribe(
       (data) => {
         this.feedback = data.map((item: Review) => {
           if (!item.sentimentAnalysis) {
@@ -87,6 +98,7 @@ export class FeedbackManagerAdminComponent implements OnInit {
         <strong>Điểm tiêu cực:</strong> ${sentimentAnalysis.sentimentScoreNegative} <br />
         <strong>Điểm trung tính:</strong> ${sentimentAnalysis.sentimentScoreNeutral} <br />
         <strong>Cảm xúc:</strong> ${sentimentAnalysis.sentimentLabel} <br />
+
       `,
       icon: 'info',
       confirmButtonText: 'Đóng',
@@ -95,4 +107,12 @@ export class FeedbackManagerAdminComponent implements OnInit {
   formatDate(dateString: string): string | null {
     return this.datePipe.transform(dateString, 'dd/MM/yyyy'); 
   }
+  resetFilters(): void {
+    this.studentNameFilter = '';
+    this.dateFilter = '';
+    this.courseNameFilter = '';
+    this.applyFilters();
+  }
+  
 }
+

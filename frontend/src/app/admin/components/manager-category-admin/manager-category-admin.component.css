@@ -126,3 +126,75 @@
   table th:first-child{
     width: 85%;
   }
+/* Định dạng container chứa input và button */
+.filter-container {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  padding: 15px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Định dạng input tìm kiếm */
+.filter-input {
+  padding: 12px 18px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 300px;
+  background-color: #ffffff;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Khi input được focus */
+.filter-input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+}
+
+/* Định dạng nút tìm kiếm */
+.filter-container button {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+/* Hiệu ứng hover cho nút */
+.filter-container button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+/* Hiệu ứng khi nhấn nút */
+.filter-container button:active {
+  background-color: #003d82;
+  transform: translateY(0);
+}
+
+/* Media query cho màn hình nhỏ */
+@media (max-width: 768px) {
+  .filter-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-input {
+    width: 100%;
+  }
+
+  .filter-container button {
+    width: 100%;
+    margin-top: 10px;
+  }
+}

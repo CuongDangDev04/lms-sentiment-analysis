@@ -15,8 +15,9 @@ import Swal from 'sweetalert2';
 export class ManagerCategoryAdminComponent {
   categories: Category[] = []; // Danh sách danh mục
   category: Partial<Category> = {}; // Danh mục hiện tại
+  filteredCategories: Category[] = [];
   isAddingCategory = false; // Trạng thái thêm danh mục
-
+  searchCategoryName: string = ''; 
   constructor(private courseService: CourseService) { }
   ngOnInit(): void {
     this.loadCategories(); // Gọi API lấy danh sách danh mục
@@ -27,12 +28,28 @@ export class ManagerCategoryAdminComponent {
     this.courseService.getAllCategories().subscribe({
       next: (data) => {
         this.categories = data; // Gán dữ liệu danh mục vào mảng
+        this.filteredCategories = [...this.categories]; // Sao chép danh mục ban đầu
       },
       error: () => {
         console.error('Lỗi khi tải danh sách danh mục.');
       },
     });
   }
+
+  // Lọc danh mục theo tên
+  applyCategorySearch(): void {
+    const keyword = this.searchCategoryName.trim().toLowerCase();
+    if (keyword) {
+      // Lọc danh mục theo từ khóa
+      this.filteredCategories = this.categories.filter((cat) =>
+        cat.name.toLowerCase().includes(keyword)
+      );
+    } else {
+      // Hiển thị tất cả danh mục nếu từ khóa trống
+      this.filteredCategories = [...this.categories];
+    }
+  }
+  
   // Thêm danh mục mới
   addCategory(name: string): void {
     this.courseService.createCategory({ name }).subscribe({

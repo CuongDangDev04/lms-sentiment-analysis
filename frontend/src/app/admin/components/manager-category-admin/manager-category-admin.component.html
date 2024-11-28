@@ -1,6 +1,17 @@
-<!-- Quản lý Danh mục -->
 <div class="category-management">
   <h2>Quản lý Danh mục</h2>
+
+  <!-- Input tìm kiếm -->
+  <div class="filter-container">
+    <input
+      id="searchCategory"
+      type="text"
+      [(ngModel)]="searchCategoryName"
+      placeholder="Tìm kiếm danh mục theo tên"
+      class="filter-input"
+    />
+    <button (click)="applyCategorySearch()">Tìm kiếm</button>
+  </div>
 
   <!-- Nút thêm danh mục -->
   <button class="btn-add-category" (click)="toggleAddCategoryForm()">
@@ -36,7 +47,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let category of categories">
+      <tr *ngFor="let category of filteredCategories">
         <td>{{ category.name }}</td>
         <td>
           <!-- Nút chỉnh sửa -->

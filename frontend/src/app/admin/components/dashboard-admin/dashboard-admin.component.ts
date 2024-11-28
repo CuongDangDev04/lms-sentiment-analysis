@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { SentimentAnalystisAdminComponent } from "../sentiment-analystis-admin/sentiment-analystis-admin.component";
 
 @Component({
   selector: 'app-dashboard-admin',
   standalone: true,
   templateUrl: './dashboard-admin.component.html',
-  styleUrls: ['./dashboard-admin.component.css']
+  styleUrls: ['./dashboard-admin.component.css'],
+  imports: [SentimentAnalystisAdminComponent]
 })
 export class DashboardAdminComponent implements OnInit {
   @ViewChild('sentimentChart', { static: false }) sentimentChartRef!: ElementRef;

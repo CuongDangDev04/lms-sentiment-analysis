@@ -1,0 +1,207 @@
+/* feedback-manager-admin.component.css */
+.feedback-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 83%;
+    float: right;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .feedback-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .feedback-table th,
+  .feedback-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+    color: black;
+  }
+  
+  .feedback-table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .feedback-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .feedback-table tr:hover {
+    background-color: #e9f7e9;
+  }
+  
+  .feedback-table td {
+    word-wrap: break-word;
+  }
+/* Button styling */
+.btn-analyze {
+    background-color: #4CAF50;  /* Màu nền xanh */
+    color: white;  /* Màu chữ trắng */
+    font-size: 16px;  /* Kích thước chữ */
+    padding: 10px 20px;  /* Cách điệu padding cho button */
+    border: none;  /* Không có viền */
+    border-radius: 5px;  /* Bo góc cho button */
+    display: flex;  /* Đảm bảo nội dung được căn giữa */
+    align-items: center;  /* Căn giữa nội dung */
+    justify-content: center;  /* Căn giữa nội dung */
+    cursor: pointer;  /* Hiển thị con trỏ chuột khi hover */
+    transition: background-color 0.3s ease, transform 0.3s ease;  /* Thêm hiệu ứng chuyển màu nền */
+  }
+  
+  /* Thêm hiệu ứng hover */
+  .btn-analyze:hover {
+    background-color: #45a049;  /* Màu nền khi hover */
+    transform: scale(1.05);  /* Tăng kích thước một chút khi hover */
+  }
+  
+  /* Điều chỉnh vị trí của icon */
+  .btn-analyze i {
+    margin-right: 10px;  /* Cách chữ và icon một chút */
+    font-size: 18px;  /* Kích thước của icon */
+  }
+  
+  /* Điều chỉnh kích thước khi nhỏ màn hình */
+  @media (max-width: 600px) {
+    .btn-analyze {
+      font-size: 14px;  /* Kích thước chữ nhỏ hơn khi màn hình nhỏ */
+    }
+  
+    .btn-analyze i {
+      font-size: 16px;  /* Kích thước icon nhỏ hơn */
+    }
+  }
+  /* Thêm lớp CSS này vào file CSS của component */
+.clickable {
+  cursor: pointer;
+}
+.clickable:hover{
+  color: blue;
+  font-weight: 200;
+}
+
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.filter-input {
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 200px;
+  transition: all 0.3s ease-in-out;
+}
+
+.filter-input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+button:active {
+  background-color: #003d82;
+}
+.filter-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-input {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.filter-button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.filter-button:hover {
+  background-color: #0056b3;
+}
+
+.filter-button.reset {
+  background-color: #dc3545;
+}
+
+.filter-button.reset:hover {
+  background-color: #a71d2a;
+}
+
+
+
+.filter-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-input {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.filter-button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.filter-button:hover {
+  background-color: #0056b3;
+}
+
+.filter-button.reset {
+  background-color: #dc3545;
+}
+
+.filter-button.reset:hover {
+  background-color: #a71d2a;
+}

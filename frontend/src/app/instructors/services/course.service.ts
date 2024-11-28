@@ -15,4 +15,7 @@ export class CourseService {
     const url = `${this.baseUrl}/instructor/${instructorId}`;
     return this.http.get(url);
   }
-}
+  getAllReviewsByInstructor(instructorId: string): Observable<any>{
+    return this.http.get(`${this.baseUrl}review/instructor/${instructorId}`);
+    }
+  }

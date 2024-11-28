@@ -1,22 +1,3 @@
-// import { Routes } from '@angular/router';
-// import { InstructorsComponent } from './instructors.component';
-// import { HeaderInstructorsComponent } from './components/header-instructors/header-instructors.component';
-// import { SidebarInstructorsComponent } from './components/sidebar-instructors/sidebar-instructors.component';
-
-// export const instructorsRoutes: Routes = [
-//     {
-//         path: 'instructors',
-//         component: InstructorsComponent,
-//         children: [
-//             {
-//                 path:"header", component:HeaderInstructorsComponent
-//             },
-//             {
-//                 path:"sidebar", component: SidebarInstructorsComponent
-//             }
-//         ]
-//     }
-// ];
 // src/app/instructors/instructors.routes.ts
 import { Routes } from '@angular/router';
 import { InstructorsComponent } from './instructors.component';
@@ -25,6 +6,7 @@ import { SidebarInstructorsComponent } from './components/sidebar-instructors/si
 import { AuthGuard } from '../auth/auth.guard';
 import { Role } from '../auth/interfaces/roles';
 import { ManagerStudentInstructorComponent } from './components/manager-student-instructor/manager-student-instructor.component';
+import { FeedbackManagerInstructorComponent } from './components/feedback-manager-instructor/feedback-manager-instructor.component';
 
 export const instructorsRoutes: Routes = [
     {
@@ -41,6 +23,9 @@ export const instructorsRoutes: Routes = [
             },
             {
                 path:'quanlysinhvien', component:ManagerStudentInstructorComponent
+            },
+            {
+                path:'feedbackmanager', component: FeedbackManagerInstructorComponent
             }
         ]
     }

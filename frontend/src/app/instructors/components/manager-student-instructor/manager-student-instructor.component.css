@@ -26,7 +26,6 @@
   .form-group {
     display: flex;
     flex-direction: column;
-    width: 100%;
   }
   
   .form-group label {
@@ -100,13 +99,12 @@
     display: flex;
     gap: 10px;
     align-items: center;
+    justify-content: center; /* Căn giữa theo chiều ngang */
     margin-bottom: 20px;
     background-color: #f9f9f9;
     padding: 10px 15px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: center;
   }
   
   /* Định dạng chung cho các input, select */
