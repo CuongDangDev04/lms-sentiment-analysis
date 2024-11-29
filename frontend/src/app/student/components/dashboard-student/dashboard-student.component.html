@@ -148,7 +148,7 @@
         </div>
       </div>
       <p class="no-exercises">
-        Bạn chưa làm bài tập nào, <a href="#">ấn vào đây</a> để làm ngay.
+        Bạn chưa làm bài tập nào, <a   >ấn vào đây</a> để làm ngay.
       </p>
     </div>
     <div class="container my-4 mx-0 px-3">
@@ -209,7 +209,9 @@
           <div *ngIf="userComments.length > 0" class="comment-list">
             <div *ngFor="let comment of userComments" class="comment-item">
               <div class="comment-header">
-                <h6 class="course-name">{{ comment.course.name }}</h6>
+                <h6 class="course-name" (click)="goToCourse(comment.course.id)">
+                  {{ comment.course.name }}
+                </h6>
                 <p class="rating">
                   <!-- Hiển thị đánh giá -->
                   <ng-container

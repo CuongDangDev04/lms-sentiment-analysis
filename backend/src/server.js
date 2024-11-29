@@ -8,7 +8,7 @@ const courseRoutes = require("./routes/course");
 const instructorRoutes = require("./routes/intructor");
 const categoryRoutes = require("./routes/category");
 const sentimentRoutes = require("./routes/sentiment");
-// const queueRoutes = require("./routes/queue");
+const feedbackRoutes = require("./routes/feedback");
 const app = express();
 
 // Các cấu hình Express
@@ -20,7 +20,7 @@ app.use("/api/category", categoryRoutes);
 app.use("/api/student", studentRoutes);
 app.use("/api/course", courseRoutes);
 app.use("/api/sentiment/", sentimentRoutes);
-// app.use("/queue", queueRoutes);
+app.use("/api/feedback", feedbackRoutes);
 const PORT = process.env.PORT || 5000;
 
 sequelize

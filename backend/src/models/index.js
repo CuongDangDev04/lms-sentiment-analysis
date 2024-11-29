@@ -3,9 +3,10 @@ const User = require("./user");
 const Course = require("./course");
 const Category = require("./category");
 const StudentCourse = require("./studentcourse");
-const Review = require('./review');
-const ApprovalRequest = require('./ApprovalRequest ');
-const SentimentAnalysis = require('./SentimentAnalysis');
+const Review = require("./review");
+const ApprovalRequest = require("./ApprovalRequest ");
+const SentimentAnalysis = require("./SentimentAnalysis");
+const Feedback = require("./feedback");
 
 // User - Course (Instructor)
 User.hasMany(Course, {
@@ -73,7 +74,7 @@ Review.belongsTo(Course, {
 
 // ReviewSentiment - User (Liên kết ReviewSentiment với User)
 SentimentAnalysis.belongsTo(User, {
-  foreignKey: "userId",  // Liên kết khóa ngoại tới User
+  foreignKey: "userId", // Liên kết khóa ngoại tới User
   as: "user", // Alias "user" cho mối quan hệ ReviewSentiment - User
 });
 
@@ -82,7 +83,6 @@ SentimentAnalysis.belongsTo(Course, {
   foreignKey: "courseId", // Liên kết khóa ngoại tới Course
   as: "course", // Alias "course" cho mối quan hệ ReviewSentiment - Course
 });
-
 
 // Thêm mối quan hệ Review và SentimentAnalysis
 Review.hasOne(SentimentAnalysis, {
@@ -133,5 +133,6 @@ module.exports = {
   StudentCourse,
   Review,
   ApprovalRequest,
-  SentimentAnalysis
+  SentimentAnalysis,
+  Feedback,
 };

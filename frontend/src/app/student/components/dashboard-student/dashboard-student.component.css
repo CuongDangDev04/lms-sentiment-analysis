@@ -498,11 +498,6 @@
   cursor: pointer;
 }
 
-.comment-item:hover {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transform: scale(1.02);
-}
-
 .comment-header {
   display: flex;
   margin-bottom: 10px;
@@ -513,6 +508,9 @@
   font-size: 16px;
   color: #333;
   width: 80%;
+}
+.course-name:hover {
+  text-decoration: underline;
 }
 .rating {
   flex-grow: 1;

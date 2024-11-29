@@ -74,7 +74,6 @@ export class DashboardStudentComponent implements OnInit {
         this.courses = courses;
         this.totalCourses = this.courses.length;
         this.current_courses(); // Cập nhật lại danh sách khóa học hiển thị
-        console.log('Courses:', this.courses);
         this.circumference = 2 * Math.PI * this.radius;
         this.totalProgress();
         this.updateProgress();
@@ -97,8 +96,6 @@ export class DashboardStudentComponent implements OnInit {
 
     // Cập nhật tổng số bình luận
     this.totalComment = userComments.length;
-
-    console.log('Tổng số bình luận của tài khoản:', this.totalComment);
   }
   // Cập nhật danh sách khóa học hiện tại
   current_courses() {
@@ -242,7 +239,6 @@ export class DashboardStudentComponent implements OnInit {
     this.userComments = this.reviews.filter(
       (review) => review.studentId === this.studentLogin.id
     );
-    console.log('hehee: ', this.userComments);
   }
   goToCourse(courseId: number): void {
     this.router.navigate(['/student/courses', courseId]);

@@ -6,14 +6,13 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class InstructorService {
+  private baseUrl = 'http://localhost:5000/api/instructor';
   constructor(private http: HttpClient) {}
 
   getInstructorById(id: number): Observable<any> {
-    return this.http.get<any>(
-      `${'http://localhost:5000/api/instructor'}/${id}`
-    );
+    return this.http.get<any>(`${this.baseUrl}/${id}`);
   }
   getAllInstructor(): Observable<any[]> {
-    return this.http.get<any[]>('http://localhost:5000/api/instructor');
+    return this.http.get<any[]>(`${this.baseUrl}`);
   }
 }

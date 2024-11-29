@@ -56,7 +56,6 @@ export class HomeStudentComponent implements OnInit {
               ...categories[0],
               count: count,
             };
-            console.log('category_top1:', this.category_top1);
           });
 
         // Xử lý cho category_top2
@@ -90,13 +89,11 @@ export class HomeStudentComponent implements OnInit {
               ...categories[3],
               count: count,
             };
-            console.log('category_top4:', this.category_top4);
           });
 
         this.popularCourses = course
           .sort((a, b) => b.rating - a.rating)
           .slice(0, 3);
-        console.log(this.popularCourses);
       },
       (error) => {
         console.error('Lỗi khi gọi API:', error);

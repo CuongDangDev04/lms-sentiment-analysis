@@ -12,7 +12,6 @@ import { AuthGuard } from '../auth/auth.guard';
 import { Role } from '../auth/interfaces/roles';
 
 export const studentRoutes: Routes = [
-
   {
     path: 'student',
     component: StudentComponent,
@@ -22,29 +21,33 @@ export const studentRoutes: Routes = [
       {
         path: '',
         component: HomeStudentComponent,
+        data: { title: 'Trang Chủ' },
       },
       {
         path: 'about',
         component: AboutStudentComponent,
+        data: { title: 'Giới Thiệu' },
       },
       {
         path: 'courses',
         component: CourseStudentComponent,
+        data: { title: 'Khóa Học' },
       },
       {
         path: 'contact',
         component: ContactStudentComponent,
+        data: { title: 'Liên Hệ' },
       },
       {
         path: 'dashboard',
         component: DashboardStudentComponent,
+        data: { title: 'Trang Cá Nhân' },
       },
       {
         path: 'courses/:id',
         component: DetailStudentComponent,
+        data: { title: 'Chi tiết Khóa Học' },
       },
     ],
   },
-
 ];
-

@@ -113,7 +113,7 @@ export class DetailStudentComponent implements OnInit {
       }
     }
   }
-
+  
   combineStudentReviews(
     students: Student[],
     reviews: Review[],
