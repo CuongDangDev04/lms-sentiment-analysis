@@ -104,17 +104,17 @@ export class SentimentAnalystisAdminComponent implements OnInit, AfterViewInit {
           labels, // Mỗi course là một nhãn
           datasets: [
             {
-              label: 'Avg Positive',
+              label: 'Điểm tích cực',
               data: avgPositives,
               backgroundColor: '#4caf50' // Màu xanh lá cho điểm tích cực
             },
             {
-              label: 'Avg Negative',
+              label: 'Điểm tiêu cực',
               data: avgNegatives,
               backgroundColor: '#f44336' // Màu đỏ cho điểm tiêu cực
             },
             {
-              label: 'Avg Neutral',
+              label: 'Điểm trung tính',
               data: avgNeutrals,
               backgroundColor: '#ffeb3b' // Màu vàng cho điểm trung tính
             }
@@ -128,7 +128,7 @@ export class SentimentAnalystisAdminComponent implements OnInit, AfterViewInit {
             },
             title: {
               display: true,
-              text: 'Sentiment Analysis Across Courses'
+              text: 'Biểu đồ phân tích tình cảm trung bình cho các khóa học'
             }
           },
           scales: {
