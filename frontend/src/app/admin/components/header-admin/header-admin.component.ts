@@ -1,19 +1,26 @@
 import { NgStyle } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-header-admin',
   standalone: true,
-  imports: [NgStyle,RouterLink],
+  imports: [NgStyle],
   templateUrl: './header-admin.component.html',
   styleUrl: './header-admin.component.css'
 })
-export class HeaderAdminComponent {
+export class HeaderAdminComponent implements OnInit {
+  name: string = ''
   constructor(private authService: AuthService, private router: Router ){}
   logout() {
     this.authService.logout();
     this.router.navigate(['/login'])
+  }
+  ngOnInit(): void {
+    const user = this.authService.getUser();
+    if(user){
+      this.name = user.fullname.toString();
+  }
   }
 }

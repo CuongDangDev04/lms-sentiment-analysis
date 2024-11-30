@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Course } from '../../interfaces/course'; // Import the Course interface
-import { AuthService } from '../../../auth/auth.service'; // Import AuthService
+import { Course } from '../../interfaces/course'; 
+import { AuthService } from '../../../auth/auth.service'; 
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -15,21 +15,27 @@ import { CourseService } from '../../services/course.service';
   styleUrls: ['./manager-student-instructor.component.css']
 })
 export class ManagerStudentInstructorComponent implements OnInit {
-  courses: Course[] = []; // List of courses
-  students: any[] = []; // List of students (flattened)
-  isLoading: boolean = true; // Loading state
-  errorMessage: string = ''; // Error message
-  searchName: string = ''; // Search keyword for student name
-  searchEmail: string = ''; // Search keyword for student email
-  selectedCourse: Course | null = null; // Selected course
-  instructorId: string = ''; // Instructor ID from AuthService
-  filteredStudents: any[] = []; // Lưu danh sách sinh viên đã lọc
+  courses: Course[] = [];
+  students: any[] = []; 
+  isLoading: boolean = true; 
+  errorMessage: string = ''; 
+  searchName: string = ''; 
+  searchEmail: string = ''; 
+  selectedCourse: Course | null = null; 
+  instructorId: string = ''; 
+  filteredStudents: any[] = []; 
+
+  // Các biến phân trang
+  currentPage: number = 1;
+  itemsPerPage: number = 7; // Số lượng sinh viên hiển thị trên mỗi trang
+  totalPages: number = 0; // Tổng số trang
+  paginatedStudents: any[] = []; // Danh sách sinh viên hiển thị cho trang hiện tại
 
   constructor(
     private http: HttpClient,
     private authService: AuthService,
     private courseService: CourseService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const user = this.authService.getUser();
@@ -37,10 +43,56 @@ export class ManagerStudentInstructorComponent implements OnInit {
       this.instructorId = user.id.toString();
     }
 
-    this.fetchCourses(); 
+    this.fetchCourses();
     this.filteredStudents = [...this.students];
   }
 
+  // Phương thức tính tổng số trang
+  calculateTotalPages(): void {
+    this.totalPages = Math.ceil(this.filteredStudents.length / this.itemsPerPage);
+  }
+
+  // Phương thức phân trang
+  paginateStudents(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedStudents = this.filteredStudents.slice(startIndex, endIndex);
+  }
+
+  // Chuyển đến trang trước
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.paginateStudents();
+    }
+  }
+
+  // Chuyển đến trang sau
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.paginateStudents();
+    }
+  }
+
+  // Chuyển đến trang bất kỳ
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.paginateStudents();
+    }
+  }
+
+  // Lấy danh sách các trang để hiển thị
+  getPages(): number[] {
+    const pages = [];
+    for (let i = 1; i <= this.totalPages; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  // Fetch dữ liệu khóa học từ backend
   fetchCourses(): void {
     if (!this.instructorId) {
       this.errorMessage = 'Instructor ID is missing.';
@@ -66,12 +118,14 @@ export class ManagerStudentInstructorComponent implements OnInit {
       }
     );
   }
-  
+
+  // Hiển thị danh sách sinh viên của khóa học
   viewStudentsInCourse(course: Course): void {
     this.selectedCourse = course;
     this.fetchStudentsFromCourse(course);
   }
 
+  // Fetch sinh viên từ khóa học
   fetchStudentsFromCourse(course: Course): void {
     if (!course || !Array.isArray(course.students)) {
       console.warn('No students found in course:', course);
@@ -83,11 +137,13 @@ export class ManagerStudentInstructorComponent implements OnInit {
       courseName: course.name
     }));
 
-    this.students = flattenedStudents; 
+    this.students = flattenedStudents;
+    this.filteredStudents = [...this.students]; // Đồng bộ danh sách đã lọc
+    this.calculateTotalPages();
+    this.paginateStudents();
   }
 
-
-
+  // Xem chi tiết sinh viên
   viewStudentDetails(student: any): void {
     Swal.fire({
       title: 'Student Details',
@@ -102,13 +158,7 @@ export class ManagerStudentInstructorComponent implements OnInit {
     });
   }
 
-  viewStudents(course: Course): void {
-    this.selectedCourse = course;
-    this.students = course.students || [];
-    this.filteredStudents = [...this.students]; // Đồng bộ danh sách đã lọc
-  }
-  
-
+  // Đóng danh sách sinh viên
   closeStudentList(): void {
     this.selectedCourse = null;
     this.students = [];
@@ -116,27 +166,33 @@ export class ManagerStudentInstructorComponent implements OnInit {
 
   // Phương thức áp dụng tìm kiếm
   applySearch(): void {
-    // Chỉ thực hiện lọc khi nhấn nút Tìm kiếm
     this.filteredStudents = this.students.filter((student) => {
       const matchesName = this.searchName
         ? student.fullname.toLowerCase().includes(this.searchName.toLowerCase())
         : true;
-  
+
       const matchesEmail = this.searchEmail
         ? student.email.toLowerCase().includes(this.searchEmail.toLowerCase())
         : true;
-  
+
       return matchesName && matchesEmail;
     });
-  
+
+    this.calculateTotalPages(); // Cập nhật lại tổng số trang sau khi lọc
+    this.paginateStudents(); // Phân trang lại sau khi lọc
     console.log('Filtered students:', this.filteredStudents); // Debug log
   }
-  
+
   // Phương thức trả về danh sách sinh viên đã lọc
   getFilteredStudents(): any[] {
     return this.filteredStudents;
   }
-  
-  
-
+  viewStudents(course: Course): void {
+    this.selectedCourse = course;
+    this.students = course.students ? [...course.students] : [];
+    this.filteredStudents = [...this.students]; 
+    this.calculateTotalPages(); 
+    this.paginateStudents();
   }
+  
+}

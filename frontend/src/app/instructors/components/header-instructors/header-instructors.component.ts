@@ -1,5 +1,5 @@
 import { NgClass, NgStyle } from '@angular/common';
-import { Component, NgModule } from '@angular/core';
+import { Component, NgModule, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/auth.service';
@@ -11,10 +11,20 @@ import { AuthService } from '../../../auth/auth.service';
   templateUrl: './header-instructors.component.html',
   styleUrl: './header-instructors.component.css'
 })
-export class HeaderInstructorsComponent {
+export class HeaderInstructorsComponent implements OnInit {
+  name: string ='';
   constructor(private router:Router, private authService: AuthService){}
+  ngOnInit(){
+    const user = this.authService.getUser();
+    if(user){
+      this.name = user.fullname.toString();
+    }
+
+  }
   logOut(){
-    this.authService.logout;
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
+  
+
 }

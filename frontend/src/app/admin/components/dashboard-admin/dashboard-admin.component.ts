@@ -2,13 +2,15 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { SentimentAnalystisAdminComponent } from "../sentiment-analystis-admin/sentiment-analystis-admin.component";
 import { ManagerUsersAdminComponent } from "../manager-users-admin/manager-users-admin.component";
+import { ManagerCoursesAdminComponent } from "../manager-courses-admin/manager-courses-admin.component";
+import { FeedbackManagerAdminComponent } from "../feedback-manager-admin/feedback-manager-admin.component";
 
 @Component({
   selector: 'app-dashboard-admin',
   standalone: true,
   templateUrl: './dashboard-admin.component.html',
   styleUrls: ['./dashboard-admin.component.css'],
-  imports: [SentimentAnalystisAdminComponent, ManagerUsersAdminComponent]
+  imports: [SentimentAnalystisAdminComponent, ManagerUsersAdminComponent, ManagerCoursesAdminComponent, FeedbackManagerAdminComponent]
 })
 export class DashboardAdminComponent implements OnInit {
   @ViewChild('sentimentChart', { static: false }) sentimentChartRef!: ElementRef;

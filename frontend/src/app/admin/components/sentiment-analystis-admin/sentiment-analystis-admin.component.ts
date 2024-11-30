@@ -4,6 +4,7 @@ import { Review, SentimentScore } from '../../interfaces/Analys';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Chart, registerables } from 'chart.js';
+import { AuthService } from '../../../auth/auth.service'; // Đảm bảo rằng bạn đã import AuthService
 
 @Component({
   selector: 'app-sentiment-analystis-admin',
@@ -18,13 +19,21 @@ export class SentimentAnalystisAdminComponent implements OnInit, AfterViewInit {
   errorMessage: string = '';
   averageSentimentScores: SentimentScore[] = [];
   charts: { [courseId: string]: Chart } = {}; // Lưu trữ các biểu đồ theo courseId
+  user: any;  // Biến lưu thông tin người dùng
 
-  constructor(private feedbackService: FeedbackService) {
+  constructor(
+    private feedbackService: FeedbackService,
+    private authService: AuthService  // Inject AuthService để lấy thông tin người dùng
+  ) {
     Chart.register(...registerables); // Đăng ký các thành phần của Chart.js
   }
 
   ngOnInit(): void {
-    this.fetchSentimentAnalysisData();
+    // Lấy thông tin người dùng từ AuthService
+    this.authService.fetchUserInfo().subscribe(user => {
+      this.user = user;
+      this.fetchSentimentAnalysisData();  // Gọi phương thức lấy dữ liệu sau khi có thông tin người dùng
+    });
   }
 
   ngAfterViewInit(): void {
@@ -37,6 +46,15 @@ export class SentimentAnalystisAdminComponent implements OnInit, AfterViewInit {
     this.feedbackService.getAllSentimentAnalysis().subscribe({
       next: (data: Review[]) => {
         this.reviews = data;
+
+        // Kiểm tra vai trò người dùng
+        const isInstructor = this.user?.role === 'instructor';
+
+        // Nếu là giảng viên, chỉ lấy các bài đánh giá của khóa học mà giảng viên đó tham gia
+        if (isInstructor) {
+          this.reviews = this.reviews.filter(review => review.userId === this.user.id);
+        }
+
         this.calculateAverageSentimentScores();
         this.createCharts(); // Tạo biểu đồ sau khi tính toán xong
         this.isLoading = false;
@@ -82,70 +100,68 @@ export class SentimentAnalystisAdminComponent implements OnInit, AfterViewInit {
   }
 
   createCharts(): void {
-  setTimeout(() => {
-    const canvas = document.getElementById('combined-chart') as HTMLCanvasElement;
+    setTimeout(() => {
+      const canvas = document.getElementById('combined-chart') as HTMLCanvasElement;
 
-    if (canvas) {
-      // Xóa biểu đồ cũ nếu tồn tại
-      if (this.charts['combined']) {
-        this.charts['combined'].destroy();
-      }
+      if (canvas) {
+        // Xóa biểu đồ cũ nếu tồn tại
+        if (this.charts['combined']) {
+          this.charts['combined'].destroy();
+        }
 
-      // Chuẩn bị dữ liệu cho từng loại cảm xúc
-      const labels = this.averageSentimentScores.map(score => `Course ${score.courseId}`);
-      const avgPositives = this.averageSentimentScores.map(score => score.avgPositive);
-      const avgNegatives = this.averageSentimentScores.map(score => score.avgNegative);
-      const avgNeutrals = this.averageSentimentScores.map(score => score.avgNeutral);
+        // Chuẩn bị dữ liệu cho từng loại cảm xúc
+        const labels = this.averageSentimentScores.map(score => `Course ${score.courseId}`);
+        const avgPositives = this.averageSentimentScores.map(score => score.avgPositive);
+        const avgNegatives = this.averageSentimentScores.map(score => score.avgNegative);
+        const avgNeutrals = this.averageSentimentScores.map(score => score.avgNeutral);
 
-      // Tạo biểu đồ tổng hợp
-      this.charts['combined'] = new Chart(canvas, {
-        type: 'bar',
-        data: {
-          labels, // Mỗi course là một nhãn
-          datasets: [
-            {
-              label: 'Điểm tích cực',
-              data: avgPositives,
-              backgroundColor: '#4caf50' // Màu xanh lá cho điểm tích cực
-            },
-            {
-              label: 'Điểm tiêu cực',
-              data: avgNegatives,
-              backgroundColor: '#f44336' // Màu đỏ cho điểm tiêu cực
-            },
-            {
-              label: 'Điểm trung tính',
-              data: avgNeutrals,
-              backgroundColor: '#ffeb3b' // Màu vàng cho điểm trung tính
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top' // Hiển thị chú thích ở trên
-            },
-            title: {
-              display: true,
-              text: 'Biểu đồ phân tích tình cảm trung bình cho các khóa học'
-            }
+        // Tạo biểu đồ tổng hợp
+        this.charts['combined'] = new Chart(canvas, {
+          type: 'bar',
+          data: {
+            labels, // Mỗi course là một nhãn
+            datasets: [
+              {
+                label: 'Điểm tích cực',
+                data: avgPositives,
+                backgroundColor: '#4caf50' // Màu xanh lá cho điểm tích cực
+              },
+              {
+                label: 'Điểm tiêu cực',
+                data: avgNegatives,
+                backgroundColor: '#f44336' // Màu đỏ cho điểm tiêu cực
+              },
+              {
+                label: 'Điểm trung tính',
+                data: avgNeutrals,
+                backgroundColor: '#ffeb3b' // Màu vàng cho điểm trung tính
+              }
+            ]
           },
-          scales: {
-            x: {
-              stacked: false // Không gộp cột, hiển thị dạng nhóm
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: 'top' // Hiển thị chú thích ở trên
+              },
+              title: {
+                display: true,
+                text: 'Biểu đồ phân tích tình cảm trung bình cho các khóa học'
+              }
             },
-            y: {
-              beginAtZero: true // Bắt đầu từ 0
+            scales: {
+              x: {
+                stacked: false // Không gộp cột, hiển thị dạng nhóm
+              },
+              y: {
+                beginAtZero: true // Bắt đầu từ 0
+              }
             }
           }
-        }
-      });
-    } else {
-      console.error('Canvas not found for combined chart');
-    }
-  }, 0);
-}
-
-  
+        });
+      } else {
+        console.error('Canvas not found for combined chart');
+      }
+    }, 0);
+  }
 }

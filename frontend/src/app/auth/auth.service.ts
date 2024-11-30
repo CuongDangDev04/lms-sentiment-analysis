@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthService {
-  private user: { id: number; username: string; fullname: string; role: Role; email: string } | null = null;
+  private user: { id: number; username: string; fullname: string; role: Role; } | null = null;
 
   constructor(private http: HttpClient) {
     this.loadUserFromLocalStorage();
@@ -30,7 +30,6 @@ export class AuthService {
               username: response.user.username,
               fullname: response.user.fullname,
               role: response.user.role,
-              email: response.user.email,
             })
           );
 
@@ -40,7 +39,6 @@ export class AuthService {
             username: response.user.username,
             fullname: response.user.fullname,
             role: response.user.role,
-            email: response.user.email,
           };
 
           return response;
@@ -84,13 +82,21 @@ export class AuthService {
     return this.http.get('http://localhost:5000/api/auth/user', { headers }).pipe(
       map((response: any) => {
         if (response.user) {
-          // Lưu tất cả các thuộc tính của user vào localStorage
-          localStorage.setItem('user', JSON.stringify(response.user));
-          this.user = response.user; // Gán toàn bộ thông tin user vào service
+          // Lưu chỉ các thuộc tính cần thiết của user vào localStorage
+          const user = {
+            id: response.user.id,
+            fullname: response.user.fullname,
+            role: response.user.role,
+            username: response.user.username
+          };
+  
+          localStorage.setItem('user', JSON.stringify(user)); // Lưu thông tin vào localStorage
+          this.user = user; // Gán thông tin vào service
         }
         return response.user;
       })
     );
   }
+  
   
 }

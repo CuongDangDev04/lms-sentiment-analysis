@@ -1,22 +1,20 @@
 <div class="student-management">
   <h2>Quản lý Sinh Viên</h2>
 
-  
-  
   <!-- Danh sách khóa học -->
   <h3 *ngIf="!selectedCourse">Danh sách Khóa Học</h3>
   <table class="table" *ngIf="!selectedCourse">
     <thead>
       <tr>
-        <th>ID</th>
+        <th>STT</th>
         <th>Tên Khóa Học</th>
         <th>Danh Mục</th>
         <th>Tổng SV</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let course of courses">
-        <td>{{ course.id }}</td>
+      <tr *ngFor="let course of courses ; let i = index"  >
+        <td>{{ i + 1 }}</td> 
         <td class="namecourse">
           <a (click)="viewStudents(course)">
             {{ course.name }}
@@ -34,50 +32,71 @@
     <button (click)="closeStudentList()" class="btn btn-secondary">Quay lại</button>
 
     <!-- Form tìm kiếm trong danh sách sinh viên -->
-    <!-- Form tìm kiếm trong danh sách sinh viên -->
-<div class="filter-container">
-  <div class="form-group">
-    <input
-      id="searchName"
-      type="text"
-      [(ngModel)]="searchName"
-      placeholder="Tìm theo tên sinh viên"
-      class="filter-input"
-    />
-  </div>
+    <div class="filter-container">
+      <div class="form-group">
+        <input
+          id="searchName"
+          type="text"
+          [(ngModel)]="searchName"
+          placeholder="Tìm theo tên sinh viên"
+          class="filter-input"
+        />
+      </div>
 
-  <div class="form-group">
-    <input
-      id="searchEmail"
-      type="text"
-      [(ngModel)]="searchEmail"
-      placeholder="Tìm theo email"
-      class="filter-input"
-    />
-  </div>
+      <div class="form-group">
+        <input
+          id="searchEmail"
+          type="text"
+          [(ngModel)]="searchEmail"
+          placeholder="Tìm theo email"
+          class="filter-input"
+        />
+      </div>
 
-  <!-- Nút tìm kiếm -->
-  <button (click)="applySearch()">Tìm kiếm</button>
-</div>
-
-    
+      <!-- Nút tìm kiếm -->
+      <button (click)="applySearch()">Tìm kiếm</button>
+    </div>
 
     <!-- Bảng danh sách sinh viên -->
     <table class="table">
       <thead>
         <tr>
+          <th>Số thứ tự</th>
           <th>ID Sinh Viên</th>
           <th>Tên Sinh Viên</th>
           <th>Email</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let student of getFilteredStudents()">
+        <tr *ngFor="let student of paginatedStudents; let i =index">
+          <td>{{ i + 1 }}</td> 
           <td>{{ student.id }}</td>
           <td>{{ student.fullname }}</td>
           <td>{{ student.email }}</td>
         </tr>
       </tbody>
     </table>
+    
+    <!-- Pagination controls -->
+    <div class="pagination">
+      <button 
+        (click)="prevPage()" 
+        [disabled]="currentPage === 1">
+        Trước
+      </button>
+  
+      <button 
+        *ngFor="let page of getPages()" 
+        (click)="goToPage(page)" 
+        [class.active]="page === currentPage">
+        {{ page }}
+      </button>
+  
+      <button 
+        (click)="nextPage()" 
+        [disabled]="currentPage === totalPages">
+        Tiếp
+      </button>
+    </div>
   </div>
 </div>

@@ -1,8 +1,8 @@
 <div class="feedback-container">
-  
-  <app-sentiment-analystis-admin/>
-  
+
   <h2>Danh Sách Phản Hồi</h2>
+  
+  <!-- Bộ lọc dữ liệu -->
   <div class="filter-container">
     <input
       type="text"
@@ -23,10 +23,12 @@
     />
     <button (click)="applyFilters()">Lọc</button>
   </div>
+
   <!-- Bảng dữ liệu phản hồi -->
   <table class="feedback-table">
     <thead>
       <tr>
+        <th>Số Thứ Tự</th>
         <th>Khóa học</th>
         <th>Sinh viên</th>
         <th>Thời gian phản hồi</th>
@@ -35,24 +37,31 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of (isFiltering ? filteredFeedback : feedback)">
+      <tr *ngFor="let item of paginatedFeedback; let i = index">
+        <td>{{ i + 1 }}</td> <!-- Hiển thị số thứ tự -->
         <td>{{ item.course.name }}</td>
         <td>{{ item.reviewStudent.fullname }}</td>
-        <td >
-          {{item.updatedAt | date: 'dd/MM/yyyy '}}
-        </td>
+        <td>{{ item.updatedAt | date: 'dd/MM/yyyy' }}</td>
         <td class="clickable" (click)="showSentimentDetails(item.sentimentAnalysis)">
           {{ item.sentimentAnalysis.sentimentLabel }}
         </td>
-        
         <td>{{ item.comment }}</td>
-        
-        
       </tr>
-      
-      
     </tbody>
   </table>
 
-   
+  
+
+  <!-- Phân trang -->
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Trước</button>
+
+    <button *ngFor="let page of [].constructor(totalPages); let i = index"
+            (click)="goToPage(i + 1)"
+            [class.active]="currentPage === i + 1">
+      {{ i + 1 }}
+    </button>
+
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Tiếp</button>
+  </div>
 </div>

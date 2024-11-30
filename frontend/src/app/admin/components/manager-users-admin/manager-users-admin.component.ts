@@ -16,6 +16,9 @@ import { Router } from '@angular/router';
 export class ManagerUsersAdminComponent implements OnInit {
   users: User[] = [];
   filteredUsers: User[] = []; // Lưu danh sách sau khi lọc
+  currentPage: number = 1; // Trang hiện tại
+  pageSize: number = 7; // Số lượng mục trên mỗi trang
+  totalPages: number = 1; // Tổng số trang
   newUser: User = {
     id: 0,
     username: '',
@@ -40,23 +43,65 @@ export class ManagerUsersAdminComponent implements OnInit {
     role: '',
   };
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit() {
     this.loadUsers();
+
   }
 
   // Tải danh sách người dùng
   loadUsers() {
+    // Lấy danh sách sinh viên
     this.userService.getAllStudents().subscribe((students) => {
-      this.users = [...students];
+      this.users = [...students]; // Gán danh sách sinh viên
+
+      // Lấy danh sách giảng viên
       this.userService.getAllInstructors().subscribe((instructors) => {
-        this.users = [...this.users, ...instructors];
-        this.filteredUsers = [...this.users]; // Gán danh sách ban đầu
+        this.users = [...this.users, ...instructors]; // Kết hợp danh sách
+        this.totalPages = Math.ceil(this.users.length / this.pageSize); // Tính tổng số trang
+        this.updateFilteredUsers(); // Cập nhật danh sách hiển thị dựa trên trang hiện tại
       });
     });
   }
+  updateFilteredUsers() {
+    const startIndex = (this.currentPage - 1) * this.pageSize; // Vị trí bắt đầu
+    const endIndex = startIndex + this.pageSize; // Vị trí kết thúc
+    this.filteredUsers = this.users.slice(startIndex, endIndex); // Cắt dữ liệu theo trang
+  }
 
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updateFilteredUsers();
+      window.scrollTo(0, 0);
+
+
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updateFilteredUsers();
+      window.scrollTo(0, 0);
+
+    }
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.updateFilteredUsers();
+      window.scrollTo(0, 0);
+
+    }
+  }
+  // Tính tổng số trang
+  getPages(): number[] {
+    this.totalPages = Math.ceil(this.users.length / this.pageSize);
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
   // Phương thức tìm kiếm
   searchUsers() {
     this.filteredUsers = this.users.filter((user) => {
@@ -104,14 +149,14 @@ export class ManagerUsersAdminComponent implements OnInit {
 
   updateUser() {
     const errorMessages: string[] = [];
-  
+
     if (this.newUser.fullname.trim() === '') {
       errorMessages.push('Vui lòng nhập tên người dùng.');
     }
     if (this.newUser.email.trim() === '') {
       errorMessages.push('Vui lòng nhập email.');
     }
-  
+
     if (errorMessages.length > 0) {
       Swal.fire({
         icon: 'warning',
@@ -124,12 +169,12 @@ export class ManagerUsersAdminComponent implements OnInit {
       });
       return;
     }
-  
+
     const updateUser = {
       ...this.newUser,
       password: this.newUser.password?.trim() === '' ? this.newUser.password : this.newUser.password,
     };
-  
+
     if (this.newUser.role === 'student') {
       this.userService.updateStudent(this.newUser.id, updateUser).subscribe(() => {
         this.loadUsers();
@@ -178,7 +223,7 @@ export class ManagerUsersAdminComponent implements OnInit {
           role === 'student'
             ? this.userService.deleteStudent(userId)
             : this.userService.deleteInstructor(userId);
-  
+
         deleteFunction.subscribe(() => {
           this.loadUsers();
           Swal.fire({
@@ -206,14 +251,14 @@ export class ManagerUsersAdminComponent implements OnInit {
       avt: '',
       birthdate: '',
       phone: '',
-      isApproved:true,
+      isApproved: true,
       isRejected: true
     };
     this.isEditing = false;
   }
   createUser() {
     const errorMessages: string[] = [];
-  
+
     // Kiểm tra form có hợp lệ hay không
     if (this.newUser.fullname.trim() === '') {
       errorMessages.push('Vui lòng nhập tên người dùng.');
@@ -227,7 +272,7 @@ export class ManagerUsersAdminComponent implements OnInit {
     if (this.newUser.role.trim() === '') {
       errorMessages.push('Vui lòng chọn vai trò.');
     }
-  
+
     if (errorMessages.length > 0) {
       Swal.fire({
         icon: 'warning',
@@ -240,13 +285,13 @@ export class ManagerUsersAdminComponent implements OnInit {
       });
       return;
     }
-  
+
     // Gửi yêu cầu tạo user
     const createFunction =
       this.newUser.role === 'student'
         ? this.userService.createStudent(this.newUser)
         : this.userService.createInstructor(this.newUser);
-  
+
     createFunction.subscribe(
       (createdUser) => {
         this.loadUsers(); // Cập nhật danh sách user
@@ -274,7 +319,7 @@ export class ManagerUsersAdminComponent implements OnInit {
       }
     );
   }
-  
+
   toggleAddUserForm() {
     this.isAdding = !this.isAdding; // Đổi trạng thái hiển thị form thêm
     if (this.isAdding) {
@@ -331,8 +376,8 @@ export class ManagerUsersAdminComponent implements OnInit {
       }
     });
   }
-  
-  
-  
-  
+
+
+
+
 }

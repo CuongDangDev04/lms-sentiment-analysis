@@ -10,15 +10,23 @@ import Swal from 'sweetalert2';
   standalone: true,
   imports: [FormsModule, NgFor, NgIf],
   templateUrl: './manager-category-admin.component.html',
-  styleUrl: './manager-category-admin.component.css'
+  styleUrls: ['./manager-category-admin.component.css']
 })
 export class ManagerCategoryAdminComponent {
   categories: Category[] = []; // Danh sách danh mục
-  category: Partial<Category> = {}; // Danh mục hiện tại
-  filteredCategories: Category[] = [];
+  filteredCategories: Category[] = []; // Danh sách danh mục đã lọc
   isAddingCategory = false; // Trạng thái thêm danh mục
-  searchCategoryName: string = ''; 
+  searchCategoryName: string = ''; // Tìm kiếm theo tên danh mục
+  category: Partial<Category> = {};
+
+  // Phân trang
+  currentPage: number = 1;
+  itemsPerPage: number = 3;
+  totalPages: number = 0;
+  paginatedCategories: Category[] = [];
+
   constructor(private courseService: CourseService) { }
+
   ngOnInit(): void {
     this.loadCategories(); // Gọi API lấy danh sách danh mục
   }
@@ -29,6 +37,8 @@ export class ManagerCategoryAdminComponent {
       next: (data) => {
         this.categories = data; // Gán dữ liệu danh mục vào mảng
         this.filteredCategories = [...this.categories]; // Sao chép danh mục ban đầu
+        this.calculateTotalPages();
+        this.paginateCategories();
       },
       error: () => {
         console.error('Lỗi khi tải danh sách danh mục.');
@@ -36,26 +46,64 @@ export class ManagerCategoryAdminComponent {
     });
   }
 
+  // Tính tổng số trang dựa trên số lượng danh mục
+  calculateTotalPages(): void {
+    this.totalPages = Math.ceil(this.filteredCategories.length / this.itemsPerPage);
+  }
+
+  // Phân trang danh mục
+  paginateCategories(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedCategories = this.filteredCategories.slice(startIndex, endIndex);
+  }
+
   // Lọc danh mục theo tên
   applyCategorySearch(): void {
     const keyword = this.searchCategoryName.trim().toLowerCase();
     if (keyword) {
-      // Lọc danh mục theo từ khóa
       this.filteredCategories = this.categories.filter((cat) =>
         cat.name.toLowerCase().includes(keyword)
       );
     } else {
-      // Hiển thị tất cả danh mục nếu từ khóa trống
       this.filteredCategories = [...this.categories];
     }
+    this.calculateTotalPages();
+    this.paginateCategories();
   }
-  
+
+  // Chuyển đến trang trước
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.paginateCategories();
+    }
+  }
+
+  // Chuyển đến trang sau
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.paginateCategories();
+    }
+  }
+
+  // Chuyển đến trang bất kỳ
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.paginateCategories();
+    }
+  }
+
   // Thêm danh mục mới
   addCategory(name: string): void {
     this.courseService.createCategory({ name }).subscribe({
       next: (newCategory) => {
         this.categories.push(newCategory);
         Swal.fire('Thêm thành công', 'Danh mục đã được thêm.', 'success');
+        this.calculateTotalPages();
+        this.paginateCategories();
       },
       error: () => {
         Swal.fire('Thêm thất bại', 'Không thể thêm danh mục.', 'error');
@@ -87,6 +135,8 @@ export class ManagerCategoryAdminComponent {
           next: () => {
             this.categories = this.categories.filter((cat) => cat.id !== id);
             Swal.fire('Đã xóa!', 'Danh mục đã bị xóa.', 'success');
+            this.calculateTotalPages();
+            this.paginateCategories();
           },
           error: () => {
             Swal.fire('Xóa thất bại', 'Không thể xóa danh mục.', 'error');
@@ -103,6 +153,7 @@ export class ManagerCategoryAdminComponent {
       this.category = {}; // Reset form khi ẩn form thêm danh mục
     }
   }
+
   // Phương thức sửa danh mục
   updateCategory(id: number): void {
     if (this.category.name) {
@@ -116,6 +167,8 @@ export class ManagerCategoryAdminComponent {
           Swal.fire('Cập nhật thành công', 'Danh mục đã được cập nhật.', 'success');
           this.isAddingCategory = false;
           this.category = {}; // Reset form
+          this.calculateTotalPages();
+          this.paginateCategories();
         },
         error: () => {
           Swal.fire('Cập nhật thất bại', 'Không thể cập nhật danh mục.', 'error');
@@ -123,10 +176,10 @@ export class ManagerCategoryAdminComponent {
       });
     }
   }
+
   // Chọn danh mục để sửa
   editCategory(id: number): void {
     this.category = this.categories.find(cat => cat.id === id) || {}; // Tìm danh mục và gán vào form
     this.isAddingCategory = false; // Hiển thị form sửa danh mục
   }
-
 }

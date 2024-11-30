@@ -14,7 +14,9 @@ import { UserService } from '../../services/user.service';
   styleUrls: ['./manager-courses-admin.component.css']
 })
 export class ManagerCoursesAdminComponent implements OnInit {
-
+  currentPage: number = 1; // Trang hiện tại
+  itemsPerPage: number = 7; // Số khóa học mỗi trang
+  totalPages: number = 0; // Tổng số trang
   courses: Course[] = []; // Danh sách khóa học
   course: Partial<Course> = {}; // Khóa học hiện tại
   categories: Category[] = []; // Danh sách danh mục
@@ -36,6 +38,41 @@ export class ManagerCoursesAdminComponent implements OnInit {
     this.loadInstructors();
   }
 
+  // Hàm tính tổng số trang
+  calculateTotalPages(): void {
+    this.totalPages = Math.ceil(this.filteredCourses.length / this.itemsPerPage);
+  }
+
+  // Phương thức trả về các trang cho phân trang
+  getPages(): number[] {
+    let pages = [];
+    for (let i = 1; i <= this.totalPages; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  // Chuyển đến trang được chọn
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+    }
+  }
+
+  // Chuyển đến trang trước
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  // Chuyển đến trang tiếp theo
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
   loadCategories(): void {
     this.courseService.getAllCategories().subscribe({
       next: (data) => {
@@ -52,6 +89,7 @@ export class ManagerCoursesAdminComponent implements OnInit {
       next: (data) => {
         this.courses = data;
         this.filteredCourses = [...data]; // Gán danh sách khóa học ban đầu vào filteredCourses
+        this.calculateTotalPages(); // Tính tổng số trang khi tải khóa học
       },
       error: () => {
         console.error('Lỗi khi tải danh sách khóa học.');
@@ -79,10 +117,14 @@ export class ManagerCoursesAdminComponent implements OnInit {
       const matchesCategory = this.selectedCategory
         ? course.categoryId === Number(this.selectedCategory)
         : true;
-      
+
       return matchesName && matchesInstructor && matchesCategory;
     });
+
+    this.currentPage = 1; // Đặt lại trang hiện tại về 1 sau khi tìm kiếm
+    this.calculateTotalPages(); // Tính lại tổng số trang
   }
+
   // Chỉnh sửa khóa học
   editCourse(course: Course): void {
     this.course = { ...course };
@@ -165,6 +207,10 @@ export class ManagerCoursesAdminComponent implements OnInit {
     this.isAdding = false;
     this.resetForm();
   }
-
+  getPagedCourses(): Course[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.filteredCourses.slice(startIndex, endIndex);
+  }
   
 }

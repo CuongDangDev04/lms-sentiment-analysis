@@ -124,10 +124,11 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ where: { username } });
     if (!user) return res.status(404).json({ message: "User not found!" });
 
-     // Kiểm tra xem người dùng đã được phê duyệt chưa
-     if (!user.isApproved) {
+    // Kiểm tra xem người dùng đã được phê duyệt chưa
+    if (!user.isApproved) {
       return res.status(403).json({ message: "Your account has not been approved yet!" });
     }
+
     // Kiểm tra mật khẩu
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid password!" });
@@ -136,20 +137,26 @@ exports.login = async (req, res) => {
     const token = jwt.sign(
       { id: user.id, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "4h" }
     );
 
-    // Trả về toàn bộ thông tin người dùng và token
+    // Trả về các thông tin cần thiết và token
     res.status(200).json({
       message: "Login successful!",
       token,
-      user: user // Trả về tất cả thuộc tính của người dùng
+      user: {
+        id: user.id,
+        fullname: user.fullname,
+        role: user.role,
+        username: user.username
+      }
     });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ error: "Login failed!" });
   }
 };
+
 exports.getUser = async (req, res) => {
   try {
     // Lấy thông tin người dùng từ req.userId (được xác thực từ middleware)
@@ -162,15 +169,21 @@ exports.getUser = async (req, res) => {
       return res.status(404).json({ message: "User not found!" });
     }
 
-    // Trả về tất cả thông tin người dùng
+    // Trả về các thông tin cần thiết của người dùng
     res.status(200).json({
-      user: user // Trả về toàn bộ thông tin của người dùng
+      user: {
+        id: user.id,
+        fullname: user.fullname,
+        role: user.role,
+        username: user.username
+      }
     });
   } catch (error) {
     console.error("Get user error:", error);
     res.status(500).json({ error: "Failed to get user information!" });
   }
 };
+
 exports.uploadAvt = async (req, res)=>{
   
 }

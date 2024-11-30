@@ -42,12 +42,14 @@
   <table>
     <thead>
       <tr>
+        <th>Số Thứ Tự</th>
         <th>Tên Danh mục</th>
         <th>Thao tác</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let category of filteredCategories">
+      <tr *ngFor="let category of paginatedCategories; let i = index">
+        <td>{{ i + 1 }}</td> <!-- Hiển thị số thứ tự -->
         <td>{{ category.name }}</td>
         <td>
           <!-- Nút chỉnh sửa -->
@@ -58,7 +60,7 @@
           >
             <i class="fa fa-edit"></i>
           </button>
-
+  
           <!-- Nút xóa -->
           <button (click)="deleteCategory(category.id)"
             type="button"
@@ -71,4 +73,16 @@
       </tr>
     </tbody>
   </table>
+  
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Trước</button>
+
+    <button *ngFor="let page of [].constructor(totalPages); let i = index"
+            (click)="goToPage(i + 1)"
+            [class.active]="currentPage === i + 1">
+      {{ i + 1 }}
+    </button>
+
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Tiếp</button>
+  </div>
 </div>
