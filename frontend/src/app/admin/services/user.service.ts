@@ -15,14 +15,21 @@ export class UserService {
   private approvalUrl = 'http://localhost:5000/api/auth/approve-instructor';
   constructor(private http: HttpClient) { }
 
-  // Phê duyệt giảng viên
-  approveInstructor(userId: number, action: string): Observable<any> {
-    const token = localStorage.getItem('token');  // Lấy token từ localStorage
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);  // Thêm token vào header
-    return this.http.put(`${this.approvalUrl}/${userId}`, { action }, { headers });
-  }
-  
 
+
+  getUserCount(): Observable<number> {
+    return new Observable((observer) => {
+      // Lấy tất cả sinh viên và giảng viên
+      this.getAllStudents().subscribe((students: User[]) => {
+        this.getAllInstructors().subscribe((instructors: User[]) => {
+          // Cộng số lượng sinh viên và giảng viên
+          const totalUsers = students.length + instructors.length;
+          observer.next(totalUsers); // Trả về tổng số người dùng
+          observer.complete();
+        });
+      });
+    });
+  }
   getAllStudents(): Observable<User[]> {
     return this.http.get<User[]>(this.studentUrl);
   }
@@ -30,7 +37,12 @@ export class UserService {
   getAllInstructors(): Observable<User[]> {
     return this.http.get<User[]>(this.instructorUrl);
   }
-
+  // Phê duyệt giảng viên
+  approveInstructor(userId: number, action: string): Observable<any> {
+    const token = localStorage.getItem('token');  // Lấy token từ localStorage
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);  // Thêm token vào header
+    return this.http.put(`${this.approvalUrl}/${userId}`, { action }, { headers });
+  }
 
   // Lấy học sinh theo ID
   getStudentById(id: number): Observable<User> {

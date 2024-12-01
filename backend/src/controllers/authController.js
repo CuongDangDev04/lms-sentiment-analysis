@@ -2,6 +2,9 @@ const { User } = require("../models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const ApprovalRequest = require("../models/ApprovalRequest ");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 exports.register = async (req, res) => {
   const { id, username, password, fullname, role, email } = req.body;
 
@@ -32,7 +35,8 @@ exports.register = async (req, res) => {
       fullname,
       role,
       email,
-      isApproved, // Gán giá trị isApproved tùy theo role
+      isApproved,
+      avt: "assets/user.png",
     });
 
     if (role === "instructor") {
@@ -128,6 +132,7 @@ exports.login = async (req, res) => {
         .status(403)
         .json({ message: "Your account has not been approved yet!" });
     }
+
     // Kiểm tra mật khẩu
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid password!" });
@@ -139,17 +144,23 @@ exports.login = async (req, res) => {
       { expiresIn: "4h" }
     );
 
-    // Trả về toàn bộ thông tin người dùng và token
+    // Trả về các thông tin cần thiết và token
     res.status(200).json({
       message: "Login successful!",
       token,
-      user: user, // Trả về tất cả thuộc tính của người dùng
+      user: {
+        id: user.id,
+        fullname: user.fullname,
+        role: user.role,
+        username: user.username,
+      },
     });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ error: "Login failed!" });
   }
 };
+
 exports.getUser = async (req, res) => {
   try {
     // Lấy thông tin người dùng từ req.userId (được xác thực từ middleware)
@@ -178,4 +189,33 @@ exports.getUser = async (req, res) => {
   }
 };
 
-exports.uploadAvt = async (req, res) => {};
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    console.log("Uploading file:", file);
+    const uploadPath = path.join(
+      __dirname,
+      "../../../public/assets/student/img/avt"
+    );
+    fs.mkdirSync(uploadPath, { recursive: true });
+    cb(null, uploadPath);
+  },
+  filename: function (req, file, cb) {
+    console.log("File name:", Date.now() + path.extname(file.originalname));
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage: storage });
+
+exports.upload = upload;
+
+exports.uploadAvatar = async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "No file uploaded." });
+  }
+
+  // Trả về đường dẫn ảnh có thể truy cập từ frontend
+  res
+    .status(200)
+    .json({ filePath: `/assets/student/img/avt/${req.file.filename}` });
+};

@@ -1,1 +1,43 @@
-<p>sentiment-analystis-admin works!</p>
+<div *ngIf="isLoading">Đang tải dữ liệu...</div>
+
+<div *ngIf="errorMessage">{{ errorMessage }}</div>
+
+<div *ngIf="reviews.length > 0 && !isLoading">
+  
+
+  <!-- <div class="container " *ngIf="averageSentimentScores.length > 0">
+    <h3>Điểm trung bình phân tích cảm xúc của các khóa học</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Course ID</th>
+          <th>Điểm Trung Bình Positive</th>
+          <th>Điểm Trung Bình Negative</th>
+          <th>Điểm Trung Bình Neutral</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let score of averageSentimentScores">
+          <td>{{ score.courseId }}</td>
+          <td>{{ score.avgPositive.toFixed(2) }}</td> 
+          <td>{{ score.avgNegative.toFixed(2) }}</td>
+          <td>{{ score.avgNeutral.toFixed(2) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div *ngIf="reviews.length === 0 && !isLoading">
+  Không có dữ liệu phân tích tình cảm.
+</div>
+<div *ngIf="isLoading">Loading...</div>
+<div *ngIf="!isLoading && averageSentimentScores.length === 0">
+  No sentiment data available.
+</div> -->
+
+
+<div *ngIf="!isLoading">
+  <canvas id="combined-chart"></canvas>
+</div>
+<div *ngIf="errorMessage">{{ errorMessage }}</div>

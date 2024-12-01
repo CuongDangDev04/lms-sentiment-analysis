@@ -23,6 +23,8 @@ import Swal from 'sweetalert2';
   styleUrl: './dashboard-student.component.css',
 })
 export class DashboardStudentComponent implements OnInit {
+  @ViewChild('comment-container') commentContainer!: ElementRef;
+  topValue: number = 28;
   courseService: CourseService = inject(CourseService);
   authService: AuthService = inject(AuthService);
   studentService: StudentService = inject(StudentService);
@@ -44,6 +46,7 @@ export class DashboardStudentComponent implements OnInit {
   isShowComment: boolean = false;
   userComments: any[] = [];
   sentimentAnalysis: any;
+  profilePicture: string = 'assets/student/img/team-1.jpg';
   constructor(private router: Router) {}
 
   ngOnInit(): void {
@@ -56,7 +59,7 @@ export class DashboardStudentComponent implements OnInit {
         // Gán dữ liệu trả về từ fetchUserInfo và getAllReview
         this.studentLogin = user;
         this.reviews = reviews;
-
+        this.profilePicture = user.avt;
         this.getAllCourses();
         this.getTotalComments();
         this.getUserComments();
@@ -198,7 +201,6 @@ export class DashboardStudentComponent implements OnInit {
   }
 
   // Quản lý ảnh đại diện
-  profilePicture: string = 'assets/student/img/team-1.jpg';
 
   @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
 
@@ -212,23 +214,57 @@ export class DashboardStudentComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      const data = { avt: `../../../../assets/student/img/${file.name}` };
       const reader = new FileReader();
 
+      // Upload avatar lên backend
+      this.authService.uploadAvatar(file).subscribe({
+        next: (response) => {
+          this.profilePicture = response.filePath; // Cập nhật đường dẫn ảnh
+          const avt = { avt: this.profilePicture };
+          this.studentService
+            .updateStudent(this.studentLogin.id, avt)
+            .subscribe({
+              next: () => {
+                Swal.fire({
+                  title: 'Thành công!',
+                  text: 'Ảnh đại diện đã được cập nhật.',
+                  icon: 'success',
+                  confirmButtonText: 'OK',
+                });
+              },
+              error: (err) => {
+                console.error('Error updating avatar in database:', err);
+                Swal.fire({
+                  title: 'Thất bại!',
+                  text: 'Không thể cập nhật ảnh đại diện trong cơ sở dữ liệu.',
+                  icon: 'error',
+                  confirmButtonText: 'OK',
+                });
+              },
+            });
+        },
+        error: (err) => {
+          console.error('Error uploading avatar:', err);
+          Swal.fire({
+            title: 'Thất bại!',
+            text: 'Không thể cập nhật ảnh đại diện.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        },
+      });
+
       reader.onload = (e: any) => {
-        this.profilePicture = e.target.result; // Cập nhật ảnh đại diện
-        const avt = data;
-        this.studentService
-          .updateStudent(this.studentLogin.id, avt)
-          .subscribe();
+        this.profilePicture = e.target.result; // Cập nhật ảnh đại diện ngay lập tức khi file được chọn
       };
 
       reader.readAsDataURL(file);
     }
-    window.location.reload();
   }
+
   changeShowCommentStatus() {
     this.isShowComment = !this.isShowComment;
+    this.calculateTopValue();
   }
   getUserComments(): void {
     if (!this.studentLogin || !this.reviews.length) {
@@ -242,5 +278,25 @@ export class DashboardStudentComponent implements OnInit {
   }
   goToCourse(courseId: number): void {
     this.router.navigate(['/student/courses', courseId]);
+  }
+
+  calculateTopValue(): void {
+    const containerHeight =
+      this.commentContainer?.nativeElement.offsetHeight || 0;
+    const numComments = this.userComments.length;
+
+    if (!this.isShowComment) {
+      this.topValue = 28;
+    } else if (numComments === 0) {
+      this.topValue = 23.5;
+    } else if (numComments === 1) {
+      this.topValue = 21.55;
+    } else if (numComments === 2) {
+      this.topValue = 19.2;
+    } else if (numComments === 3) {
+      this.topValue = 17.3;
+    } else if (numComments > 3) {
+      this.topValue = 17.14;
+    }
   }
 }

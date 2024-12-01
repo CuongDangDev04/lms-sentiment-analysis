@@ -1,30 +1,38 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FeedbackService {
-  private baseUrl = 'http://localhost:5000/api/course'; // URL của API
-  private Url = 'http://localhost:5000/api/sentiment'; // URL của API
+  private baseUrl = 'http://localhost:5000/api/course'; 
+  private sentimentUrl  = 'http://localhost:5000/api/sentiment'
 
   constructor(private http: HttpClient) {}
-
+ // Phương thức đếm số lượng phản hồi
+ getFeedbackCount(): Observable<number> {
+  return new Observable((observer) => {
+    this.getAllFeedback().subscribe((feedbacks: any[]) => {
+      const totalFeedbacks = feedbacks.length;
+      observer.next(totalFeedbacks); // Trả về tổng số phản hồi
+      observer.complete();
+    });
+  });
+}
   // Lấy tất cả phản hồi
   getAllFeedback(): Observable<any> {
     return this.http.get(`${this.baseUrl}/review/all`);
   }
- 
+// Lấy phân tích cảm xúc tất cả các phản hồi
+getAllSentimentAnalysis(): Observable<any> {
+  return this.http.get(`${this.sentimentUrl}/all`).pipe(
+    tap((data) => console.log('Data từ API:', data))  // In dữ liệu trả về lên console
+  );
+}
 
-  // Phân tích cảm xúc theo khóa học và người dùng
-  analyzeSentiment(courseId: number, userId: number): Observable<any> {
-    return this.http.post(`${this.Url}/analyze/${courseId}/${userId}`, {});
-  }
-  // Phân tích cảm xúc cho toàn bộ khóa học
-  analyzeCourseReviews(courseId: number): Observable<any> {
-    return this.http.post(`${this.Url}/analyze/${courseId}`, {});
-  }
+
+ 
   
 
 }

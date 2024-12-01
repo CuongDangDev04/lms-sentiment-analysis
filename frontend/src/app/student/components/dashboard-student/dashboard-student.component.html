@@ -17,7 +17,10 @@
       <h2>{{ studentLogin.fullname }}</h2>
     </div>
     <div class="user-details">
-      <p><i class="fas fa-envelope"></i> {{ studentLogin.email }}</p>
+      <p>
+        <i class="fas fa-envelope"></i>
+        {{ studentLogin.email || "abc@example.com" }}
+      </p>
       <p>
         <i class="fas fa-phone"></i> {{ studentLogin.phone || "0000000000" }}
       </p>
@@ -104,6 +107,7 @@
         id="previousCourses"
         class="btn btn-primary mt-3"
         (click)="previousCourses()"
+        [style.top.%]="topValue"
       >
         <i class="fas fa-arrow-left"></i>
       </button>
@@ -112,6 +116,7 @@
         id="nextCourses"
         class="btn btn-primary mt-3"
         (click)="nextCourses()"
+        [style.top.%]="topValue"
       >
         <i class="fas fa-arrow-right"></i>
       </button>
@@ -159,7 +164,7 @@
       </div>
     </div>
     <!-- Phần Bình luận -->
-    <div class="col-12 mt-4" *ngIf="isShowComment">
+    <div class="comment-container col-12 mt-4" *ngIf="isShowComment">
       <div class="card shadow-sm comments-section">
         <div class="card-header text-uppercase font-weight-bold">Bình luận</div>
         <div class="card-body">

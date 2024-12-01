@@ -123,61 +123,78 @@
 
 
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Tên Người Dùng</th>
-        <th>Username</th>
-        <th>MSSV/GV</th>
-        <th>Vai trò</th>
-        <th>Email</th>
-        <th>Phê Duyệt</th> <!-- Cột Phê Duyệt -->
-        <th>Thao tác</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of filteredUsers">
-        <td>{{ user.fullname }}</td>
-        <td>{{ user.username }}</td>
-        <td>{{ user.id }}</td>
-        <td>{{ getRoleDisplay(user.role) }}</td>
-        <td>{{ user.email }}</td>
-        <td>
-          <!-- Nút Phê Duyệt chỉ hiển thị nếu người dùng là giảng viên và chưa được phê duyệt -->
-          <i *ngIf="user.role === 'instructor' && !user.isApproved" 
-             (click)="approveInstructor(user.id, 'approve')" 
-             class="fa-regular fa-circle-check"></i>
-          
-          <!-- Nút Từ Chối chỉ hiển thị nếu người dùng là giảng viên và chưa được phê duyệt -->
-          <i *ngIf="user.role === 'instructor' && !user.isApproved" 
-             (click)="approveInstructor(user.id, 'reject')" 
-              class="fa-regular fa-circle-xmark"></i>
-          
-          <!-- Hiển thị trạng thái đã phê duyệt -->
-          <span *ngIf="user.isApproved" class="approved-status">
-            Đã Phê Duyệt
-          </span>
-          
-          <!-- Hiển thị trạng thái đã từ chối -->
-          <span *ngIf="user.isRejected" class="rejected-status">
-            <i class="fas fa-thumbs-down"></i> Đã Từ Chối
-          </span>
-          
-          
-        </td>
+ <table class="table">
+  <thead>
+    <tr>
+      <th>Số Thứ Tự</th>
+      <th>Tên Người Dùng</th>
+      <th>Username</th>
+      <th>MSSV/GV</th>
+      <th>Vai trò</th>
+      <th>Email</th>
+      <th>Phê Duyệt</th> <!-- Cột Phê Duyệt -->
+      <th>Thao tác</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of filteredUsers; let i = index">
+      <td>{{ i + 1 }}</td> <!-- Hiển thị số thứ tự -->
+      <td>{{ user.fullname }}</td>
+      <td>{{ user.username }}</td>
+      <td>{{ user.id }}</td>
+      <td>{{ getRoleDisplay(user.role) }}</td>
+      <td>{{ user.email }}</td>
+      <td>
+        <!-- Nút Phê Duyệt chỉ hiển thị nếu người dùng là giảng viên và chưa được phê duyệt -->
+        <i *ngIf="user.role === 'instructor' && !user.isApproved" 
+           (click)="approveInstructor(user.id, 'approve')" 
+           class="fa-regular fa-circle-check"></i>
         
+        <!-- Nút Từ Chối chỉ hiển thị nếu người dùng là giảng viên và chưa được phê duyệt -->
+        <i *ngIf="user.role === 'instructor' && !user.isApproved" 
+           (click)="approveInstructor(user.id, 'reject')" 
+           class="fa-regular fa-circle-xmark"></i>
         
+        <!-- Hiển thị trạng thái đã phê duyệt -->
+        <span *ngIf="user.isApproved" class="approved-status">
+          Đã Phê Duyệt
+        </span>
         
-        <td>
-          <button (click)="editUser(user)" type="button" class="btn btn-link btn-primary btn-lg" title="Chỉnh Sửa">
-            <i class="fa fa-edit"></i>
-          </button>
-          <button (click)="deleteUser(user.id, user.role)" type="button" class="btn btn-link btn-danger" title="Xóa">
-            <i class="fa fa-times"></i>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  
+        <!-- Hiển thị trạng thái đã từ chối -->
+        <span *ngIf="user.isRejected" class="rejected-status">
+          <i class="fas fa-thumbs-down"></i> Đã Từ Chối
+        </span>
+      </td>
+      <td>
+        <button (click)="editUser(user)" type="button" class="btn btn-link btn-primary btn-lg" title="Chỉnh Sửa">
+          <i class="fa fa-edit"></i>
+        </button>
+        <button (click)="deleteUser(user.id, user.role)" type="button" class="btn btn-link btn-danger" title="Xóa">
+          <i class="fa fa-times"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  <!-- Điều hướng phân trang -->
+<div class="pagination">
+  <button 
+    (click)="prevPage()" 
+    [disabled]="currentPage === 1">
+    Trước
+  </button>
+  <button 
+    *ngFor="let page of getPages()" 
+    (click)="goToPage(page)" 
+    [class.active]="page === currentPage">
+    {{ page }}
+  </button>
+  <button 
+    (click)="nextPage()" 
+    [disabled]="currentPage === totalPages">
+    Tiếp
+  </button>
+</div>
+
 </div>

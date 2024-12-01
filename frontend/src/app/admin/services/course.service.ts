@@ -1,20 +1,34 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Category, Course } from '../interfaces/Course'; // Đường dẫn đến interface Course
 
 @Injectable({
   providedIn: 'root'
 })
 export class CourseService {
-  private readonly API_URL = 'http://localhost:5000/api/course'; 
+  private readonly API_URL = 'http://localhost:5000/api/course';
   private readonly CATEGORY_API_URL = 'http://localhost:5000/api/category';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
+  // Phương thức để đếm số lượng khóa học
+  getCourseCount(): Observable<number> {
+    return this.getAllCourses().pipe(
+      map((courses: Course[]) => courses.length) // Đếm số lượng khóa học trong mảng
+    );
+  }
 
+  // Phương thức để đếm số lượng thể loại
+  getCategoryCount(): Observable<number> {
+    return this.getAllCategories().pipe(
+      map((categories: Category[]) => categories.length) // Đếm số lượng thể loại trong mảng
+    );
+  }
   getAllCourses(): Observable<Course[]> {
     return this.http.get<Course[]>(this.API_URL);
   }
-
+  getAllCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(this.CATEGORY_API_URL);
+  }
   getCourseById(id: number): Observable<Course> {
     return this.http.get<Course>(`${this.API_URL}/${id}`);
   }
@@ -31,9 +45,7 @@ export class CourseService {
     return this.http.delete<void>(`${this.API_URL}/${id}`);
   }
 
-  getAllCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(this.CATEGORY_API_URL);
-  }
+
 
   getCategoryById(id: number): Observable<Category> {
     return this.http.get<Category>(`${this.CATEGORY_API_URL}/${id}`);

@@ -105,4 +105,13 @@ export class AuthService {
         })
       );
   }
+  uploadAvatar(file: File): Observable<{ filePath: string }> {
+    const formData = new FormData();
+    formData.append('avatar', file);
+
+    return this.http.post<{ filePath: string }>(
+      'http://localhost:5000/api/auth/upload-avatar',
+      formData
+    );
+  }
 }

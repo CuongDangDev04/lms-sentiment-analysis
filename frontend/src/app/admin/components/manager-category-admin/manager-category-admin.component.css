@@ -65,10 +65,15 @@
     color: #fff;
     font-size: 16px;
   }
-  
+  .category-management table th{
+    padding: 12px 15px !important;
+    color: white !important;
+
+
+  }
   .category-management table th,
   .category-management table td {
-    padding: 12px;
+    padding: 3px;
     border: 1px solid #ddd;
     text-align: left;
     color: black;
@@ -123,6 +128,131 @@
     cursor: pointer; /* Con trỏ chuột khi hover */
     transition: background-color 0.3s ease, transform 0.2s ease; /* Hiệu ứng khi hover */
   }
-  table th:first-child{
-    width: 85%;
+  table th:nth-child(2){
+    width: 70%;
   }
+  table th:first-child{
+    width: 9%;
+  }
+/* Định dạng container chứa input và button */
+.filter-container {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  padding: 15px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Định dạng input tìm kiếm */
+.filter-input {
+  padding: 12px 18px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 300px;
+  background-color: #ffffff;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Khi input được focus */
+.filter-input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+}
+
+/* Định dạng nút tìm kiếm */
+.filter-container button {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+/* Hiệu ứng hover cho nút */
+.filter-container button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+/* Hiệu ứng khi nhấn nút */
+.filter-container button:active {
+  background-color: #003d82;
+  transform: translateY(0);
+}
+
+/* Media query cho màn hình nhỏ */
+@media (max-width: 768px) {
+  .filter-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-input {
+    width: 100%;
+  }
+
+  .filter-container button {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  border: none;
+  background-color: #f0f0f0;
+  color: #333;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagination button:hover {
+  background-color: #007bff;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+  cursor: default;
+}
+
+.pagination button:disabled {
+  background-color: #e9ecef;
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+.pagination button:disabled:hover {
+  transform: none;
+}
+
+.pagination .dots {
+  background-color: transparent;
+  color: #333;
+  font-size: 16px;
+  border: none;
+  cursor: default;
+}
+

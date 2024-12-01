@@ -1,6 +1,17 @@
-<!-- Quản lý Danh mục -->
 <div class="category-management">
   <h2>Quản lý Danh mục</h2>
+
+  <!-- Input tìm kiếm -->
+  <div class="filter-container">
+    <input
+      id="searchCategory"
+      type="text"
+      [(ngModel)]="searchCategoryName"
+      placeholder="Tìm kiếm danh mục theo tên"
+      class="filter-input"
+    />
+    <button (click)="applyCategorySearch()">Tìm kiếm</button>
+  </div>
 
   <!-- Nút thêm danh mục -->
   <button class="btn-add-category" (click)="toggleAddCategoryForm()">
@@ -31,12 +42,14 @@
   <table>
     <thead>
       <tr>
+        <th>Số Thứ Tự</th>
         <th>Tên Danh mục</th>
         <th>Thao tác</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let category of categories">
+      <tr *ngFor="let category of paginatedCategories; let i = index">
+        <td>{{ i + 1 }}</td> <!-- Hiển thị số thứ tự -->
         <td>{{ category.name }}</td>
         <td>
           <!-- Nút chỉnh sửa -->
@@ -47,7 +60,7 @@
           >
             <i class="fa fa-edit"></i>
           </button>
-
+  
           <!-- Nút xóa -->
           <button (click)="deleteCategory(category.id)"
             type="button"
@@ -60,4 +73,16 @@
       </tr>
     </tbody>
   </table>
+  
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Trước</button>
+
+    <button *ngFor="let page of [].constructor(totalPages); let i = index"
+            (click)="goToPage(i + 1)"
+            [class.active]="currentPage === i + 1">
+      {{ i + 1 }}
+    </button>
+
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Tiếp</button>
+  </div>
 </div>

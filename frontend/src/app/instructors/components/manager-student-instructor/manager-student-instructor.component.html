@@ -1,71 +1,102 @@
 <div class="student-management">
-    <h2>Quản lý Sinh Viên</h2>
-    
-    <!-- Bộ lọc và tìm kiếm -->
-    <div class="filter-search">
+  <h2>Quản lý Sinh Viên</h2>
+
+  <!-- Danh sách khóa học -->
+  <h3 *ngIf="!selectedCourse">Danh sách Khóa Học</h3>
+  <table class="table" *ngIf="!selectedCourse">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Tên Khóa Học</th>
+        <th>Danh Mục</th>
+        <th>Tổng SV</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let course of courses ; let i = index"  >
+        <td>{{ i + 1 }}</td> 
+        <td class="namecourse">
+          <a (click)="viewStudents(course)">
+            {{ course.name }}
+          </a>
+        </td>
+        <td>{{ course.category.name }}</td>
+        <td>{{ course.studentsCount || 'N/A' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Danh sách sinh viên của khóa học -->
+  <div *ngIf="selectedCourse">
+    <h3>Danh sách Sinh Viên - {{ selectedCourse.name }}</h3>
+    <button (click)="closeStudentList()" class="btn btn-secondary">Quay lại</button>
+
+    <!-- Form tìm kiếm trong danh sách sinh viên -->
+    <div class="filter-container">
       <div class="form-group">
-        <label for="searchName">Tìm kiếm theo tên</label>
-        <input id="searchName" type="text" placeholder="Nhập tên sinh viên..." [(ngModel)]="searchName" />
+        <input
+          id="searchName"
+          type="text"
+          [(ngModel)]="searchName"
+          placeholder="Tìm theo tên sinh viên"
+          class="filter-input"
+        />
       </div>
-  
+
       <div class="form-group">
-        <label for="searchEmail">Tìm kiếm theo email</label>
-        <input id="searchEmail" type="text" placeholder="Nhập email..." [(ngModel)]="searchEmail" />
+        <input
+          id="searchEmail"
+          type="text"
+          [(ngModel)]="searchEmail"
+          placeholder="Tìm theo email"
+          class="filter-input"
+        />
       </div>
+
+      <!-- Nút tìm kiếm -->
+      <button (click)="applySearch()">Tìm kiếm</button>
     </div>
-  
-    <!-- Danh sách sinh viên -->
-    <h3>Danh sách Sinh Viên</h3>
+
+    <!-- Bảng danh sách sinh viên -->
     <table class="table">
       <thead>
         <tr>
+          <th>Số thứ tự</th>
+          <th>ID Sinh Viên</th>
           <th>Tên Sinh Viên</th>
           <th>Email</th>
-          <th>Phản hồi</th>
-          <th>Thao tác</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let student of getFilteredStudents()">
-          <td>{{ student.name }}</td>
+        <tr *ngFor="let student of paginatedStudents; let i =index">
+          <td>{{ i + 1 }}</td> 
+          <td>{{ student.id }}</td>
+          <td>{{ student.fullname }}</td>
           <td>{{ student.email }}</td>
-          <td>{{ student.feedback }}</td>
-          <td>
-            
-              <button
-              (click)="viewStudentDetails(student)"
-                type="button"
-                data-bs-toggle="tooltip"
-                title=""
-                class="btn btn-link btn-primary btn-lg"
-                data-original-title="Edit Task"
-              >
-              <i class="fa-solid fa-eye"></i>
-              </button>
-              <button 
-              (click)="deleteStudent(student)"
-                type="button"
-                data-bs-toggle="tooltip"
-                title=""
-                class="btn btn-link btn-danger"
-                data-original-title="Remove"
-              >
-                <i class="fa fa-times"></i>
-              </button>
-          </td>
         </tr>
       </tbody>
     </table>
+    
+    <!-- Pagination controls -->
+    <div class="pagination">
+      <button 
+        (click)="prevPage()" 
+        [disabled]="currentPage === 1">
+        Trước
+      </button>
   
-    <!-- Modal hiển thị thông tin chi tiết sinh viên -->
-    <div *ngIf="selectedStudent" class="modal">
-      <div class="modal-content">
-        <span class="close" (click)="closeModal()">&times;</span>
-        <h4>Thông tin chi tiết</h4>
-        <p><strong>Tên:</strong> {{ selectedStudent.name }}</p>
-        <p><strong>Email:</strong> {{ selectedStudent.email }}</p>
-        <p><strong>Phản hồi:</strong> {{ selectedStudent.feedback }}</p>
-      </div>
+      <button 
+        *ngFor="let page of getPages()" 
+        (click)="goToPage(page)" 
+        [class.active]="page === currentPage">
+        {{ page }}
+      </button>
+  
+      <button 
+        (click)="nextPage()" 
+        [disabled]="currentPage === totalPages">
+        Tiếp
+      </button>
     </div>
   </div>
-  
+</div>

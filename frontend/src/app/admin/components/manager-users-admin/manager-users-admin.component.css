@@ -147,11 +147,16 @@ table thead tr {
 
 table th,
 table td {
-  padding: 12px;
+  padding: 3px !important;
   border: 1px solid #ddd;
   text-align: left;
 }
+table th{
+  padding: 12px 15px !important;
+  color: white !important;
 
+
+}
 table tbody tr:nth-child(even) {
   background-color: #f2f2f2;
 }
@@ -267,4 +272,55 @@ table tbody tr:hover {
 
 
 
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+  font-family: Arial, sans-serif;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  border: none;
+  background-color: #f0f0f0;
+  color: #333;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagination button:hover {
+  background-color: #007bff;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+  cursor: default;
+}
+
+.pagination button:disabled {
+  background-color: #e9ecef;
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+.pagination button:disabled:hover {
+  transform: none;
+}
+
+.pagination .dots {
+  background-color: transparent;
+  color: #333;
+  font-size: 16px;
+  border: none;
+  cursor: default;
+}
 

@@ -49,7 +49,7 @@ exports.createCourse = async (req, res) => {
       number_of_students,
       rating,
       duration,
-      imageUrl,
+      imageUrl: "assets/student/img/course-1.jpg",
       categoryId,
     });
 
@@ -157,7 +157,66 @@ exports.getAllReview = async (req, res) => {
       .json({ message: "Error fetching review", error: error.message });
   }
 };
+exports.getAllReviewsByInstructor = async (req, res) => {
+  const { instructorId } = req.params; // Lấy instructorId từ request params
 
+  try {
+    // Lấy danh sách các khóa học mà giảng viên dạy
+    const courses = await Course.findAll({
+      where: { instructorId },
+      attributes: ["id"], // Chỉ lấy id của khóa học
+    });
+
+    // Kiểm tra nếu không có khóa học nào
+    if (!courses.length) {
+      return res.status(404).json({ message: "No courses found for this instructor." });
+    }
+
+    // Lấy danh sách courseId
+    const courseIds = courses.map((course) => course.id);
+
+    // Truy vấn review dựa trên courseId
+    const reviews = await Review.findAll({
+      where: { courseId: courseIds }, // Lọc review theo danh sách courseId
+      include: [
+        {
+          model: User,
+          as: "reviewStudent", // Alias cho User
+          attributes: ["id", "fullname", "email"],
+        },
+        {
+          model: Course,
+          as: "course", // Alias cho Course
+          attributes: ["id", "name"],
+        },
+        {
+          model: SentimentAnalysis,
+          as: "sentimentAnalysis", // Alias cho SentimentAnalysis
+          required: false, // Không bắt buộc có dữ liệu
+          where: {
+            id: {
+              [Sequelize.Op.eq]: Sequelize.col("Review.sentimentAnalysisId"),
+            },
+          },
+        },
+      ],
+    });
+
+    // Kiểm tra nếu không có review nào
+    if (!reviews.length) {
+      return res.status(404).json({ message: "No reviews found for this instructor's courses." });
+    }
+
+    // Trả về danh sách review
+    return res.status(200).json(reviews);
+  } catch (error) {
+    console.error("Error in getAllReviewsByInstructor:", error);
+    res.status(500).json({
+      message: "Error fetching reviews for instructor.",
+      error: error.message,
+    });
+  }
+};
 exports.getReviewOfCourse = async (req, res) => {
   try {
     const { courseId } = req.params;
