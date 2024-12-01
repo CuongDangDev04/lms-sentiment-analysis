@@ -24,3 +24,4 @@ router.get(
 router.get("/all", sentimentController.getAllSentimentAnalysis)
 
 module.exports = router;
+

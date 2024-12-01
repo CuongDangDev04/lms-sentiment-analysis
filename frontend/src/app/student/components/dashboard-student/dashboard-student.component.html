@@ -148,53 +148,20 @@
         </div>
       </div>
       <p class="no-exercises">
-        Bạn chưa làm bài tập nào, <a href="#">ấn vào đây</a> để làm ngay.
+        Bạn chưa làm bài tập nào, <a   >ấn vào đây</a> để làm ngay.
       </p>
     </div>
     <div class="container my-4 mx-0 px-3">
       <div class="row d-flex justify-content-around">
         <!-- Phần Thảo Luận -->
-        <div class="col-md-6 px-0">
+        <div class="col-md-12 px-0">
           <div class="card">
             <div class="card-header text-uppercase font-weight-bold">
               Thảo Luận
             </div>
             <div class="card-body">
               <div class="row">
-                <div class="col-6 mb-3">
-                  <div class="discussion-box">
-                    <img
-                      src="../../../../assets/student/img/topic.png"
-                      alt="Chủ đề"
-                      class="icon"
-                    />
-                    <p>Chủ đề</p>
-                    <span>0</span>
-                  </div>
-                </div>
-                <div class="col-6 mb-3">
-                  <div class="discussion-box">
-                    <img
-                      src="../../../../assets/student/img/vote.png"
-                      alt="Đánh giá"
-                      class="icon"
-                    />
-                    <p>Đánh giá</p>
-                    <span>0</span>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="discussion-box">
-                    <img
-                      src="../../../../assets/student/img/like.png"
-                      alt="Lượt thích"
-                      class="icon"
-                    />
-                    <p>Lượt thích</p>
-                    <span>0</span>
-                  </div>
-                </div>
-                <div class="col-6">
+                <div class="col-md-12">
                   <div class="discussion-box">
                     <img
                       src="../../../../assets/student/img/comment.png"
@@ -202,60 +169,74 @@
                       class="icon"
                     />
                     <p>Bình luận</p>
-                    <span>0</span>
+                    <strong>{{ totalComment }}</strong>
                   </div>
+                  <button
+                    class="btn btn-primary d-flex ms-auto me-auto mt-3 showall-comment"
+                    *ngIf="!isShowComment"
+                    (click)="changeShowCommentStatus()"
+                  >
+                    Xem tất cả
+                  </button>
+                  <button
+                    class="btn btn-primary d-flex ms-auto me-auto mt-3 showall-comment"
+                    *ngIf="isShowComment"
+                    (click)="changeShowCommentStatus()"
+                  >
+                    Rút gọn
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <!-- tiến độ học tập -->
-        <div class="col-md-6">
-          <div class="card shadow-sm progress-card">
-            <div class="card-body">
-              <h5 class="title text-center">Tiến độ học tập</h5>
-              <div class="progress-circle-container text-center">
-                <svg
-                  class="progress-circle"
-                  width="120"
-                  height="120"
-                  viewBox="0 0 120 120"
-                >
-                  <circle
-                    class="progress-circle-bg"
-                    cx="60"
-                    cy="60"
-                    r="54"
-                    stroke-width="12"
-                  ></circle>
-                  <circle
-                    class="progress-circle-fg"
-                    cx="60"
-                    cy="60"
-                    r="54"
-                    stroke-width="12"
-                    [attr.stroke-dasharray]="circumference"
-                    [attr.stroke-dashoffset]="
-                      circumference - (progressPercentage / 100) * circumference
-                    "
-                  ></circle>
-                  <text
-                    class="progress-text"
-                    x="60"
-                    y="60"
-                    text-anchor="middle"
-                    dominant-baseline="middle"
-                    font-size="20"
-                    fill="#000"
-                    transform="rotate(90 60 60)"
+      </div>
+    </div>
+    <!-- Phần Bình luận -->
+    <div class="col-12 mt-4" *ngIf="isShowComment">
+      <div class="card shadow-sm comments-section">
+        <div class="card-header text-uppercase font-weight-bold">Bình luận</div>
+        <div class="card-body">
+          <!-- Nếu không có bình luận -->
+          <div
+            *ngIf="userComments.length === 0"
+            class="no-comments text-center"
+          >
+            <p>Bạn chưa có bình luận nào.</p>
+          </div>
+
+          <!-- Danh sách bình luận -->
+          <div *ngIf="userComments.length > 0" class="comment-list">
+            <div *ngFor="let comment of userComments" class="comment-item">
+              <div class="comment-header">
+                <h6 class="course-name" (click)="goToCourse(comment.course.id)">
+                  {{ comment.course.name }}
+                </h6>
+                <p class="rating">
+                  <!-- Hiển thị đánh giá -->
+                  <ng-container
+                    *ngFor="let star of getFullStars(comment.rating)"
                   >
-                    {{ progressPercentage | number : "1.0-0" }}%
-                  </text>
-                </svg>
-                <!-- <div class="progress-text mt-3">
-                  {{ progressCurrent }}/{{ progressTotal }}
-                </div> -->
+                    <i class="fas fa-star text-warning"></i>
+                  </ng-container>
+                  <!--  -->
+                  <ng-container
+                    *ngFor="let star of getEmptyStars(comment.rating)"
+                  >
+                    <i class="far fa-star text-warning"></i>
+                  </ng-container>
+                </p>
+                <div class="showSentimentAnalysis">
+                  <button
+                    class="btn btn-primary btn-sm"
+                    (click)="showSentimentAnalysis(comment.course.id)"
+                    title="Xem kết quả phân tích cảm xúc"
+                  >
+                    <i class="bi bi-eye"></i>
+                  </button>
+                </div>
               </div>
+              <p class="comment-content">{{ comment.comment }}</p>
             </div>
           </div>
         </div>

@@ -249,12 +249,20 @@ ul.list-group li:hover {
 #Comments strong {
   font-size: 16px;
   color: #333;
-  width: 100%;
+  width: 70%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
+.comment-interact {
+  flex-grow: 1;
+}
+.update-comment-container textarea {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+}
 #Comments .comment-form {
   display: flex;
   align-items: flex-start;

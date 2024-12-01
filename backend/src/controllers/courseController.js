@@ -84,7 +84,6 @@ exports.getAllCourses = async (req, res) => {
 // Lấy khóa học theo ID
 exports.getCourseById = async (req, res) => {
   const { id } = req.params; // Đổi courseId thành id
-  console.log(id);
   // Kiểm tra xem id có phải là số nguyên hay không
   if (isNaN(id)) {
     return res.status(400).json({ error: "Invalid course ID" });
@@ -292,7 +291,50 @@ exports.addComment = async (req, res) => {
     });
   }
 };
+exports.deleteComment = async (req, res) => {
+  const { courseId, studentId } = req.params; // Lấy courseId và studentId từ request body
 
+  if (!courseId || !studentId) {
+    return res.status(400).json({ error: "Missing courseId or studentId" });
+  }
+
+  try {
+    // Kiểm tra xem review có tồn tại không
+    const review = await Review.findOne({ where: { courseId, studentId } });
+    if (!review) {
+      return res.status(404).json({ error: "Review not found" });
+    }
+
+    // Xóa review
+    await review.destroy();
+
+    // Trả về phản hồi thành công
+    res.status(200).json({ message: "Review deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting review:", err);
+    res.status(500).json({ error: "An error occurred while deleting review" });
+  }
+};
+exports.updateComment = async (req, res) => {
+  const { courseId, studentId } = req.params; // Đổi courseId thành id
+  const { comment, rating } = req.body;
+
+  try {
+    const review = await Review.findOne({
+      where: { courseId: courseId, studentId: studentId },
+    });
+    review.comment = comment || review.comment;
+    review.rating = rating || review.rating;
+
+    await addCommentToQueue(studentId, courseId, comment);
+    review.isAnalyzed = false;
+    await review.save();
+
+    res.status(200).json(review);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 // Cập nhật khóa học
 exports.updateCourse = async (req, res) => {
   const { id } = req.params; // Đổi courseId thành id
@@ -485,7 +527,9 @@ exports.getCoursesByInstructor = async (req, res) => {
 
   try {
     // Kiểm tra xem giảng viên có tồn tại không
-    const instructor = await User.findOne({ where: { id: instructorId, role: "instructor" } });
+    const instructor = await User.findOne({
+      where: { id: instructorId, role: "instructor" },
+    });
     if (!instructor) {
       return res.status(404).json({ error: "Instructor not found" });
     }

@@ -82,7 +82,6 @@ export class CourseStudentComponent implements OnInit {
       categories: this.courseService.getAllCategories(),
     }).subscribe(
       ({ courses, reviews, categories }) => {
-        console.log('Courses:', courses); // Kiểm tra dữ liệu khóa học
         this.reviews = reviews;
         this.courses = courses;
         this.category_all = categories.map((category) => category.name);
@@ -134,9 +133,7 @@ export class CourseStudentComponent implements OnInit {
         rating: course.rating,
       };
       this.courseService.updateCourse(course.id, data).subscribe(
-        (response) => {
-          console.log('update thành công: ', response);
-        },
+        (response) => {},
         (error) => {
           console.error('Lỗi khi gửi bình luận: ', error);
         }

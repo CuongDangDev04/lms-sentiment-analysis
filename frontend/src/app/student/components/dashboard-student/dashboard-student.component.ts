@@ -12,7 +12,8 @@ import { CourseService } from '../../services/course.service';
 import { AuthService } from '../../../auth/auth.service';
 import { forkJoin } from 'rxjs';
 import { StudentService } from '../../services/student.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-dashboard-student',
@@ -26,20 +27,24 @@ export class DashboardStudentComponent implements OnInit {
   authService: AuthService = inject(AuthService);
   studentService: StudentService = inject(StudentService);
 
-  progressCurrent: number = 59;
+  progressCurrent: number = 173;
   progressTotal: number = 173;
   progressPercentage: number = 0;
   radius: number = 54;
   circumference: number = 0;
 
   reviews: Review[] = [];
-  courses: Course[] = [];
+  courses: any[] = [];
   studentLogin: any;
   index: number = 0;
   currentCourses: Course[] = [];
   totalCourses: number = 0;
 
-  constructor() {}
+  totalComment: Number = 0;
+  isShowComment: boolean = false;
+  userComments: any[] = [];
+  sentimentAnalysis: any;
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     // Lấy thông tin sinh viên và các khóa học, đánh giá song song bằng forkJoin
@@ -51,7 +56,10 @@ export class DashboardStudentComponent implements OnInit {
         // Gán dữ liệu trả về từ fetchUserInfo và getAllReview
         this.studentLogin = user;
         this.reviews = reviews;
+
         this.getAllCourses();
+        this.getTotalComments();
+        this.getUserComments();
       },
       (error) => {
         console.error('Lỗi khi gọi API:', error);
@@ -66,7 +74,6 @@ export class DashboardStudentComponent implements OnInit {
         this.courses = courses;
         this.totalCourses = this.courses.length;
         this.current_courses(); // Cập nhật lại danh sách khóa học hiển thị
-        console.log('Courses:', this.courses);
         this.circumference = 2 * Math.PI * this.radius;
         this.totalProgress();
         this.updateProgress();
@@ -76,7 +83,20 @@ export class DashboardStudentComponent implements OnInit {
       }
     );
   }
+  getTotalComments(): void {
+    if (!this.studentLogin || !this.studentLogin.id || !this.reviews.length) {
+      this.totalComment = 0; // Nếu không có dữ liệu
+      return;
+    }
 
+    // Lọc bình luận của sinh viên đăng nhập
+    const userComments = this.reviews.filter(
+      (review) => review.studentId === this.studentLogin.id
+    );
+
+    // Cập nhật tổng số bình luận
+    this.totalComment = userComments.length;
+  }
   // Cập nhật danh sách khóa học hiện tại
   current_courses() {
     const startIndex = this.index;
@@ -91,7 +111,58 @@ export class DashboardStudentComponent implements OnInit {
       this.current_courses();
     }
   }
-
+  showSentimentAnalysis(courseId: any) {
+    const findReview: any = this.reviews.find(
+      (review) => review.courseId === Number(courseId)
+    );
+    this.sentimentAnalysis = findReview.sentimentAnalysis;
+    if (findReview.isAnalyzed) {
+      Swal.fire({
+        title: 'Kết quả phân tích cảm xúc',
+        html: `
+        <table style="width: 100%; text-align: left; font-size: 14px;">
+      <tr>
+        <td style="font-weight: bold; padding-right: 10px;">Bình luận:</td>
+        <td style="
+          max-width: 200px; 
+          white-space: nowrap; 
+          overflow: hidden; 
+          text-overflow: ellipsis;"
+          title="${this.sentimentAnalysis.reviewText}"
+        >${this.sentimentAnalysis.reviewText}</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; padding-right: 10px;">Điểm tích cực:</td>
+        <td>${this.sentimentAnalysis.sentimentScorePositive}</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; padding-right: 10px;">Điểm tiêu cực:</td>
+        <td>${this.sentimentAnalysis.sentimentScoreNegative}</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; padding-right: 10px;">Điểm trung tính:</td>
+        <td>${this.sentimentAnalysis.sentimentScoreNeutral}</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; padding-right: 10px;">Cảm xúc:</td>
+        <td>${this.sentimentAnalysis.sentimentLabel}</td>
+      </tr>
+    </table>
+    `,
+        icon: 'info',
+        confirmButtonText: 'Đồng ý',
+      });
+    } else {
+      Swal.fire({
+        title: 'Kết quả phân tích cảm xúc',
+        text: 'Bình luận của bạn chưa được phân tích',
+        icon: 'warning',
+        confirmButtonText: 'Đồng ý',
+      }).then(() => {
+        window.location.reload();
+      });
+    }
+  }
   // Hàm quay lại khóa học trước
   previousCourses() {
     if (this.index >= 3) {
@@ -155,5 +226,21 @@ export class DashboardStudentComponent implements OnInit {
       reader.readAsDataURL(file);
     }
     window.location.reload();
+  }
+  changeShowCommentStatus() {
+    this.isShowComment = !this.isShowComment;
+  }
+  getUserComments(): void {
+    if (!this.studentLogin || !this.reviews.length) {
+      this.userComments = []; // Nếu không có dữ liệu
+      return;
+    }
+
+    this.userComments = this.reviews.filter(
+      (review) => review.studentId === this.studentLogin.id
+    );
+  }
+  goToCourse(courseId: number): void {
+    this.router.navigate(['/student/courses', courseId]);
   }
 }

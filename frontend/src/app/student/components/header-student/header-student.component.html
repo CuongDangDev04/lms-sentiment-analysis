@@ -22,7 +22,7 @@
       <a [routerLink]="['/about-us']" class="nav-item nav-link">About</a>
       <a href="courses.html" class="nav-item nav-link">Courses</a>
       <div class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+        <a   class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
           >Pages</a
         >
         <div class="dropdown-menu fade-down m-0">
@@ -34,12 +34,12 @@
       <a href="contact.html" class="nav-item nav-link">Contact</a>
     </div>
     <div class="nav-item dropdown">
-      <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+      <a   class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
         <i class="fa fa-user text-primary"></i>
       </a>
       <div class="dropdown-menu fade-down m-0">
-        <a href="#" class="dropdown-item">Sign In</a>
-        <a href="#" class="dropdown-item">Sign Up</a>
+        <a   class="dropdown-item">Sign In</a>
+        <a   class="dropdown-item">Sign Up</a>
       </div>
     </div>
   </div> -->
@@ -51,7 +51,7 @@
         [ngClass]="{
           active: isHomePage
         }"
-        >Home</a
+        >Trang Chủ</a
       >
       <a
         [routerLink]="['about']"
@@ -59,7 +59,7 @@
         [ngClass]="{
           active: isAboutPage
         }"
-        >About</a
+        >Giới Thiệu</a
       >
       <a
         [routerLink]="['courses']"
@@ -68,7 +68,7 @@
         [ngClass]="{
           active: isCoursesPage
         }"
-        >Courses</a
+        >Khóa Học</a
       >
 
       <a
@@ -77,12 +77,12 @@
         [ngClass]="{
           active: isContactPage
         }"
-        >Contact</a
+        >Liên Hệ</a
       >
     </div>
     <div class="nav-item dropdown">
       <a
-        href="#"
+         
         [routerLink]="['dashboard']"
         class="nav-link dropdown-toggle"
         data-bs-toggle="dropdown"
@@ -95,26 +95,29 @@
             <div class="user-box">
               <div class="avatar-lg">
                 <img
-                  src="assets/lecture_admin/img/profile.jpg"
+                  [src]="studentLogin.avt"
                   alt="image profile"
                   class="avatar-img rounded"
                 />
               </div>
               <div class="u-text">
-                <h4>Hizrian</h4>
-                <p class="text-muted">hello.com</p>
+                <h4>{{ studentLogin.fullname }}</h4>
               </div>
             </div>
           </li>
           <li>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item">My Profile</a>
-            <a class="dropdown-item" href="#">My Balance</a>
-            <a class="dropdown-item" href="#">Inbox</a>
+            <a
+              class="dropdown-item"
+              style="cursor: pointer"
+              [routerLink]="['dashboard']"
+              >Trang Cá Nhân</a
+            >
+            <a class="dropdown-item"  >Hộp Thư</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Account Setting</a>
+            <a class="dropdown-item"  >Cài Đặt</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" (click)="logOut()">Logout</a>
+            <a class="dropdown-item" (click)="logOut()">Đăng Xuất</a>
           </li>
         </div>
       </div>
@@ -128,15 +131,18 @@
     <div class="container">
       <div class="row align-items-center">
         <div class="col-md-6">
-          <h1 class="display-4">Welcome to Our E-learning Platform</h1>
+          <h1 class="display-4">
+            Chào mừng bạn đến với Nền tảng học tập trực tuyến của chúng tôi
+          </h1>
           <p class="lead">
-            Unlock limitless learning opportunities from experts around the
-            world. Join us and expand your knowledge today!
+            Mở khóa cơ hội học tập vô hạn từ các chuyên gia trên khắp thế giới.
+            Hãy tham gia cùng chúng tôi và mở rộng kiến thức của bạn ngay hôm
+            nay!
           </p>
           <a
             [routerLink]="['courses']"
             class="btn btn-lg btn-light text-primary mt-3"
-            >Explore Courses</a
+            >Khám phá các khóa học</a
           >
         </div>
         <div class="col-md-6 text-center">
@@ -168,10 +174,10 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb justify-content-center">
               <li class="breadcrumb-item">
-                <a class="text-white" href="#">Home</a>
+                <a class="text-white"  >Home</a>
               </li>
               <li class="breadcrumb-item">
-                <a class="text-white" href="#">Pages</a>
+                <a class="text-white"  >Pages</a>
               </li>
               <li class="breadcrumb-item text-white active" aria-current="page">
                 {{ currentPage }}

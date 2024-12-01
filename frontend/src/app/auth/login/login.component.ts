@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, HttpClientModule, NgIf,RouterLink],
+  imports: [FormsModule, HttpClientModule, NgIf, RouterLink],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
@@ -27,19 +27,19 @@ export class LoginComponent {
       this.errorMessage = 'Vui lòng nhập đầy đủ thông tin';
       return;
     }
-  
+
     this.errorMessage = '';
-  
+
     this.authService.login(this.username, this.password).subscribe(
       (response: any) => {
         console.log('Login successful:', response);
         console.log('User role:', response.user.role); // Đảm bảo vai trò được log đúng
-  
+
         Swal.fire({
           title: 'Đăng nhập thành công!',
           text: `Chào mừng ${response.user.fullname}, bạn đã đăng nhập thành công.`,
           icon: 'success',
-          confirmButtonText: 'OK'
+          confirmButtonText: 'OK',
         }).then(() => {
           switch (response.user.role) {
             case Role.Admin:
@@ -59,19 +59,21 @@ export class LoginComponent {
       (error) => {
         console.error('Login failed:', error);
         // Kiểm tra lỗi về tài khoản chưa được phê duyệt
-        if (error.error && error.error.message === "Your account has not been approved yet!") {
+        if (
+          error.error &&
+          error.error.message === 'Your account has not been approved yet!'
+        ) {
           Swal.fire({
             title: 'Tài khoản chưa được phê duyệt!',
             text: 'Vui lòng chờ quản trị viên phê duyệt tài khoản với quyền giáo viên.',
             icon: 'warning',
-            confirmButtonText: 'OK'
+            confirmButtonText: 'OK',
           });
         } else {
-          this.errorMessage = 'Đăng nhập không thành công! Kiểm tra lại thông tin.';
+          this.errorMessage =
+            'Đăng nhập không thành công! Kiểm tra lại thông tin.';
         }
       }
     );
   }
-  
-  
 }

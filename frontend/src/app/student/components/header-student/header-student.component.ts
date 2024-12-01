@@ -23,6 +23,7 @@ export class HeaderStudentComponent implements OnInit {
   isDashboardPage: boolean = false;
   isDetailPage: boolean = false;
   currentPage!: string;
+  studentLogin: any;
   constructor(private router: Router, private authService: AuthService) {}
   logOut() {
     this.authService.logout;
@@ -34,6 +35,9 @@ export class HeaderStudentComponent implements OnInit {
       if (event instanceof NavigationEnd) {
         this.checkCurrentPage();
       }
+    });
+    this.authService.fetchUserInfo().subscribe((user) => {
+      this.studentLogin = user;
     });
   }
 

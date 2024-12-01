@@ -9,7 +9,7 @@
         </div>
         <div class="row instructor">
           <p>
-            <span>Intructor: </span
+            <span>Giảng viên: </span
             ><span>{{ courseDetail.instructor.fullname }}</span>
           </p>
         </div>
@@ -22,10 +22,20 @@
           <div class="col-md-3">
             <button
               class="btn btn-primary register-button"
-              (click)="register()"
+              *ngIf="isRegistrationCourse; else nonRegister"
+              disabled
             >
-              Register
+              Đã đăng ký
             </button>
+
+            <ng-template #nonRegister>
+              <button
+                class="btn btn-primary register-button"
+                (click)="register()"
+              >
+                Đăng ký
+              </button>
+            </ng-template>
           </div>
         </div>
         <div
@@ -383,12 +393,12 @@
           class="btn btn-primary register-button"
           [disabled]="isRegistrationCourse"
         >
-          Registered
+          Đã đăng ký
         </button>
       </div>
       <ng-template #closedRegistrationInBox>
         <button class="btn btn-primary register-button" (click)="register()">
-          Register
+          Đăng ký
         </button>
       </ng-template>
     </div>
@@ -439,10 +449,10 @@
         <p>Hiện không có bình luận nào</p>
       </div>
       <div class="comment" *ngFor="let student of visibleComments">
-        <div class="comment-header">
+        <div class="comment-header w-100">
           <img [src]="student.avt" alt="Avatar" class="avatar" />
           <strong>{{ student.fullname }}</strong>
-          <div class="comment-rating">
+          <div class="comment-rating" *ngIf="!isEditing">
             <span
               *ngFor="let star of [1, 2, 3, 4, 5]"
               [class.filled]="star <= student.reviews[0].rating"
@@ -452,9 +462,69 @@
               <!-- Sao đầy -->
             </span>
           </div>
+          <div class="rating-input" *ngIf="isEditing">
+            <div
+              class="stars"
+              *ngFor="let star of [1, 2, 3, 4, 5]"
+              class="star"
+              [class.filled]="star <= updateRatingNumber"
+              (click)="setRating(star)"
+            >
+              <span>&#9733;</span>
+            </div>
+          </div>
+          <div
+            class="comment-interact d-flex justify-content-end"
+            *ngIf="student.id === studentLogin.id"
+          >
+            <button
+              class="btn btn-primary btn-sm me-2"
+              (click)="getMySentimentAnalyze()"
+              title="Xem kết quả phân tích cảm xúc"
+            >
+              <i class="bi bi-eye"></i>
+            </button>
+            <button
+              class="btn btn-primary btn-sm me-2"
+              title="Chỉnh sửa bình luận"
+              (click)="enableEditMode()"
+            >
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="deleteComment()"
+              title="Xóa bình luận"
+            >
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
         </div>
-        <div *ngFor="let review of student.reviews">
-          <p>{{ review.comment }}</p>
+        <div *ngIf="!isEditing">
+          <div *ngFor="let review of student.reviews">
+            <p>{{ review.comment }}</p>
+          </div>
+        </div>
+
+        <div
+          class="update-comment-container"
+          *ngIf="isEditing && student.id === studentLogin.id"
+        >
+          <textarea
+            class="w-100"
+            [(ngModel)]="updateCommentText"
+            placeholder="Nhập bình luận mới ..."
+            rows="10"
+            >{{ updateCommentText }}</textarea
+          >
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-primary me-2" (click)="updateComment()">
+              Lưu
+            </button>
+            <button class="btn btn-secondary" (click)="enableEditMode()">
+              Hủy
+            </button>
+          </div>
         </div>
       </div>
 

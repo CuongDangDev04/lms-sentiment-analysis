@@ -13,57 +13,63 @@ export class CourseService {
   private baseUrl = 'http://localhost:5000/api/course';
   constructor(private http: HttpClient) {}
 
-  getAllReview(): Observable<Review[]> {
-    return this.http.get<Review[]>(`${this.baseUrl}/review/all`);
+  getAllReview(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/review/all`);
   }
   getReviewOfCourse(id: number): Observable<Review[]> {
     return this.http.get<Review[]>(`${this.baseUrl}/review/${id}`);
   }
   getAllCourses(): Observable<Course[]> {
-    return this.http.get<Course[]>('http://localhost:5000/api/course/');
+    return this.http.get<Course[]>(`${this.baseUrl}/`);
   }
 
   getCourseById(id: number): Observable<Course> {
-    return this.http.get<Course>(`${'http://localhost:5000/api/course'}/${id}`);
+    return this.http.get<Course>(`${this.baseUrl}/${id}`);
   }
 
   addComment(commentData: any): Observable<any> {
-    return this.http.post(
-      'http://localhost:5000/api/course/review/new',
-      commentData
+    return this.http.post(`${this.baseUrl}/review/new`, commentData);
+  }
+  deleteComment(courseId: Number, studentId: Number): Observable<any> {
+    return this.http.delete<any>(
+      `${this.baseUrl}/review/${courseId}/${studentId}`
     );
   }
-
+  updateComment(
+    courseId: Number,
+    studentId: Number,
+    reviewData: any
+  ): Observable<any> {
+    return this.http.put(
+      `${this.baseUrl}/review/${courseId}/${studentId}`,
+      reviewData
+    );
+  }
   getAllCategories(): Observable<any[]> {
     return this.http.get<any[]>('http://localhost:5000/api/category/');
   }
 
   registerCourse(id: number, userId: number): Observable<any> {
     const body = { userId }; // Gửi us erId trong một đối tượng JSON
-    return this.http.post<any>(
-      `${'http://localhost:5000/api/course'}/${id}/students`,
-      body
-    );
+    return this.http.post<any>(`${this.baseUrl}/${id}/students`, body);
   }
   isCourseRegistered(courseId: number, userId: number): Observable<boolean> {
-    return this.http
-      .get<any>(`http://localhost:5000/api/course/${courseId}/students`)
-      .pipe(
-        map((response) => {
-          if (response.students && Array.isArray(response.students)) {
-            return response.students.some(
-              (student: any) => student.id === userId
-            );
-          }
-          return false;
-        })
-      );
+    return this.http.get<any>(`${this.baseUrl}/${courseId}/students`).pipe(
+      map((response) => {
+        if (response.students && Array.isArray(response.students)) {
+          return response.students.some(
+            (student: any) => student.id === userId
+          );
+        }
+        return false;
+      })
+    );
   }
-  getStudentInCourse(id: Number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/${id}/students`);
+  getStudentInCourse(id: Number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/${id}/students`);
   }
-  getCoursesOfStudent(userId: Number): Observable<Course[]> {
-    return this.http.get<Course[]>(`${this.baseUrl}/students/${userId}`);
+  getCoursesOfStudent(userId: Number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/students/${userId}`);
   }
 
   updateCourse(id: number, data: any): Observable<any> {

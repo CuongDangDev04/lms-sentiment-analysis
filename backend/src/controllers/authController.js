@@ -1,7 +1,7 @@
-const {User} = require("../models");
+const { User } = require("../models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const ApprovalRequest = require('../models/ApprovalRequest ')
+const ApprovalRequest = require("../models/ApprovalRequest ");
 exports.register = async (req, res) => {
   const { id, username, password, fullname, role, email } = req.body;
 
@@ -32,7 +32,7 @@ exports.register = async (req, res) => {
       fullname,
       role,
       email,
-      isApproved,  // Gán giá trị isApproved tùy theo role
+      isApproved, // Gán giá trị isApproved tùy theo role
     });
 
     if (role === "instructor") {
@@ -51,13 +51,13 @@ exports.register = async (req, res) => {
   }
 };
 exports.approveInstructor = async (req, res) => {
-  const { userId } = req.params;  // Lấy userId từ URL params
-  const { action } = req.body;  // Lấy hành động từ request body (approve hoặc reject)
+  const { userId } = req.params; // Lấy userId từ URL params
+  const { action } = req.body; // Lấy hành động từ request body (approve hoặc reject)
 
   try {
     // Tìm yêu cầu phê duyệt theo userId
     const approvalRequest = await ApprovalRequest.findOne({
-      where: { instructorId: userId, status: "pending" }
+      where: { instructorId: userId, status: "pending" },
     });
 
     if (!approvalRequest) {
@@ -66,14 +66,14 @@ exports.approveInstructor = async (req, res) => {
 
     // Lấy thông tin giảng viên (instructor) liên quan đến yêu cầu phê duyệt
     const instructor = await User.findByPk(userId, {
-      attributes: { exclude: ['password'] }  // Loại bỏ mật khẩu
+      attributes: { exclude: ["password"] }, // Loại bỏ mật khẩu
     });
 
     if (!instructor) {
       return res.status(404).json({ message: "Instructor not found!" });
     }
 
-    if (action === 'approve') {
+    if (action === "approve") {
       // Phê duyệt giảng viên
       instructor.isApproved = true;
       await instructor.save();
@@ -87,7 +87,7 @@ exports.approveInstructor = async (req, res) => {
         approvalRequest,
         instructor,
       });
-    } else if (action === 'reject') {
+    } else if (action === "reject") {
       // Từ chối giảng viên và xóa tài khoản
       approvalRequest.status = "rejected";
       await approvalRequest.save();
@@ -107,16 +107,14 @@ exports.approveInstructor = async (req, res) => {
   }
 };
 
-
-
-
-
 exports.login = async (req, res) => {
   const { username, password } = req.body;
 
   // Kiểm tra nếu thiếu thông tin đăng nhập
   if (!username || !password) {
-    return res.status(400).json({ message: "Username and password are required!" });
+    return res
+      .status(400)
+      .json({ message: "Username and password are required!" });
   }
 
   try {
@@ -126,7 +124,10 @@ exports.login = async (req, res) => {
 
     // Kiểm tra xem người dùng đã được phê duyệt chưa
     if (!user.isApproved) {
-      return res.status(403).json({ message: "Your account has not been approved yet!" });
+
+      return res
+        .status(403)
+        .json({ message: "Your account has not been approved yet!" });
     }
 
     // Kiểm tra mật khẩu
@@ -150,6 +151,7 @@ exports.login = async (req, res) => {
         role: user.role,
         username: user.username
       }
+
     });
   } catch (error) {
     console.error("Login error:", error);
@@ -161,7 +163,7 @@ exports.getUser = async (req, res) => {
   try {
     // Lấy thông tin người dùng từ req.userId (được xác thực từ middleware)
     const user = await User.findOne({
-      where: { id: req.userId }  // Tìm người dùng theo ID
+      where: { id: req.userId }, // Tìm người dùng theo ID
     });
 
     // Nếu không tìm thấy người dùng, trả về lỗi 404
@@ -177,6 +179,7 @@ exports.getUser = async (req, res) => {
         role: user.role,
         username: user.username
       }
+
     });
   } catch (error) {
     console.error("Get user error:", error);
@@ -184,6 +187,4 @@ exports.getUser = async (req, res) => {
   }
 };
 
-exports.uploadAvt = async (req, res)=>{
-  
-}
+exports.uploadAvt = async (req, res) => {};

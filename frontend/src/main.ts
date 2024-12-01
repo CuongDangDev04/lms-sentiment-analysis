@@ -20,3 +20,4 @@ bootstrapApplication(AppComponent, {
     provideHttpClient(), // Cung cấp HttpClientModule ở đây
   ],
 }).catch((err) => console.error(err));
+
