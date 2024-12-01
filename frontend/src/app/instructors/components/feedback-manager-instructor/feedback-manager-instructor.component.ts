@@ -7,11 +7,12 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../auth/auth.service';
 import { FormGroup, FormsModule } from '@angular/forms';
 import { SentimentAnalystisAdminComponent } from "../../../admin/components/sentiment-analystis-admin/sentiment-analystis-admin.component";
+import { SentimentAnalysisInstructorComponent } from "../sentiment-analysis-instructor/sentiment-analysis-instructor.component";
 
 @Component({
   selector: 'app-feedback-manager-instructor',
   standalone: true,
-  imports: [CommonModule, FormsModule, SentimentAnalystisAdminComponent],
+  imports: [CommonModule, FormsModule, SentimentAnalysisInstructorComponent],
   templateUrl: './feedback-manager-instructor.component.html',
   styleUrls: ['./feedback-manager-instructor.component.css'],
   providers: [DatePipe]

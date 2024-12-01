@@ -1,16 +1,14 @@
-<!-- Sidebar -->
-<div class="sidebar" [ngStyle]="{ 'background-color': 'rgb(3 26 85)' }">
+<div class="sidebar" [ngClass]="{ 'active': isSidebarActive }" [ngStyle]="{ 'background-color': 'rgb(3 26 85)' }">
   <div class="sidebar-logo">
-    <!-- Logo Header -->
     <div class="logo-header" data-background-color="white">
       <a [routerLink]="['/admin']" class="logo">
         <img src="assets/lecture_admin/img/logotruong.png" alt="navbar brand" class="navbar-brand" height="50px" />
       </a>
       <div class="nav-toggle">
-        <button class="btn btn-toggle toggle-sidebar">
+        <button class="btn btn-toggle toggle-sidebar" (click)="toggleSidebar()">
           <i class="gg-menu-right"></i>
         </button>
-        <button class="btn btn-toggle sidenav-toggler">
+        <button class="btn btn-toggle sidenav-toggler" (click)="toggleSidebar()">
           <i class="gg-menu-left"></i>
         </button>
       </div>
@@ -18,15 +16,14 @@
         <i class="gg-more-vertical-alt"></i>
       </button>
     </div>
-    <!-- End Logo Header -->
   </div>
   <div class="sidebar-wrapper scrollbar scrollbar-inner">
     <div class="sidebar-content">
       <ul class="nav nav-secondary">
-        <li class="nav-item ">
-          <a data-bs-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false" routerLink="dashboard">
+        <li class="nav-item">
+          <a data-bs-toggle="collapse" class="collapsed" aria-expanded="false" routerLink="dashboard">
             <i class="fas fa-home"></i>
-            <p>Dashboard </p>
+            <p>Dashboard</p>
           </a>
           <div class="collapse" id="dashboard">
             <ul class="nav nav-collapse">
@@ -61,7 +58,6 @@
             <i class="fas fa-th-list"></i>
             <p>Quản lí phản hồi</p>
           </a>
-          
         </li>
         <li class="nav-item">
           <a data-bs-toggle="collapse" routerLink="quanlydanhmuc">
@@ -69,9 +65,7 @@
             <p>Quản lí danh mục</p>
           </a>
         </li>
-        
       </ul>
     </div>
   </div>
 </div>
-<!-- End Sidebar -->

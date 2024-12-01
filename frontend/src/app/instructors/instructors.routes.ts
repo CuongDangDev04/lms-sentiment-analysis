@@ -7,6 +7,7 @@ import { AuthGuard } from '../auth/auth.guard';
 import { Role } from '../auth/interfaces/roles';
 import { ManagerStudentInstructorComponent } from './components/manager-student-instructor/manager-student-instructor.component';
 import { FeedbackManagerInstructorComponent } from './components/feedback-manager-instructor/feedback-manager-instructor.component';
+import { DashboardInstructorComponent } from './components/dashboard-instructor/dashboard-instructor.component';
 
 export const instructorsRoutes: Routes = [
     {
@@ -26,6 +27,9 @@ export const instructorsRoutes: Routes = [
             },
             {
                 path:'feedbackmanager', component: FeedbackManagerInstructorComponent
+            },
+            {
+                path: 'dashboard', component: DashboardInstructorComponent
             }
         ]
     }

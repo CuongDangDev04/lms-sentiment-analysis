@@ -10,7 +10,16 @@ export class FeedbackService {
   private sentimentUrl  = 'http://localhost:5000/api/sentiment'
 
   constructor(private http: HttpClient) {}
-
+ // Phương thức đếm số lượng phản hồi
+ getFeedbackCount(): Observable<number> {
+  return new Observable((observer) => {
+    this.getAllFeedback().subscribe((feedbacks: any[]) => {
+      const totalFeedbacks = feedbacks.length;
+      observer.next(totalFeedbacks); // Trả về tổng số phản hồi
+      observer.complete();
+    });
+  });
+}
   // Lấy tất cả phản hồi
   getAllFeedback(): Observable<any> {
     return this.http.get(`${this.baseUrl}/review/all`);

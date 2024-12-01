@@ -1,0 +1,6 @@
+#sentiment-chart {
+    display: block; /* Đảm bảo canvas là block-level */
+    width: 90%; /* Chiếm 70% chiều rộng của trang */
+    height: auto; /* Giữ tỷ lệ gốc */
+    margin: 0 auto; /* Canh giữa trang */
+  }

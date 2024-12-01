@@ -61,9 +61,11 @@
     background-color: #007bff;
     color: #fff;
   }
-  
+  .table th{
+    color: white !important;
+  }
   .table th, .table td {
-    padding: 12px;
+    padding: 8px;
     border: 1px solid #ddd;
     text-align: left;
   }
@@ -109,7 +111,7 @@
   
   /* Định dạng chung cho các input, select */
   .filter-input {
-    padding: 10px 15px;
+    padding: 10px 15px !important;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 5px !important;
