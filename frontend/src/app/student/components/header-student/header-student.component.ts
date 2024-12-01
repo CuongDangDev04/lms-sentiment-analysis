@@ -55,7 +55,22 @@ export class HeaderStudentComponent implements OnInit {
       !urlWithoutParams.endsWith('/courses');
 
     this.currentPage = urlWithoutParams.replace('/student/', '');
-    if (this.isAboutPage) this.currentPage = 'About Us';
+
+    if (this.isHomePage) {
+      this.currentPage = 'Trang Chủ';
+    } else if (this.isAboutPage) {
+      this.currentPage = 'Giới Thiệu';
+    } else if (this.isContactPage) {
+      this.currentPage = 'Liên Hệ';
+    } else if (this.isCoursesPage) {
+      this.currentPage = 'Khóa Học';
+    } else if (this.isDetailPage) {
+      this.currentPage = 'Chi Tiết';
+    } else if (this.isDashboardPage) {
+      this.currentPage = 'Trang Cá Nhân';
+    } else {
+      this.currentPage = '...';
+    }
 
     this.currentPage =
       this.currentPage.charAt(0).toUpperCase() + this.currentPage.slice(1);

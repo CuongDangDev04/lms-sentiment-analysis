@@ -7,13 +7,15 @@ import { RegisterComponent } from './auth/register/register.component';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
 
 export const routes: Routes = [
-    ...instructorsRoutes,
-    ...studentRoutes,
-    ...adminRoutes,
-    { path: 'register', component: RegisterComponent },
-    { path: 'login', component: LoginComponent },
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
-    { path: '**', component: NotFoundComponent }
-    
+  ...instructorsRoutes,
+  ...studentRoutes,
+  ...adminRoutes,
+  {
+    path: 'register',
+    component: RegisterComponent,
+    data: { title: 'Đăng Ký' },
+  },
+  { path: 'login', component: LoginComponent, data: { title: 'Đăng Nhập' } },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '**', component: NotFoundComponent },
 ];
-

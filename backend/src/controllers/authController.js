@@ -162,13 +162,20 @@ exports.getUser = async (req, res) => {
       return res.status(404).json({ message: "User not found!" });
     }
 
-    // Trả về tất cả thông tin người dùng
+    // Trả về các thông tin cần thiết của người dùng
     res.status(200).json({
-      user: user, // Trả về toàn bộ thông tin của người dùng
+      user: {
+        id: user.id,
+        fullname: user.fullname,
+        role: user.role,
+        username: user.username,
+        avt: user.avt,
+      },
     });
   } catch (error) {
     console.error("Get user error:", error);
     res.status(500).json({ error: "Failed to get user information!" });
   }
 };
+
 exports.uploadAvt = async (req, res) => {};
