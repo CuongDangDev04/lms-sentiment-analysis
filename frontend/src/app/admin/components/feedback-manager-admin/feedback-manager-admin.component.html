@@ -1,26 +1,14 @@
 <div class="feedback-container">
 
   <h2>Danh Sách Phản Hồi</h2>
-  
+  <app-sentiment-analystis-admin />
+  <button (click)="exportFeedbackToPDF()">Xuất báo cáo PDF</button>
+
   <!-- Bộ lọc dữ liệu -->
   <div class="filter-container">
-    <input
-      type="text"
-      placeholder="Tên sinh viên"
-      [(ngModel)]="studentNameFilter"
-      class="filter-input"
-    />
-    <input
-      type="date"
-      [(ngModel)]="dateFilter"
-      class="filter-input"
-    />
-    <input
-      type="text"
-      placeholder="Tên khóa học"
-      [(ngModel)]="courseNameFilter"
-      class="filter-input"
-    />
+    <input type="text" placeholder="Tên sinh viên" [(ngModel)]="studentNameFilter" class="filter-input" />
+    <input type="date" [(ngModel)]="dateFilter" class="filter-input" />
+    <input type="text" placeholder="Tên khóa học" [(ngModel)]="courseNameFilter" class="filter-input" />
     <button (click)="applyFilters()">Lọc</button>
   </div>
 
@@ -50,15 +38,14 @@
     </tbody>
   </table>
 
-  
+
 
   <!-- Phân trang -->
   <div class="pagination">
     <button (click)="prevPage()" [disabled]="currentPage === 1">Trước</button>
 
-    <button *ngFor="let page of [].constructor(totalPages); let i = index"
-            (click)="goToPage(i + 1)"
-            [class.active]="currentPage === i + 1">
+    <button *ngFor="let page of [].constructor(totalPages); let i = index" (click)="goToPage(i + 1)"
+      [class.active]="currentPage === i + 1">
       {{ i + 1 }}
     </button>
 

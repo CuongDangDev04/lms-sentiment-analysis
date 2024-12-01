@@ -10,10 +10,10 @@ export const routes: Routes = [
     ...instructorsRoutes,
     ...studentRoutes,
     ...adminRoutes,
-    { path: 'register', component: RegisterComponent },
-    { path: 'login', component: LoginComponent },
+    { path: 'register', component: RegisterComponent ,data: { title: 'Đăng kí' }},
+    { path: 'login', component: LoginComponent ,data: { title: 'Đăng nhập' }},
     { path: '', redirectTo: '/login', pathMatch: 'full' },
-    { path: '**', component: NotFoundComponent }
+    { path: '**', component: NotFoundComponent , data: { title: '404' }}
     
 ];
 

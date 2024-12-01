@@ -87,7 +87,8 @@ export class AuthService {
             id: response.user.id,
             fullname: response.user.fullname,
             role: response.user.role,
-            username: response.user.username
+            username: response.user.username,
+            avt:response.user.avatar
           };
   
           localStorage.setItem('user', JSON.stringify(user)); // Lưu thông tin vào localStorage

@@ -32,7 +32,8 @@ exports.register = async (req, res) => {
       fullname,
       role,
       email,
-      isApproved, // Gán giá trị isApproved tùy theo role
+      isApproved,
+      avt: "assets/user.png"
     });
 
     if (role === "instructor") {
@@ -177,7 +178,8 @@ exports.getUser = async (req, res) => {
         id: user.id,
         fullname: user.fullname,
         role: user.role,
-        username: user.username
+        username: user.username,
+        avt: user.avt
       }
 
     });

@@ -31,7 +31,7 @@ exports.createInstructor = async (req, res) => {
       password: hashedPassword,
       fullname,
       email,
-      avt,
+      avt: "assets/user.png",
       birthdate,
       phone,
       role: 'instructor', // Role mặc định là instructor

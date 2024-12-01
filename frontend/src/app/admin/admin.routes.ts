@@ -9,6 +9,7 @@ import { AuthGuard } from '../auth/auth.guard';
 import { Role } from '../auth/interfaces/roles';
 import { ManagerCategoryAdminComponent } from './components/manager-category-admin/manager-category-admin.component';
 import { SentimentAnalystisAdminComponent } from './components/sentiment-analystis-admin/sentiment-analystis-admin.component';
+import { ContactadComponent } from './components/contactad/contactad.component';
 
 export const adminRoutes: Routes = [
     {
@@ -21,22 +22,25 @@ export const adminRoutes: Routes = [
                 path: '' , redirectTo: 'dashboard', pathMatch: 'full'
             },
             {
-                path: "quanlykhoahoc", component: ManagerCoursesAdminComponent            
+                path: "quanlykhoahoc", component: ManagerCoursesAdminComponent   , data: { title: 'Quản lí khóa học' }         
             },
             {
-                path: "quanlynguoidung", component: ManagerUsersAdminComponent
+                path: "quanlynguoidung", component: ManagerUsersAdminComponent, data: { title: 'Quản lí người dùng' }
             },
             {
-                path: 'dashboard', component: DashboardAdminComponent
+                path: 'dashboard', component: DashboardAdminComponent, data: { title: 'Dashboard' }
             },
             {
-                path: 'feedbackmanger', component: FeedbackManagerAdminComponent
+                path: 'feedbackmanger', component: FeedbackManagerAdminComponent, data: { title: 'Quản lí phản hồi' }
             },
             {
-                path: 'quanlydanhmuc' , component:ManagerCategoryAdminComponent
+                path: 'quanlydanhmuc' , component:ManagerCategoryAdminComponent, data: { title: 'Quản lí danh mục' }
             },
             {
                 path: 'sentiment', component:SentimentAnalystisAdminComponent
+            },
+            {
+                path: 'contact', component: ContactadComponent, data: {title: 'Liên hệ'}
             }
             
         ]

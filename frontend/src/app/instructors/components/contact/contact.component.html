@@ -1,0 +1,29 @@
+<div class="student-management">
+  
+    <!-- Danh sách phản hồi -->
+    <h3 *ngIf="!selectedFeedback">Danh sách liên hệ</h3>
+    <table class="table" *ngIf="!selectedFeedback">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Tên Người Gửi</th>
+          <th>Email</th>
+          <th>Nội dung</th>
+          <th>Ngày gửi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let feedback of feedbackList; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td class="namefeedback">
+              {{ feedback.personName }}
+          </td>
+          <td>{{ feedback.email }}</td>
+          <td>{{ feedback.message }}</td>
+          <td>{{ feedback.createdAt | date: 'short' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+  </div>
+  

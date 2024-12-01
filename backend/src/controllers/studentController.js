@@ -31,7 +31,7 @@ exports.createStudent = async (req, res) => {
       password: hashedPassword,
       fullname,
       email,
-      avt,
+      avt: "assets/user.png",
       birthdate,
       phone,
       role: 'student', // Role mặc định là student

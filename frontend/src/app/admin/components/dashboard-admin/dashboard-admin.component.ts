@@ -3,13 +3,14 @@ import { UserService } from '../../services/user.service';
 import { CourseService } from '../../services/course.service';
 import { FeedbackService } from '../../services/feedback.service';
 import { SentimentAnalystisAdminComponent } from "../sentiment-analystis-admin/sentiment-analystis-admin.component";
+import { ContactComponent } from "../../../instructors/components/contact/contact.component";
 
 @Component({
   selector: 'app-dashboard-admin',
   standalone: true,
   templateUrl: './dashboard-admin.component.html',
   styleUrls: ['./dashboard-admin.component.css'],
-  imports: [SentimentAnalystisAdminComponent]
+  imports: [SentimentAnalystisAdminComponent, ContactComponent]
 })
 export class DashboardAdminComponent implements OnInit {
   stats = {
