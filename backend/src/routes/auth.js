@@ -16,9 +16,9 @@ router.put(
   verifyToken,
   authController.approveInstructor
 );
-router.post(
-  "/upload-avatar",
-  authController.upload.single("avatar"),
-  authController.uploadAvatar
-);
+// router.post(
+//   "/upload-avatar",
+//   authController.upload.single("avatar"),
+//   authController.uploadAvatar
+// );
 module.exports = router;

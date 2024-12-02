@@ -3,10 +3,13 @@ const User = require("../models/user");
 
 // Tạo mới tài khoản student
 exports.createStudent = async (req, res) => {
-  const { id, username, password, fullname, email, avt, birthdate, phone } = req.body;
+  const { id, username, password, fullname, email, avt, birthdate, phone } =
+    req.body;
 
   if (!username || !password || !fullname || !email) {
-    return res.status(400).json({ message: "All required fields must be provided!" });
+    return res
+      .status(400)
+      .json({ message: "All required fields must be provided!" });
   }
 
   try {
@@ -34,7 +37,7 @@ exports.createStudent = async (req, res) => {
       avt: "assets/user.png",
       birthdate,
       phone,
-      role: 'student', // Role mặc định là student
+      role: "student", // Role mặc định là student
       isApproved: true, // Sinh viên mặc định được phê duyệt
     });
 
@@ -53,7 +56,7 @@ exports.getAllStudents = async (req, res) => {
   try {
     // Lấy tất cả người dùng với role là 'student'
     const students = await User.findAll({
-      where: { role: 'student' }
+      where: { role: "student" },
     });
 
     // Trả về danh sách sinh viên
@@ -62,24 +65,22 @@ exports.getAllStudents = async (req, res) => {
     );
   } catch (error) {
     console.error("Get all students error:", error);
-  try {
-    // Tìm người dùng theo ID và role là 'student'
-    const student = await User.findOne({
-      where: { id, role: 'student' }
-    });
+    try {
+      // Tìm người dùng theo ID và role là 'student'
+      const student = await User.findOne({
+        where: { id, role: "student" },
+      });
 
-    // Nếu không tìm thấy người dùng, trả về lỗi 404
+      // Nếu không tìm thấy người dùng, trả về lỗi 404
 
-    // Trả về thông tin sinh viên
-    res.status(200).json(
-      student 
-    );
-  } catch (error) {
-    console.error("Get student by ID error:", error);
-    res.status(500).json({ error: "Failed to get student information!" });
+      // Trả về thông tin sinh viên
+      res.status(200).json(student);
+    } catch (error) {
+      console.error("Get student by ID error:", error);
+      res.status(500).json({ error: "Failed to get student information!" });
+    }
   }
 };
-}
 exports.getStudentById = async (req, res) => {
   const { id } = req.params; // Lấy id từ params
 
@@ -220,4 +221,4 @@ exports.editStudent = async (req, res) => {
     console.error("Error updating student:", error);
     res.status(500).json({ error: "Failed to update student!" });
   }
-}
+};

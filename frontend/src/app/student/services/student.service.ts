@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { Student } from '../interfaces/student';
 
 @Injectable({
@@ -17,5 +17,11 @@ export class StudentService {
   }
   updateStudent(userId: Number, data: any): Observable<any> {
     return this.http.put<any>(`${this.baseUrl}/${userId}`, data);
+  }
+  checkFileExists(url: string): Observable<boolean> {
+    return this.http.head(url, { observe: 'response' }).pipe(
+      map((response) => response.status === 200), // Nếu status là 200, file tồn tại
+      catchError(() => of(false)) // Nếu có lỗi (file không tồn tại), trả về false
+    );
   }
 }

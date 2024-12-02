@@ -59,7 +59,15 @@ export class DashboardStudentComponent implements OnInit {
         // Gán dữ liệu trả về từ fetchUserInfo và getAllReview
         this.studentLogin = user;
         this.reviews = reviews;
-        this.profilePicture = user.avt;
+        this.studentService
+          .checkFileExists(this.studentLogin.avt)
+          .subscribe((exists) => {
+            if (this.isBase64Image(this.studentLogin.avt)) {
+            } else if (!exists) {
+              this.studentLogin.avt = '../../../../assets/user.png';
+            }
+            this.profilePicture = this.studentLogin.avt;
+          });
         this.getAllCourses();
         this.getTotalComments();
         this.getUserComments();
@@ -216,52 +224,26 @@ export class DashboardStudentComponent implements OnInit {
       const file = input.files[0];
       const reader = new FileReader();
 
-      // Upload avatar lên backend
-      this.authService.uploadAvatar(file).subscribe({
-        next: (response) => {
-          this.profilePicture = response.filePath; // Cập nhật đường dẫn ảnh
-          const avt = { avt: this.profilePicture };
-          this.studentService
-            .updateStudent(this.studentLogin.id, avt)
-            .subscribe({
-              next: () => {
-                Swal.fire({
-                  title: 'Thành công!',
-                  text: 'Ảnh đại diện đã được cập nhật.',
-                  icon: 'success',
-                  confirmButtonText: 'OK',
-                });
-              },
-              error: (err) => {
-                console.error('Error updating avatar in database:', err);
-                Swal.fire({
-                  title: 'Thất bại!',
-                  text: 'Không thể cập nhật ảnh đại diện trong cơ sở dữ liệu.',
-                  icon: 'error',
-                  confirmButtonText: 'OK',
-                });
-              },
-            });
-        },
-        error: (err) => {
-          console.error('Error uploading avatar:', err);
-          Swal.fire({
-            title: 'Thất bại!',
-            text: 'Không thể cập nhật ảnh đại diện.',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          });
-        },
-      });
-
       reader.onload = (e: any) => {
         this.profilePicture = e.target.result; // Cập nhật ảnh đại diện ngay lập tức khi file được chọn
+        this.studentService
+          .updateStudent(this.studentLogin.id, { avt: this.profilePicture })
+          .subscribe(
+            (response) => {},
+            (error) => {
+              console.error('There was an error!', error);
+            }
+          );
       };
 
       reader.readAsDataURL(file);
     }
   }
-
+  isBase64Image(str: string): boolean {
+    const base64Pattern =
+      /^data:image\/(png|jpeg|jpg|gif|bmp|webp);base64,[A-Za-z0-9+/=]+$/;
+    return base64Pattern.test(str);
+  }
   changeShowCommentStatus() {
     this.isShowComment = !this.isShowComment;
     this.calculateTopValue();
@@ -271,7 +253,6 @@ export class DashboardStudentComponent implements OnInit {
       this.userComments = []; // Nếu không có dữ liệu
       return;
     }
-
     this.userComments = this.reviews.filter(
       (review) => review.studentId === this.studentLogin.id
     );

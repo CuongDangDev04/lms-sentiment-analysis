@@ -188,34 +188,3 @@ exports.getUser = async (req, res) => {
     res.status(500).json({ error: "Failed to get user information!" });
   }
 };
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    console.log("Uploading file:", file);
-    const uploadPath = path.join(
-      __dirname,
-      "../../../public/assets/student/img/avt"
-    );
-    fs.mkdirSync(uploadPath, { recursive: true });
-    cb(null, uploadPath);
-  },
-  filename: function (req, file, cb) {
-    console.log("File name:", Date.now() + path.extname(file.originalname));
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({ storage: storage });
-
-exports.upload = upload;
-
-exports.uploadAvatar = async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: "No file uploaded." });
-  }
-
-  // Trả về đường dẫn ảnh có thể truy cập từ frontend
-  res
-    .status(200)
-    .json({ filePath: `/assets/student/img/avt/${req.file.filename}` });
-};

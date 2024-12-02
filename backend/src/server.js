@@ -14,7 +14,9 @@ const app = express();
 
 // Các cấu hình Express
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+
 app.use("/api/auth", authRoutes);
 app.use("/api/instructor", instructorRoutes);
 app.use("/api/category", categoryRoutes);
@@ -22,7 +24,7 @@ app.use("/api/student", studentRoutes);
 app.use("/api/course", courseRoutes);
 app.use("/api/sentiment/", sentimentRoutes);
 app.use("/api/feedback", feedbackRoutes);
-app.use("/assets", express.static(path.join(__dirname, "public/assets")));
+
 const PORT = process.env.PORT || 5000;
 
 sequelize
