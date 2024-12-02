@@ -21,7 +21,5 @@ router.get(
   "/course/:courseId",
   sentimentController.getSentimentAnalysisByCourse
 );
-router.get("/all", sentimentController.getAllSentimentAnalysis)
 
 module.exports = router;
-

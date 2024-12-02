@@ -238,6 +238,7 @@ export class DashboardStudentComponent implements OnInit {
 
       reader.readAsDataURL(file);
     }
+    window.location.reload();
   }
   isBase64Image(str: string): boolean {
     const base64Pattern =
