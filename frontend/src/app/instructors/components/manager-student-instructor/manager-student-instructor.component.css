@@ -68,6 +68,7 @@
     padding: 8px;
     border: 1px solid #ddd;
     text-align: left;
+    color: black;
   }
   
   .table tbody tr:nth-child(even) {
@@ -89,6 +90,7 @@
     .table th, .table td {
       font-size: 14px;
       padding: 8px;
+      color: black;
     }
   }
   td.namecourse{

@@ -147,16 +147,17 @@
         <td>{{ course.instructor.fullname }}</td>
         <td>{{ course.category.name }}</td>
         <td>
+          
           <button (click)="editCourse(course)"
             type="button"
-            class="btn btn-link btn-primary btn-lg"
             title="Chỉnh sửa"
           >
             <i class="fa fa-edit"></i>
           </button>
+  
+          <!-- Nút xóa -->
           <button (click)="deleteCourse(course.id)"
             type="button"
-            class="btn btn-link btn-danger"
             title="Xóa"
           >
             <i class="fa fa-times"></i>

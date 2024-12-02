@@ -1,143 +1,155 @@
 .course-management {
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-right: 0;
-    max-width: 83%;
-  }
-  
-  .course-management h2 {
-    text-align: center;
-    color: #333;
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  .course-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
-  
-  .form-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .form-group label {
-    width: 20%;
-    font-weight: bold;
-    color: #555;
-  }
-  
-  .form-group input[type="text"],
-  .form-group input[type="number"],
-  .form-group textarea,
-  .form-group select {
-    width: 80%;
-    padding: 10px;
-    font-size: 16px;
-    color: #333;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    outline: none;
-    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .form-group input[type="text"]:focus,
-  .form-group textarea:focus,
-  .form-group select:focus {
-    background-color: #fff;
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
-  }
-  
-  textarea {
-    resize: vertical;
-    min-height: 80px;
-  }
-  
-  .course-form button {
-    padding: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .btn-save {
-    background-color: #28a745;
-    color: #fff;
-    margin-right: 10px;
-  }
-  
-  .btn-save:hover {
-    background-color: #218838;
-  }
-  
-  .btn-reset {
-    background-color: #6c757d;
-    color: #fff;
-  }
-  
-  .btn-reset:hover {
-    background-color: #5a6268;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  table thead tr {
-    background-color: #007bff;
-    color: #fff;
-    font-size: 16px;
-  }
-  table th{
-    padding: 12px 15px !important;
-    color: white !important;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-right: 0;
+  max-width: 83%;
+
+}
+
+.course-management h2 {
+  text-align: center;
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.course-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-group label {
+  width: 20%;
+  font-weight: bold;
+  color: #555;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group textarea,
+.form-group select {
+  width: 80%;
+  padding: 10px;
+  font-size: 16px;
+  color: #333;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  outline: none;
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  background-color: #fff;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.course-form button {
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-save {
+  background-color: #28a745;
+  color: #fff;
+  margin-right: 10px;
+}
+
+.btn-save:hover {
+  background-color: #218838;
+}
+
+.btn-reset {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.btn-reset:hover {
+  background-color: #5a6268;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table thead tr {
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+}
+
+table th {
+  padding: 12px 15px !important;
+  color: white !important;
 
 
-  }
-  table th,
-  table td {
-    padding: 3px;
-    border: 1px solid #ddd;
-    text-align: left;
-    color: black;
-  }
-  
-  
-  table tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  
-  table tbody tr:hover {
-    background-color: #e9ecef;
-  }
-  
-  .btn-add-course {
-    background-color: #4CAF50; /* Màu nền xanh */
-    color: white; /* Màu chữ trắng */
-    padding: 12px 24px; /* Khoảng cách xung quanh nội dung */
-    font-size: 16px; /* Cỡ chữ */
-    border: none; /* Bỏ viền */
-    border-radius: 4px; /* Bo tròn góc */
-    cursor: pointer; /* Con trỏ chuột khi hover */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Hiệu ứng khi hover */
-  }
-  /* Container chứa các input và button */
+}
+
+table th,
+table td {
+  padding: 3px;
+  border: 1px solid #ddd;
+  text-align: left;
+  color: black;
+}
+
+
+table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+table tbody tr:hover {
+  background-color: #e9ecef;
+}
+
+.btn-add-course {
+  background-color: #4CAF50;
+  /* Màu nền xanh */
+  color: white;
+  /* Màu chữ trắng */
+  padding: 12px 24px;
+  /* Khoảng cách xung quanh nội dung */
+  font-size: 16px;
+  /* Cỡ chữ */
+  border: none;
+  /* Bỏ viền */
+  border-radius: 4px;
+  /* Bo tròn góc */
+  cursor: pointer;
+  /* Con trỏ chuột khi hover */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  /* Hiệu ứng khi hover */
+}
+
+/* Container chứa các input và button */
 .filter-container {
   display: flex;
   gap: 10px;
@@ -159,8 +171,9 @@
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 5px !important;
-  width: 250px; /* Điều chỉnh theo nhu cầu */
-  background-color: transparent !important;  
+  width: 250px;
+  /* Điều chỉnh theo nhu cầu */
+  background-color: transparent !important;
   transition: all 0.3s ease-in-out;
 }
 
@@ -174,32 +187,52 @@
 
 /* Nút tìm kiếm */
 button {
-  background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  font-size: 16px;
+  background: transparent;
+  /* Xóa nền của nút */
   border: none;
-  border-radius: 5px;
+  /* Xóa viền của nút */
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
-  white-space: nowrap; /* Đảm bảo chữ không bị cắt */
+  margin-right: 20px;
 }
 
-/* Hiệu ứng hover cho nút */
-button:hover {
-  background-color: #45a049;
-  transform: translateY(-2px);
+button i {
+  font-size: 20px;
+  /* Điều chỉnh kích thước icon nếu cần */
+  color: inherit;
+  /* Dùng màu sắc mặc định hoặc có thể chỉnh sửa màu */
 }
 
-/* Hiệu ứng khi nhấn nút */
-button:active {
-  background-color: #003d82;
+.fa-times {
+  color: red !important;
+}
+
+.fa-times:hover {
+  color: black !important;
+}
+
+.fa-edit {
+  color: blue !important;
+}
+
+.fa-edit:hover {
+  color: black !important;
+}
+
+button:focus {
+  outline: none;
+  /* Xóa viền focus nếu không muốn hiển thị */
 }
 
 /* Đảm bảo chiều rộng của input và select không bị ảnh hưởng */
 .filter-container input,
 .filter-container select {
-  width: 250px !important; /* Ghi đè width của input và select */
+  width: 250px !important;
+  /* Ghi đè width của input và select */
   box-sizing: border-box;
 }
 
@@ -219,6 +252,7 @@ button:active {
     margin-top: 10px;
   }
 }
+
 .pagination {
   display: flex;
   justify-content: center;
@@ -269,4 +303,3 @@ button:active {
   border: none;
   cursor: default;
 }
-

@@ -10,7 +10,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './sidebar-admin.component.css'
 })
 export class SidebarAdminComponent {
-  isSidebarActive = false;
+  isSidebarActive = true;
 
   toggleSidebar() {
     this.isSidebarActive = !this.isSidebarActive;

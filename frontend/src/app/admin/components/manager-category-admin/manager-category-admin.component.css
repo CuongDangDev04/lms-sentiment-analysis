@@ -7,6 +7,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 83%;
     margin-right: 0;
+
   }
   
   .category-management h2 {
@@ -23,35 +24,35 @@
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
     margin-right: 20px;
   }
   
-  .btn-primary {
-    background-color: #4CAF50; /* Màu xanh giống nút thêm khóa học */
-    color: white;
+  button {
+    
+    background: transparent; /* Xóa nền của nút */
+    border: none; /* Xóa viền của nút */
+    padding: 0; /* Xóa khoảng cách trong nút */
   }
   
-  .btn-primary:hover {
-    background-color: #45a049;
+  button i {
+    font-size: 20px; /* Điều chỉnh kích thước icon nếu cần */
+    color: inherit; /* Dùng màu sắc mặc định hoặc có thể chỉnh sửa màu */
+  }
+  .fa-times{
+    color: red !important;
+  }
+  .fa-times:hover{
+    color: black !important;
+  }
+  .fa-edit{
+    color: blue !important;
   }
   
-  .btn-success {
-    background-color: #28a745;
-    color: #fff;
+  .fa-edit:hover{
+    color: black !important;
   }
-  
-  .btn-success:hover {
-    background-color: #218838;
-  }
-  
-  .btn-secondary {
-    background-color: #6c757d;
-    color: #fff;
-  }
-  
-  .btn-secondary:hover {
-    background-color: #5a6268;
+  button:focus {
+    outline: none; /* Xóa viền focus nếu không muốn hiển thị */
   }
   
   .category-management table {

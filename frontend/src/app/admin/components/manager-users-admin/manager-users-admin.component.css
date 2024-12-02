@@ -7,12 +7,13 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 83%;
   margin-right: 0;
+
 }
 
 .user-management h2 {
   text-align: center;
   color: #333;
-  font-size: 24px;
+  font-size: 24px;  
   margin-bottom: 20px;
 }
 .filter-container {
@@ -43,25 +44,6 @@
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
-button {
-  background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
-}
-
-button:hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
-}
-
-button:active {
-  background-color: #003d82;
-}
 
 
 .user-management h2 {
@@ -150,6 +132,7 @@ table td {
   padding: 3px !important;
   border: 1px solid #ddd;
   text-align: left;
+  color: black;
 }
 table th{
   padding: 12px 15px !important;
@@ -166,30 +149,46 @@ table tbody tr:hover {
 }
 
 /* Định dạng các nút trong bảng */
-.btn-edit,
-.btn-delete {
-  padding: 5px 10px;
+button {
+  background: transparent;
+  /* Xóa nền của nút */
+  border: none;
+  /* Xóa viền của nút */
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  margin-right: 20px;
 }
 
-.btn-edit {
-  background-color: #ffc107;
-  color: #333;
+button i {
+  font-size: 20px;
+  /* Điều chỉnh kích thước icon nếu cần */
+  color: inherit;
+  /* Dùng màu sắc mặc định hoặc có thể chỉnh sửa màu */
 }
 
-.btn-edit:hover {
-  background-color: #e0a800;
+.fa-times {
+  color: red !important;
 }
 
-.btn-delete {
-  background-color: #dc3545;
-  color: #fff;
+.fa-times:hover {
+  color: black !important;
 }
 
-.btn-delete:hover {
-  background-color: #c82333;
+.fa-edit {
+  color: blue !important;
+}
+
+.fa-edit:hover {
+  color: black !important;
+}
+
+button:focus {
+  outline: none;
+  /* Xóa viền focus nếu không muốn hiển thị */
 }
 
 /* Dropdown */

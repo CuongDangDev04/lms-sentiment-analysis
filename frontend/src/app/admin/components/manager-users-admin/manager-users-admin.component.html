@@ -166,12 +166,21 @@
         </span>
       </td>
       <td>
-        <button (click)="editUser(user)" type="button" class="btn btn-link btn-primary btn-lg" title="Chỉnh Sửa">
-          <i class="fa fa-edit"></i>
-        </button>
-        <button (click)="deleteUser(user.id, user.role)" type="button" class="btn btn-link btn-danger" title="Xóa">
-          <i class="fa fa-times"></i>
-        </button>
+        
+        <button (click)="editUser(user)"
+            type="button"
+            title="Chỉnh sửa"
+          >
+            <i class="fa fa-edit"></i>
+          </button>
+  
+          <!-- Nút xóa -->
+          <button (click)="deleteUser(user.id, user.role)"
+            type="button"
+            title="Xóa"
+          >
+            <i class="fa fa-times"></i>
+          </button>
       </td>
     </tr>
   </tbody>

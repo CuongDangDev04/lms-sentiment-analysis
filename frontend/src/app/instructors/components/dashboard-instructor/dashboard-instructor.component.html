@@ -1,72 +1,38 @@
-<div class="container-he">
-    <div class="page-inner">
-      <div class="container-dashboard row">
-        
-        <!-- Số lượng người dùng -->
-        <div class="col-sm-6 col-md-3">
-          <div class="card card-stats card-round">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-icon">
-                  <div class="icon-big text-center icon-primary bubble-shadow-small">
-                    <i class="fas fa-users"></i>
-                  </div>
-                </div>
-                <div class="col col-stats ms-3 ms-sm-0">
-                  <div class="numbers">
-                    <p class="card-category">Số lượng sinh viên</p>
-                    <h4 class="card-title">{{ stats.studentsCount || '0' }}</h4> <!-- Thay đổi thành studentsCount -->
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-  
-        <!-- Số lượng phản hồi -->
-        <div class="col-sm-6 col-md-3">
-          <div class="card card-stats card-round">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-icon">
-                  <div class="icon-big text-center icon-info bubble-shadow-small">
-                    <i class="fa-solid fa-comment"></i>
-                  </div>
-                </div>
-                <div class="col col-stats ms-3 ms-sm-0">
-                  <div class="numbers">
-                    <p class="card-category">Số lượng phản hồi </p>
-                    <h4 class="card-title">{{ stats.reviewsCount || '0' }}</h4> <!-- Thay đổi thành reviewsCount -->
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-  
-        <!-- Số lượng khóa học -->
-        <div class="col-sm-6 col-md-3">
-          <div class="card card-stats card-round">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-icon">
-                  <div class="icon-big text-center icon-success bubble-shadow-small">
-                    <i class="fa-solid fa-book"></i>
-                  </div>
-                </div>
-                <div class="col col-stats ms-3 ms-sm-0">
-                  <div class="numbers">
-                    <p class="card-category">Số lượng khóa học giảng dạy</p>
-                    <h4 class="card-title">{{ stats.coursesCount || '0' }}</h4> <!-- Thay đổi thành coursesCount -->
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-  <app-sentiment-analysis-instructor/>
-  
+<div class="dashboard-container">
+  <div class="cart-container">
+    <div class="dashboard-card">
+      <div class="card-icon icon-primary">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="card-details">
+        <p class="card-category">Số lượng sinh viên</p>
+        <h4 class="card-title">{{ stats.studentsCount || '0' }}</h4>
       </div>
     </div>
+
+    <div class="dashboard-card">
+      <div class="card-icon icon-info">
+        <i class="fa-solid fa-comment"></i>
+      </div>
+      <div class="card-details">
+        <p class="card-category">Số lượng phản hồi</p>
+        <h4 class="card-title">{{ stats.reviewsCount || '0' }}</h4>
+      </div>
+    </div>
+
+    <div class="dashboard-card">
+      <div class="card-icon icon-success">
+        <i class="fa-solid fa-book"></i>
+      </div>
+      <div class="card-details">
+        <p class="card-category">Số lượng khóa học giảng dạy</p>
+        <h4 class="card-title">{{ stats.coursesCount || '0' }}</h4>
+      </div>
+    </div>
+
+    
+    <div class="canvas-container">
+      <app-sentiment-analysis-instructor/>
+    </div>
   </div>
-  
+</div>

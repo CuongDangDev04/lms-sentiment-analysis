@@ -1,79 +1,38 @@
-<!-- Sidebar -->
-<div class="sidebar" [ngStyle]="{ 'background-color': '#0B4A9A' }">
-    <div class="sidebar-logo">
-      <!-- Logo Header -->
-      <div class="logo-header" data-background-color="white">
-        
-        <a routerLink="dashboard" class="logo">
-          <img
-            src="assets/logotruong.png"
-            alt="navbar brand"
-            class="navbar-brand"
-            height="50px"
-          />
-        </a>
-        <div class="nav-toggle">
-          <button class="btn btn-toggle toggle-sidebar">
-            <i class="gg-menu-right"></i>
-          </button>
-          <button class="btn btn-toggle sidenav-toggler">
-            <i class="gg-menu-left"></i>
-          </button>
-        </div>
-        <button class="topbar-toggler more">
-          <i class="gg-more-vertical-alt"></i>
-        </button>
-      </div>
-      <!-- End Logo Header -->
-    </div>
-    <div class="sidebar-wrapper scrollbar scrollbar-inner">
-      <div class="sidebar-content">
-        <ul class="nav nav-secondary">
-          <li class="nav-item ">
-            <a
-              data-bs-toggle="collapse"
-              routerLink="dashboard"
-              class="collapsed"
-              aria-expanded="false"
-            >
-              <i class="fas fa-home"></i>
-              <p>Dashboard </p>
-            </a>
-            
-          </li>
-          <li class="nav-section">
-            <span class="sidebar-mini-icon">
-              <i class="fa fa-ellipsis-h"></i>
-            </span>
-            <h4 class="text-section">Quản lí</h4>
-          </li>
-          
-          <li class="nav-item">
-            <a data-bs-toggle="collapse" routerLink="quanlysinhvien">
-              <i class="fas fa-layer-group"></i>
-              <p>Quản lí sinh viên</p>
-            </a>
-            
-          </li>
-          <li class="nav-item">
-            <a data-bs-toggle="collapse" routerLink="feedbackmanager">
-
-            <i class="fas fa-th-list"></i>
-              <p>Quản lí phản hồi</p>
-            </a>
-            
-          </li>
-          <li class="nav-item">
-            <a data-bs-toggle="collapse" routerLink="contact">
-              <i class="fas fa-layer-group"></i>
-              <p>Liên hệ</p>
-            </a>
-          </li>
-         
-         
-          
-        </ul>
-      </div>
-    </div>
+<div class="sidebar"  [ngStyle]="{ 'background-color': '#0B4A9A' }">
+  <div class="sidebar-logo">
+    <a [routerLink]="['/instructors']" class="logo">
+      <img src="assets/logotruong.png" alt="Logo" class="navbar-brand" height="50px" />
+    </a>
+    
   </div>
-  <!-- End Sidebar -->
+  <ul class="nav">
+    <li class="nav-item">
+      <a [routerLink]="'dashboard'">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+      </a>
+     
+    </li>
+   
+    <li class="nav-item">
+      <a [routerLink]="'quanlysinhvien'">
+        <i class="fas fa-users"></i>
+        <span>Quản lí sinh viên</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a [routerLink]="'feedbackmanager'">
+        <i class="fas fa-comments"></i>
+        <span>Quản lí phản hồi</span>
+      </a>
+    </li>
+    
+    <li class="nav-item">
+      <a [routerLink]="'contact'">
+        <i class="fas fa-envelope"></i>
+        <span>Liên hệ</span>
+      </a>
+    </li>
+   
+  </ul>
+</div>

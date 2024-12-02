@@ -1,63 +1,15 @@
 <div class="main-header">
-    <div class="main-header-logo">
-      <!-- Logo Header -->
-      <div class="logo-header" >
-        <a  class="logo">
-          <img
-            src="assets/lecture_admin/img/logotruong.svg"
-            alt="logo"
-            height="20"
-          />
-        </a>
-        <div class="nav-toggle">
-          <button class="btn btn-toggle toggle-sidebar">
-            <i class="gg-menu-right"></i>
-          </button>
-          <button class="btn btn-toggle sidenav-toggler">
-            <i class="gg-menu-left"></i>
-          </button>
-        </div>
-        <button class="topbar-toggler more">
-          <i class="gg-more-vertical-alt"></i>
-        </button>
-      </div>
-      <!-- End Logo Header -->
-    </div>
-    <!-- Navbar Header -->
-    <nav
-      class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom" [ngStyle]="{ 'background-color': '#0B4A9A' }"
-    >
-      <div class="container-fluid"  >
-        <nav
-          class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex"
-        >
-        
-        </nav>
-
-        <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
-          
-          
-
-          <li class="nav-item topbar-user dropdown hidden-caret">
-            <a
-              class="dropdown-toggle profile-pic"
-              data-bs-toggle="dropdown"
-              href="#"
-              aria-expanded="false"
-            >
-              <div class="avatar-sm">
-                
-              </div>
-              <span class="profile-username">
-                <span class="fw-bold text-light me-3" >{{name}}</span>
-                <a class="" (click)="logOut()" title="Đăng xuất" ><i class="fa-solid fa-right-from-bracket text-light"></i></a>
-
-              </span>
-            </a>
-            
-          </li>
-        </ul>
-      </div>
-    </nav>
-    <!-- End Navbar -->
-  </div>
+  <!-- Navbar Header -->
+  <nav class="navbar" [ngStyle]="{ 'background-color': '#0B4A9A' }">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <span class="profile-username">
+          <span class="username">{{ name }}</span>
+          <a class="logout-btn" (click)="logOut()" title="Đăng xuất">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </a>
+        </span>
+      </li>
+    </ul>
+  </nav>
+</div>

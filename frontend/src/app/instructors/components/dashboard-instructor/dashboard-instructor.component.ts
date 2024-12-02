@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CourseService } from '../../services/course.service';
 import { CommonModule } from '@angular/common';
 import { SentimentAnalysisInstructorComponent } from "../sentiment-analysis-instructor/sentiment-analysis-instructor.component";
+import { SentimentAnalystisAdminComponent } from "../../../admin/components/sentiment-analystis-admin/sentiment-analystis-admin.component";
 
 @Component({
   selector: 'app-dashboard-instructor',
   standalone: true,
-  imports: [CommonModule, SentimentAnalysisInstructorComponent],
+  imports: [CommonModule, SentimentAnalysisInstructorComponent, SentimentAnalystisAdminComponent],
   templateUrl: './dashboard-instructor.component.html',
   styleUrls: ['./dashboard-instructor.component.css']
 })

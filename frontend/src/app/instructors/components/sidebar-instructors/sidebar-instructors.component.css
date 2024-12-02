@@ -1,3 +1,119 @@
-p, li, a{
+/* Định dạng chung cho sidebar */
+.sidebar {
+    width: 250px;
+    background-color: rgb(3, 26, 85);
     color: white;
-}
+    height: 100vh;
+    position: fixed;
+    transition: transform 0.3s ease;
+    z-index: 999;
+    /* Đảm bảo sidebar ở trên các phần tử khác */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    /* Thêm bóng cho sidebar */
+  }
+  
+  /* Sidebar khi ẩn trên màn hình nhỏ */
+  .sidebar.active {
+    transform: translateX(0);
+  }
+  
+  /* Định dạng cho logo và tên trường */
+  .sidebar-logo {
+    text-align: center;
+    padding: 7.5px 0;
+    background-color: white;
+  }
+  
+  .sidebar-logo .logo img {
+    height: 53px;
+    width: auto;
+  }
+  
+  /* Định dạng cho menu */
+  .nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-top: 40px;
+  }
+  
+  .nav-item {
+    padding: 16px 30px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-item a {
+    display: flex;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .nav-item a i {
+    margin-right: 12px;
+    font-size: 16px;
+  }
+  
+  .nav-item:hover a {
+    border-radius: 5px;
+    color: yellow;
+  }
+  
+  .nav-section {
+    margin: 25px 20px 10px;
+    font-size: 13px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+    margin-left: 30px !important;
+  }
+  
+  /* Media query cho màn hình nhỏ */
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 0;
+      height: 100%;
+    }
+  
+    .sidebar.active {
+      width: 250px;
+    }
+  
+    /* Hiển thị nút toggle khi màn hình nhỏ */
+    .toggle-sidebar {
+      display: block;
+      /* Đảm bảo nút toggle sẽ hiển thị */
+      position: absolute;
+      top: 15px;
+      left: 0;
+      background-color: rgba(255, 255, 255, 0.2);
+      /* Thêm nền mờ cho dễ nhìn */
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+    }
+  
+    .nav-item {
+      padding: 12px 15px;
+    }
+  
+    .nav-section {
+      margin-left: 10px !important;
+    }
+  }
+  
+  /* Media query cho các màn hình lớn hơn */
+  @media (min-width: 769px) {
+    .sidebar {
+      width: 250px;
+    }
+  
+    .toggle-sidebar {
+      display: none;
+      /* Ẩn nút toggle khi màn hình lớn */
+    }
+  }

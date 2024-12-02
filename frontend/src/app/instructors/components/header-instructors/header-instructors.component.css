@@ -1,0 +1,64 @@
+/* Tổng thể phần header */
+.main-header {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color:#0B4A9A;
+    padding: 10px 20px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    top: 0;
+  }
+  
+  /* Navbar tổng quan */
+  .navbar {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 49px;
+  }
+  
+  /* Danh sách items */
+  .navbar-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Mỗi item trong navbar */
+  .nav-item {
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Username */
+  .profile-username {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  /* Text của username */
+  .username {
+    margin-right: 10px;
+  }
+  
+  /* Nút đăng xuất */
+  .logout-btn {
+    color: #fff;
+    font-size: 18px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .logout-btn:hover {
+    color: #ff4d4d; /* Màu đỏ khi hover */
+  }
+  
