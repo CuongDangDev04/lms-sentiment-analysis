@@ -14,6 +14,7 @@ import { forkJoin } from 'rxjs';
 import { StudentService } from '../../services/student.service';
 import { Router, RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
+import { InstructorService } from '../../services/instructor.service';
 
 @Component({
   selector: 'app-dashboard-student',
@@ -28,7 +29,7 @@ export class DashboardStudentComponent implements OnInit {
   courseService: CourseService = inject(CourseService);
   authService: AuthService = inject(AuthService);
   studentService: StudentService = inject(StudentService);
-
+  instructorService: InstructorService = inject(InstructorService);
   progressCurrent: number = 173;
   progressTotal: number = 173;
   progressPercentage: number = 0;
@@ -41,7 +42,7 @@ export class DashboardStudentComponent implements OnInit {
   index: number = 0;
   currentCourses: Course[] = [];
   totalCourses: number = 0;
-
+  instructors: any[] = [];
   totalComment: Number = 0;
   isShowComment: boolean = false;
   userComments: any[] = [];
@@ -69,6 +70,7 @@ export class DashboardStudentComponent implements OnInit {
             this.profilePicture = this.studentLogin.avt;
           });
         this.getAllCourses();
+
         this.getTotalComments();
         this.getUserComments();
       },
@@ -84,7 +86,8 @@ export class DashboardStudentComponent implements OnInit {
       (courses) => {
         this.courses = courses;
         this.totalCourses = this.courses.length;
-        this.current_courses(); // Cập nhật lại danh sách khóa học hiển thị
+
+        this.current_courses();
         this.circumference = 2 * Math.PI * this.radius;
         this.totalProgress();
         this.updateProgress();
@@ -96,32 +99,43 @@ export class DashboardStudentComponent implements OnInit {
   }
   getTotalComments(): void {
     if (!this.studentLogin || !this.studentLogin.id || !this.reviews.length) {
-      this.totalComment = 0; // Nếu không có dữ liệu
+      this.totalComment = 0;
       return;
     }
 
-    // Lọc bình luận của sinh viên đăng nhập
     const userComments = this.reviews.filter(
       (review) => review.studentId === this.studentLogin.id
     );
 
-    // Cập nhật tổng số bình luận
     this.totalComment = userComments.length;
   }
-  // Cập nhật danh sách khóa học hiện tại
   current_courses() {
-    const startIndex = this.index;
-    const endIndex = Math.min(this.courses.length, startIndex + 3); // Đảm bảo không vượt quá độ dài của mảng courses
-    this.currentCourses = this.courses.slice(startIndex, endIndex);
+    this.instructorService.getAllInstructor().subscribe((instructors) => {
+      const instructorMap = new Map(
+        instructors.map((instructor) => [instructor.id, instructor.fullname])
+      );
+
+      const studentCountRequests = this.courses.map((course) =>
+        this.courseService.getStudentInCourse(course.id)
+      );
+
+      forkJoin(studentCountRequests).subscribe((studentCounts) => {
+        this.courses = this.courses.map((course, index) => {
+          course.instructorName =
+            instructorMap.get(course.instructorId) || 'Không xác định';
+          course.number_of_students =
+            studentCounts[index]?.students.length || 0;
+          return course;
+        });
+
+        // Chia nhỏ danh sách khóa học hiển thị
+        const startIndex = this.index;
+        const endIndex = Math.min(this.courses.length, startIndex + 3); // Đảm bảo không vượt quá độ dài của mảng courses
+        this.currentCourses = this.courses.slice(startIndex, endIndex);
+      });
+    });
   }
 
-  // Hàm chuyển đến khóa học tiếp theo
-  nextCourses() {
-    if (this.index + 3 < this.totalCourses) {
-      this.index += 3;
-      this.current_courses();
-    }
-  }
   showSentimentAnalysis(courseId: any) {
     const findReview: any = this.reviews.find(
       (review) => review.courseId === Number(courseId)
@@ -174,7 +188,12 @@ export class DashboardStudentComponent implements OnInit {
       });
     }
   }
-  // Hàm quay lại khóa học trước
+  nextCourses() {
+    if (this.index + 3 < this.totalCourses) {
+      this.index += 3;
+      this.current_courses();
+    }
+  }
   previousCourses() {
     if (this.index >= 3) {
       this.index -= 3;
