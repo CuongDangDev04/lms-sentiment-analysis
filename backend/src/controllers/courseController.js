@@ -3,11 +3,6 @@ const User = require("../models/user");
 const Category = require("../models/category");
 const StudentCourse = require("../models/studentcourse");
 const Review = require("../models/review");
-const { SentimentAnalysis } = require("../models");
-const { Sequelize } = require("sequelize");
-const { analyzeUserCourseReviews } = require("./sentimentController");
-const { commentAnalysisQueue } = require("../jobs/sentimentAnalysis");
-const { addCommentToQueue } = require("./commentQueueController");
 // Tạo mới khóa học
 exports.createCourse = async (req, res) => {
   try {
@@ -49,7 +44,7 @@ exports.createCourse = async (req, res) => {
       number_of_students,
       rating,
       duration,
-      imageUrl: "assets/student/img/course-1.jpg",
+      imageUrl,
       categoryId,
     });
 
@@ -84,6 +79,7 @@ exports.getAllCourses = async (req, res) => {
 // Lấy khóa học theo ID
 exports.getCourseById = async (req, res) => {
   const { id } = req.params; // Đổi courseId thành id
+  console.log(id);
   // Kiểm tra xem id có phải là số nguyên hay không
   if (isNaN(id)) {
     return res.status(400).json({ error: "Invalid course ID" });
@@ -132,23 +128,12 @@ exports.getAllReview = async (req, res) => {
           as: "course", // Sử dụng alias mới
           attributes: ["id", "name"], // Chọn các trường của Course
         },
-        {
-          model: SentimentAnalysis,
-          as: "sentimentAnalysis", // Alias cho SentimentAnalysis
-          required: false, // Không yêu cầu có dữ liệu SentimentAnalysis
-          where: {
-            id: {
-              [Sequelize.Op.eq]: Sequelize.col("Review.sentimentAnalysisId"), // So sánh với sentimentAnalysisId trong Review
-            },
-          },
-        },
       ],
     });
 
     if (!reviews || reviews.length === 0) {
-      return res.status(200).json([]);
+      return res.status(404).json({ message: "No reviews found" });
     }
-
     res.status(200).json(reviews);
   } catch (error) {
     console.error(error);
@@ -157,66 +142,7 @@ exports.getAllReview = async (req, res) => {
       .json({ message: "Error fetching review", error: error.message });
   }
 };
-exports.getAllReviewsByInstructor = async (req, res) => {
-  const { instructorId } = req.params; // Lấy instructorId từ request params
 
-  try {
-    // Lấy danh sách các khóa học mà giảng viên dạy
-    const courses = await Course.findAll({
-      where: { instructorId },
-      attributes: ["id"], // Chỉ lấy id của khóa học
-    });
-
-    // Kiểm tra nếu không có khóa học nào
-    if (!courses.length) {
-      return res.status(404).json({ message: "No courses found for this instructor." });
-    }
-
-    // Lấy danh sách courseId
-    const courseIds = courses.map((course) => course.id);
-
-    // Truy vấn review dựa trên courseId
-    const reviews = await Review.findAll({
-      where: { courseId: courseIds }, // Lọc review theo danh sách courseId
-      include: [
-        {
-          model: User,
-          as: "reviewStudent", // Alias cho User
-          attributes: ["id", "fullname", "email"],
-        },
-        {
-          model: Course,
-          as: "course", // Alias cho Course
-          attributes: ["id", "name"],
-        },
-        {
-          model: SentimentAnalysis,
-          as: "sentimentAnalysis", // Alias cho SentimentAnalysis
-          required: false, // Không bắt buộc có dữ liệu
-          where: {
-            id: {
-              [Sequelize.Op.eq]: Sequelize.col("Review.sentimentAnalysisId"),
-            },
-          },
-        },
-      ],
-    });
-
-    // Kiểm tra nếu không có review nào
-    if (!reviews.length) {
-      return res.status(404).json({ message: "No reviews found for this instructor's courses." });
-    }
-
-    // Trả về danh sách review
-    return res.status(200).json(reviews);
-  } catch (error) {
-    console.error("Error in getAllReviewsByInstructor:", error);
-    res.status(500).json({
-      message: "Error fetching reviews for instructor.",
-      error: error.message,
-    });
-  }
-};
 exports.getReviewOfCourse = async (req, res) => {
   try {
     const { courseId } = req.params;
@@ -226,16 +152,6 @@ exports.getReviewOfCourse = async (req, res) => {
         {
           model: User,
           as: "reviewStudent", // Sử dụng alias mới
-        },
-        {
-          model: SentimentAnalysis,
-          as: "sentimentAnalysis", // Alias cho SentimentAnalysis
-          required: false, // Không yêu cầu có dữ liệu SentimentAnalysis
-          where: {
-            id: {
-              [Sequelize.Op.eq]: Sequelize.col("Review.sentimentAnalysisId"), // So sánh với sentimentAnalysisId trong Review
-            },
-          },
         },
       ],
     });
@@ -261,27 +177,23 @@ exports.addComment = async (req, res) => {
     const existingReview = await Review.findOne({
       where: { studentId, courseId },
     });
-    let review;
+
     if (existingReview) {
       // Cập nhật review cũ
       existingReview.rating = rating;
       existingReview.comment = comment;
-      existingReview.isAnalyzed = false;
       await existingReview.save();
-      review = existingReview;
-      await addCommentToQueue(studentId, courseId, comment);
       return res.status(200).json(existingReview);
     } else {
       // Tạo mới review
-      review = await Review.create({
+      const newReview = await Review.create({
         courseId,
         rating,
         comment,
         studentId,
       });
 
-      await addCommentToQueue(studentId, courseId, comment);
-      return res.status(201).json(review);
+      return res.status(201).json(newReview);
     }
   } catch (error) {
     console.error("Lỗi khi thêm hoặc cập nhật comment:", error);
@@ -291,50 +203,7 @@ exports.addComment = async (req, res) => {
     });
   }
 };
-exports.deleteComment = async (req, res) => {
-  const { courseId, studentId } = req.params; // Lấy courseId và studentId từ request body
 
-  if (!courseId || !studentId) {
-    return res.status(400).json({ error: "Missing courseId or studentId" });
-  }
-
-  try {
-    // Kiểm tra xem review có tồn tại không
-    const review = await Review.findOne({ where: { courseId, studentId } });
-    if (!review) {
-      return res.status(404).json({ error: "Review not found" });
-    }
-
-    // Xóa review
-    await review.destroy();
-
-    // Trả về phản hồi thành công
-    res.status(200).json({ message: "Review deleted successfully" });
-  } catch (err) {
-    console.error("Error deleting review:", err);
-    res.status(500).json({ error: "An error occurred while deleting review" });
-  }
-};
-exports.updateComment = async (req, res) => {
-  const { courseId, studentId } = req.params; // Đổi courseId thành id
-  const { comment, rating } = req.body;
-
-  try {
-    const review = await Review.findOne({
-      where: { courseId: courseId, studentId: studentId },
-    });
-    review.comment = comment || review.comment;
-    review.rating = rating || review.rating;
-
-    await addCommentToQueue(studentId, courseId, comment);
-    review.isAnalyzed = false;
-    await review.save();
-
-    res.status(200).json(review);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
 // Cập nhật khóa học
 exports.updateCourse = async (req, res) => {
   const { id } = req.params; // Đổi courseId thành id
@@ -399,6 +268,9 @@ exports.addStudentToCourse = async (req, res) => {
   try {
     const { id } = req.params; // Đây là courseId
     const { userId } = req.body; // Đây là userId của sinh viên
+    console.log("id", id);
+    console.log("usid", userId);
+
     // Kiểm tra xem khóa học có tồn tại không
     const course = await Course.findByPk(id);
     if (!course) {
@@ -438,30 +310,24 @@ exports.getStudentsInCourse = async (req, res) => {
 
   try {
     // Tìm khóa học bằng `id`
-    // const course = await Course.findByPk(id);
-    // if (!course) {
-    //   return res.status(404).json({ error: "Course not found" });
-    // }
+    const course = await Course.findByPk(id);
+    if (!course) {
+      return res.status(404).json({ error: "Course not found" });
+    }
 
-    // // Lấy danh sách sinh viên trong khóa học
-    // const students = await Course.findAll({
-    //   where: { id },
-    //   include: {
-    //     model: User,
-    //     as: "students",
-    //     attributes: ["id", "fullname", "email", "phone", "birthdate"],
-    //   },
-    // });
-    const course = await Course.findByPk(id, {
+    // Lấy danh sách sinh viên trong khóa học
+    const students = await Course.findAll({
+      where: { id },
       include: [
         {
           model: User,
           as: "students",
-          attributes: ["id", "fullname", "email", "phone", "birthdate"], // Lấy các thuộc tính cần thiết của sinh viên
+          attributes: ["id", "fullname", "email", "phone", "birthdate"],
         },
       ],
     });
-    res.status(200).json(course);
+
+    res.status(200).json(students);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -517,44 +383,6 @@ exports.getCoursesOfStudent = async (req, res) => {
 
     res.status(200).json(courses);
   } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-// Lấy danh sách khóa học mà một giảng viên phụ trách
-exports.getCoursesByInstructor = async (req, res) => {
-  const { instructorId } = req.params;
-
-  try {
-    // Kiểm tra xem giảng viên có tồn tại không
-    const instructor = await User.findOne({
-      where: { id: instructorId, role: "instructor" },
-    });
-    if (!instructor) {
-      return res.status(404).json({ error: "Instructor not found" });
-    }
-
-    // Lấy danh sách khóa học mà giảng viên phụ trách
-    const courses = await Course.findAll({
-      where: { instructorId },
-      include: [
-        {
-          model: Category,
-          as: "category",
-          attributes: ["id", "name"], // Chọn các trường của Category
-        },
-        {
-          model: User,
-          as: "students", // Đảm bảo bạn đã định nghĩa mối quan hệ này trong Sequelize
-          attributes: ["id", "fullname", "email"], // Chỉ lấy các trường cần thiết của sinh viên
-          through: { attributes: [] }, // Bỏ qua các trường trong bảng trung gian nếu có
-        },
-      ],
-    });
-
-    res.status(200).json(courses);
-  } catch (err) {
-    console.error(err);
     res.status(500).json({ error: err.message });
   }
 };

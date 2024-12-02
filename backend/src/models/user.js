@@ -34,7 +34,7 @@ const User = sequelize.define("User", {
     },
   },
   avt: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT("medium"),
     allowNull: true,
   },
 
