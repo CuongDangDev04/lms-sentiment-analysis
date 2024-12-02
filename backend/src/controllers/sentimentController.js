@@ -319,3 +319,36 @@ exports.getSentimentAnalysisByCourse = async (req, res) => {
     });
   }
 };
+// Lấy tất cả kết quả phân tích theo courseId và userId
+exports.getAllSentimentAnalysis = async (req, res) => {
+  try {
+    // Truy vấn SentimentAnalysis mà không cần tham chiếu đến các điều kiện cụ thể
+    const sentimentData = await SentimentAnalysis.findAll({
+      include: [
+        {
+          model: User, // Kết nối với model User để lấy thông tin người dùng
+          as: "user",
+          attributes: ["id", "username", "fullname"], // Chỉ lấy các trường cần thiết
+        },
+        {
+          model: Course, // Kết nối với model Course để lấy thông tin khóa học
+          as: "course",
+          attributes: ["id", "name"], // Chỉ lấy các trường cần thiết
+        },
+      ],
+    });
+
+    // Kiểm tra nếu không có dữ liệu
+    if (!sentimentData.length) {
+      return res.status(404).send({ message: "No sentiment analysis records found." });
+    }
+
+    // Trả về tất cả dữ liệu sentiment analysis
+    return res.status(200).json(sentimentData);
+  } catch (err) {
+    console.error("Error in getAllSentimentAnalysis:", err);
+    return res.status(500).send({
+      error: "An error occurred while retrieving all sentiment analysis data.",
+    });
+  }
+};

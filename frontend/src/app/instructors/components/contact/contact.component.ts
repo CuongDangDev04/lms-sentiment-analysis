@@ -23,7 +23,6 @@ export class ContactComponent {
     this.feedbackService.getAllFeedback().subscribe({
       next: (data) => {
         this.feedbackList = data;
-        console.log('Dữ liệu phản hồi:', this.feedbackList);
       },
       error: (err) => {
         console.error('Lỗi khi lấy phản hồi', err);

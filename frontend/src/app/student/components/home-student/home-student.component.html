@@ -148,21 +148,21 @@
           <div class="col-lg-12 col-md-12 wow zoomIn" data-wow-delay="0.1s">
             <a
               [routerLink]="['courses']"
-              [queryParams]="{ category: category_top1.name }"
+              [queryParams]="{ category: category_top1?.name }"
               class="position-relative d-block overflow-hidden"
             >
               <img
                 class="img-fluid"
                 src="../../../assets/student/img/cat-1.jpg"
-                alt="{{ category_top1.name }}"
+                alt="{{ category_top1?.name }}"
               />
               <div
                 class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3"
                 style="margin: 1px"
               >
-                <h5 class="m-0">{{ category_top1.name }}</h5>
+                <h5 class="m-0">{{ category_top1?.name }}</h5>
                 <small class="text-primary"
-                  >{{ category_top1.count }} Khóa học</small
+                  >{{ category_top1?.count }} Khóa học</small
                 >
               </div>
             </a>
@@ -171,7 +171,7 @@
             <a
               class="position-relative d-block overflow-hidden"
               [routerLink]="['courses']"
-              [queryParams]="{ category: category_top2.name }"
+              [queryParams]="{ category: category_top2?.name }"
             >
               <img
                 class="img-fluid"
@@ -182,9 +182,9 @@
                 class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3"
                 style="margin: 1px"
               >
-                <h5 class="m-0">{{ category_top2.name }}</h5>
+                <h5 class="m-0">{{ category_top2?.name }}</h5>
                 <small class="text-primary"
-                  >{{ category_top2.count }} Khóa học</small
+                  >{{ category_top2?.count }} Khóa học</small
                 >
               </div>
             </a>
@@ -193,7 +193,7 @@
             <a
               class="position-relative d-block overflow-hidden"
               [routerLink]="['courses']"
-              [queryParams]="{ category: category_top3.name }"
+              [queryParams]="{ category: category_top3?.name }"
             >
               <img
                 class="img-fluid"
@@ -204,9 +204,9 @@
                 class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3"
                 style="margin: 1px"
               >
-                <h5 class="m-0">{{ category_top3.name }}</h5>
+                <h5 class="m-0">{{ category_top3?.name }}</h5>
                 <small class="text-primary"
-                  >{{ category_top3.count }} Khóa học</small
+                  >{{ category_top3?.count }} Khóa học</small
                 >
               </div>
             </a>
@@ -221,7 +221,7 @@
         <a
           class="position-relative d-block h-100 overflow-hidden"
           [routerLink]="['courses']"
-          [queryParams]="{ category: category_top4.name }"
+          [queryParams]="{ category: category_top4?.name }"
         >
           <img
             class="img-fluid position-absolute w-100 h-100"
@@ -233,9 +233,9 @@
             class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3"
             style="margin: 1px"
           >
-            <h5 class="m-0">{{ category_top4.name }}</h5>
+            <h5 class="m-0">{{ category_top4?.name }}</h5>
             <small class="text-primary"
-              >{{ category_top4.count }} Khóa học</small
+              >{{ category_top4?.count }} Khóa học</small
             >
           </div>
         </a>

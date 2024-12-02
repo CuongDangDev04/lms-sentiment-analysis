@@ -26,9 +26,7 @@ export class FeedbackService {
   }
 // Lấy phân tích cảm xúc tất cả các phản hồi
 getAllSentimentAnalysis(): Observable<any> {
-  return this.http.get(`${this.sentimentUrl}/all`).pipe(
-    tap((data) => console.log('Data từ API:', data))  // In dữ liệu trả về lên console
-  );
+  return this.http.get(`${this.sentimentUrl}/all`);  // In dữ liệu trả về lên console
 }
 
 

@@ -25,15 +25,17 @@ export class HomeStudentComponent implements OnInit {
     {
       id: '2200002525',
       name: 'Nguyễn Đại Nam',
-      avt: '../../../../assets/student/img/team-1.jpg',
+      avt: '../../../../assets/student/img/meme1.png',
       fb: 'https://www.facebook.com/dainam159',
     },
     {
       id: '2200000447',
       name: 'Đặng Trần Quốc Cường',
-      avt: '../../../../assets/student/img/team-2.jpg',
+      avt: '../../../../assets/student/img/meme2.png',
       fb: 'https://www.facebook.com/BlueSkyDev04',
-    },
+    }
+    
+    ,
   ];
 
   constructor(
