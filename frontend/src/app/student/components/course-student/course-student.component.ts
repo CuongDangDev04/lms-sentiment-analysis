@@ -5,7 +5,7 @@ import { Course } from '../../interfaces/course';
 import { Review } from '../../interfaces/review';
 import { CourseService } from '../../services/course.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { catchError, forkJoin } from 'rxjs';
+import { catchError, forkJoin, of } from 'rxjs';
 import { InstructorService } from '../../services/instructor.service';
 
 @Component({
@@ -85,8 +85,30 @@ export class CourseStudentComponent implements OnInit {
         this.reviews = reviews;
         this.courses = courses;
         this.category_all = categories.map((category) => category.name);
-        this.updateCourseRatings();
-        this.applyFilter(); // Áp dụng bộ lọc
+
+        // Sử dụng forkJoin để lấy số lượng sinh viên cho từng khóa học
+        const studentCountRequests = this.courses.map((course) =>
+          this.courseService.getStudentInCourse(course.id).pipe(
+            catchError((error) => {
+              console.error(
+                `Lỗi khi lấy số lượng sinh viên cho khóa học ${course.id}:`,
+                error
+              );
+              return of({ students: [] }); // Nếu có lỗi, trả về mảng sinh viên rỗng
+            })
+          )
+        );
+
+        // Khi tất cả các yêu cầu lấy số lượng sinh viên hoàn thành
+        forkJoin(studentCountRequests).subscribe((studentsResponses) => {
+          studentsResponses.forEach((response, index) => {
+            this.courses[index].number_of_students = response.students.length;
+          });
+
+          // Cập nhật rating sau khi số lượng sinh viên đã được cập nhật
+          this.updateCourseRatings();
+          this.applyFilter(); // Áp dụng bộ lọc
+        });
       },
       (error) => {
         console.error('Có lỗi xảy ra khi lấy dữ liệu:', error); // Xử lý lỗi

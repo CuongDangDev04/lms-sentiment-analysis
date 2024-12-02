@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CourseService } from '../../services/course.service';
 import { ReviewService } from '../../services/review.service';
-import { forkJoin, map } from 'rxjs';
+import { catchError, forkJoin, map, of } from 'rxjs';
 import { CategoryService } from '../../services/category.service';
 import { CommonModule } from '@angular/common';
 import { Course } from '../../interfaces/course';
@@ -94,6 +94,27 @@ export class HomeStudentComponent implements OnInit {
         this.popularCourses = course
           .sort((a, b) => b.rating - a.rating)
           .slice(0, 3);
+
+        // Sử dụng forkJoin để lấy số lượng sinh viên cho từng khóa học trong popularCourses
+        const studentCountRequests = this.popularCourses.map((course) =>
+          this.courseService.getStudentInCourse(course.id).pipe(
+            catchError((error) => {
+              console.error(
+                `Lỗi khi lấy số lượng sinh viên cho khóa học ${course.id}:`,
+                error
+              );
+              return of({ students: [] }); // Nếu có lỗi, trả về mảng sinh viên rỗng
+            })
+          )
+        );
+
+        // Khi tất cả các yêu cầu lấy số lượng sinh viên hoàn thành
+        forkJoin(studentCountRequests).subscribe((studentsResponses) => {
+          studentsResponses.forEach((response, index) => {
+            this.popularCourses[index].number_of_students =
+              response.students.length;
+          });
+        });
       },
       (error) => {
         console.error('Lỗi khi gọi API:', error);

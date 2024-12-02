@@ -87,6 +87,7 @@ export class DetailStudentComponent implements OnInit {
         (student: any) => student.id === studentLogin.id
       );
       this.isRegistrationCourse = !!studentRegister;
+      this.studentRegisterCourse = studentRegisterCourse;
       this.updateCourseRatings();
       this.loadComments();
     } catch (error) {
@@ -113,7 +114,7 @@ export class DetailStudentComponent implements OnInit {
       }
     }
   }
-  
+
   combineStudentReviews(
     students: Student[],
     reviews: Review[],
