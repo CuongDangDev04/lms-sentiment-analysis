@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  OnInit,
+  Renderer2,
+} from '@angular/core';
 import {
   NavigationEnd,
   Router,
@@ -15,7 +21,7 @@ import { AuthService } from '../../../auth/auth.service';
   templateUrl: './header-student.component.html',
   styleUrl: './header-student.component.css',
 })
-export class HeaderStudentComponent implements OnInit {
+export class HeaderStudentComponent implements OnInit, AfterViewChecked {
   isHomePage: boolean = false;
   isAboutPage: boolean = false;
   isCoursesPage: boolean = false;
@@ -24,7 +30,22 @@ export class HeaderStudentComponent implements OnInit {
   isDetailPage: boolean = false;
   currentPage!: string;
   studentLogin: any;
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private el: ElementRef,
+    private renderer: Renderer2
+  ) {}
+  ngAfterViewChecked() {
+    // const currentRoute = this.router.url;
+    // if (currentRoute.includes('dashboard')) {
+    //   const dropdownMenu =
+    //     this.el.nativeElement.querySelector('.dropdown-menu');
+    //   if (dropdownMenu) {
+    //     this.renderer.removeAttribute(dropdownMenu, 'data-bs-popper');
+    //   }
+    // }
+  }
   logOut() {
     this.authService.logout;
     this.router.navigate(['/login']);

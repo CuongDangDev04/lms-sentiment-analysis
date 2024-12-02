@@ -8,3 +8,9 @@
 .text-navigation {
   cursor: pointer;
 }
+.dropdown-menu[data-bs-popper="static"] {
+  position: absolute !important;
+  top: auto !important;
+  left: auto !important;
+  transform: none !important;
+}

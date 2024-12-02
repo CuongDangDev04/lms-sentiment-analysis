@@ -169,7 +169,9 @@ exports.getAllReviewsByInstructor = async (req, res) => {
 
     // Kiểm tra nếu không có khóa học nào
     if (!courses.length) {
-      return res.status(404).json({ message: "No courses found for this instructor." });
+      return res
+        .status(404)
+        .json({ message: "No courses found for this instructor." });
     }
 
     // Lấy danh sách courseId
@@ -204,7 +206,9 @@ exports.getAllReviewsByInstructor = async (req, res) => {
 
     // Kiểm tra nếu không có review nào
     if (!reviews.length) {
-      return res.status(404).json({ message: "No reviews found for this instructor's courses." });
+      return res
+        .status(404)
+        .json({ message: "No reviews found for this instructor's courses." });
     }
 
     // Trả về danh sách review
