@@ -88,11 +88,11 @@
       >
         <i class="fa fa-user text-primary"></i>
       </a>
-      <div class="dropdown-menu fade-down m-0">
+      <div class="dropdown-menu fade-down m-0 user-container">
         <div class="dropdown-user-scroll scrollbar-outer">
           <li>
             <div class="user-box">
-              <div class="avatar-lg">
+              <div class="avatar-lg d-flex justify-content-center">
                 <img
                   [src]="studentLogin.avt"
                   alt="image profile"
@@ -100,21 +100,22 @@
                 />
               </div>
               <div class="u-text">
-                <h4>{{ studentLogin.fullname }}</h4>
+                <h4 class="text-center">{{ studentLogin.fullname }}</h4>
               </div>
             </div>
           </li>
           <li>
             <div class="dropdown-divider"></div>
             <a
-              class="dropdown-item"
+              class="dropdown-item text-center"
               style="cursor: pointer"
               [routerLink]="['dashboard']"
               >Trang Cá Nhân</a
             >
             <div class="dropdown-divider"></div>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" (click)="logOut()">Đăng Xuất</a>
+            <a class="dropdown-item logout-btn text-center" (click)="logOut()"
+              >Đăng Xuất</a
+            >
           </li>
         </div>
       </div>

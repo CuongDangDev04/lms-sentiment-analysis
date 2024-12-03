@@ -140,9 +140,14 @@
   left: 20%;
   top: 16%;
 } */
+.course-controller {
+  display: flex;
+  padding: 1rem;
+  justify-content: center;
+  max-height: 50px;
+}
 #previousCourses,
 #nextCourses {
-  position: absolute;
   transform: translateY(-50%);
   background-color: rgba(128, 128, 128, 0.5) !important;
   color: white;
@@ -161,11 +166,9 @@
 }
 
 #previousCourses {
-  left: 20.4%;
 }
 
 #nextCourses {
-  right: 2%;
 }
 
 #previousCourses:hover,

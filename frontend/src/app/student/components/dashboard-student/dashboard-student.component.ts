@@ -24,7 +24,6 @@ import { InstructorService } from '../../services/instructor.service';
   styleUrl: './dashboard-student.component.css',
 })
 export class DashboardStudentComponent implements OnInit {
-  @ViewChild('comment-container') commentContainer!: ElementRef;
   topValue: number = 28;
   courseService: CourseService = inject(CourseService);
   authService: AuthService = inject(AuthService);
@@ -266,7 +265,6 @@ export class DashboardStudentComponent implements OnInit {
   }
   changeShowCommentStatus() {
     this.isShowComment = !this.isShowComment;
-    this.calculateTopValue();
   }
   getUserComments(): void {
     if (!this.studentLogin || !this.reviews.length) {
@@ -279,25 +277,5 @@ export class DashboardStudentComponent implements OnInit {
   }
   goToCourse(courseId: number): void {
     this.router.navigate(['/student/courses', courseId]);
-  }
-
-  calculateTopValue(): void {
-    const containerHeight =
-      this.commentContainer?.nativeElement.offsetHeight || 0;
-    const numComments = this.userComments.length;
-
-    if (!this.isShowComment) {
-      this.topValue = 28;
-    } else if (numComments === 0) {
-      this.topValue = 23.5;
-    } else if (numComments === 1) {
-      this.topValue = 21.55;
-    } else if (numComments === 2) {
-      this.topValue = 19.2;
-    } else if (numComments === 3) {
-      this.topValue = 17.3;
-    } else if (numComments > 3) {
-      this.topValue = 17.14;
-    }
   }
 }
