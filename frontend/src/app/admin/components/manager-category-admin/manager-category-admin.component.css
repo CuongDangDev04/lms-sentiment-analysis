@@ -129,6 +129,10 @@
     cursor: pointer; /* Con trỏ chuột khi hover */
     transition: background-color 0.3s ease, transform 0.2s ease; /* Hiệu ứng khi hover */
   }
+  .btn-add-category:hover{
+    background-color: #45a049;
+    transform: translateY(-2px);
+  }
   table th:nth-child(2){
     width: 70%;
   }
@@ -257,3 +261,17 @@
   cursor: default;
 }
 
+.btn-search{
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s
+}
+.btn-search:hover{
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
