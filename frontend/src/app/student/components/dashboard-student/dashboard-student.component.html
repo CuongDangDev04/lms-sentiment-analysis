@@ -97,31 +97,29 @@
               </div>
               <div class="students">
                 <i class="fas fa-user"></i>
-                {{ course.number_of_students }} Students
+                {{ course.number_of_students }} Sinh viên
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <button
-        id="previousCourses"
-        class="btn btn-primary mt-3"
-        (click)="previousCourses()"
-        [style.top.%]="topValue"
-        *ngIf="totalCourses > 0"
-      >
-        <i class="fas fa-arrow-left"></i>
-      </button>
-      <button
-        *ngIf="currentCourses.length >= 3"
-        id="nextCourses"
-        class="btn btn-primary mt-3"
-        (click)="nextCourses()"
-        [style.top.%]="topValue"
-      >
-        <i class="fas fa-arrow-right"></i>
-      </button>
+      <div class="course-controller">
+        <button
+          id="previousCourses"
+          class="btn btn-primary mt-3"
+          (click)="previousCourses()"
+        >
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="spacing" style="width: 50px"></div>
+        <button
+          id="nextCourses"
+          class="btn btn-primary mt-3"
+          (click)="nextCourses()"
+        >
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
     </div>
 
     <div class="container my-4 mx-0 px-3">
