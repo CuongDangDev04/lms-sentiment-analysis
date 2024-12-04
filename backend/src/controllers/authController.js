@@ -181,6 +181,9 @@ exports.getUser = async (req, res) => {
         role: user.role,
         username: user.username,
         avt: user.avt,
+        phone: user.phone,
+        birthdate: user.birthdate,
+        email: user.email
       },
     });
   } catch (error) {

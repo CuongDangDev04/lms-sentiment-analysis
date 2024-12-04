@@ -24,7 +24,8 @@
       <p>
         <i class="fas fa-phone"></i> {{ studentLogin.phone || "0000000000" }}
       </p>
-      <p><i class="fas fa-calendar"></i> 17/09/2020</p>
+      <p><i class="fas fa-calendar"></i>{{ studentLogin.birthdate ? (studentLogin.birthdate | date: "dd/MM/yyyy") : "1/1/2024" }}</p>
+
     </div>
   </div>
 

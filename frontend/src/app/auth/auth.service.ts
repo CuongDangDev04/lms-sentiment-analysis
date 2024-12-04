@@ -96,6 +96,9 @@ export class AuthService {
               role: response.user.role,
               username: response.user.username,
               avt: response.user.avatar,
+              phone: response.user.phone,
+              birthdate: response.user.birthdate,
+              email:response.user.email
             };
 
             localStorage.setItem('user', JSON.stringify(user)); // Lưu thông tin vào localStorage
