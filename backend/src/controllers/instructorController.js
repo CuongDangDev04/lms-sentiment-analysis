@@ -32,7 +32,6 @@ exports.createInstructor = async (req, res) => {
       fullname,
       email,
       avt: "assets/user.png",
-      birthdate,
       phone,
       role: 'instructor', // Role mặc định là instructor
       isApproved: true, // Instructor được phê duyệt mặc định

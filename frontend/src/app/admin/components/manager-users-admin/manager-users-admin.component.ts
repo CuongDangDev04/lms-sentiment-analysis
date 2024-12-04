@@ -51,19 +51,29 @@ export class ManagerUsersAdminComponent implements OnInit {
   }
 
   // Tải danh sách người dùng
-  loadUsers() {
-    // Lấy danh sách sinh viên
-    this.userService.getAllStudents().subscribe((students) => {
-      this.users = [...students]; // Gán danh sách sinh viên
+loadUsers() {
+  // Lấy danh sách sinh viên
+  this.userService.getAllStudents().subscribe((students) => {
+    this.users = [...students]; // Gán danh sách sinh viên
 
-      // Lấy danh sách giảng viên
-      this.userService.getAllInstructors().subscribe((instructors) => {
-        this.users = [...this.users, ...instructors]; // Kết hợp danh sách
-        this.totalPages = Math.ceil(this.users.length / this.pageSize); // Tính tổng số trang
-        this.updateFilteredUsers(); // Cập nhật danh sách hiển thị dựa trên trang hiện tại
+    // Lấy danh sách giảng viên
+    this.userService.getAllInstructors().subscribe((instructors) => {
+      this.users = [...this.users, ...instructors]; // Kết hợp danh sách
+
+      // Sắp xếp danh sách theo `isApproved`
+      this.users.sort((a, b) => {
+        if (!a.isApproved && b.isApproved) return -1; // `isApproved: false` lên trước
+        if (a.isApproved && !b.isApproved) return 1; // `isApproved: true` xuống sau
+        return 0; // Nếu giống nhau thì giữ nguyên thứ tự
       });
+
+      // Tính tổng số trang và cập nhật danh sách hiển thị
+      this.totalPages = Math.ceil(this.users.length / this.pageSize);
+      this.updateFilteredUsers();
     });
-  }
+  });
+}
+
   updateFilteredUsers() {
     const startIndex = (this.currentPage - 1) * this.pageSize; // Vị trí bắt đầu
     const endIndex = startIndex + this.pageSize; // Vị trí kết thúc
@@ -293,12 +303,12 @@ export class ManagerUsersAdminComponent implements OnInit {
         : this.userService.createInstructor(this.newUser);
 
     createFunction.subscribe(
-      (createdUser) => {
+      () => {
         this.loadUsers(); // Cập nhật danh sách user
         Swal.fire({
           icon: 'success',
           title: 'Thành công!',
-          text: `Người dùng ${createdUser.fullname} đã được tạo.`,
+          text: `Người dùng đã được tạo.`,
           confirmButtonText: 'OK',
           customClass: {
             confirmButton: 'btn btn-success',

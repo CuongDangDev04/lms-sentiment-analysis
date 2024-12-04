@@ -26,7 +26,7 @@ export class ContactStudentComponent {
           icon: 'success',
           confirmButtonText: 'Đồng ý',
         });
-        return;
+        form.reset();
       });
     }
   }

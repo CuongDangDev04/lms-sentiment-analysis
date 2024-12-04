@@ -13,9 +13,10 @@
 .user-management h2 {
   text-align: center;
   color: #333;
-  font-size: 24px;  
+  font-size: 24px;
   margin-bottom: 20px;
 }
+
 .filter-container {
   display: flex;
   flex-wrap: wrap;
@@ -73,20 +74,29 @@
   background-color: #f5f5f5;
   border: 1px solid #ccc;
   border-radius: 8px;
+  margin-bottom: 15px;
 }
 
+
+
 .user-form button {
-  padding: 12px 20px; /* Điều chỉnh padding cho button */
-  font-size: 16px; /* Kích thước chữ */
+  padding: 12px 20px;
+  /* Điều chỉnh padding cho button */
+  font-size: 16px;
+  /* Kích thước chữ */
   font-weight: bold;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  width: auto; /* Để button có kích thước tự động căn chỉnh theo nội dung */
-  min-width: 100%; /* Đảm bảo button không quá nhỏ */
-  max-width: 200px; /* Đảm bảo button không quá lớn */
-  margin-right: 10px; /* Khoảng cách giữa 2 button */
+  width: auto;
+  /* Để button có kích thước tự động căn chỉnh theo nội dung */
+  min-width: 100%;
+  /* Đảm bảo button không quá nhỏ */
+  max-width: 200px;
+  /* Đảm bảo button không quá lớn */
+  margin-right: 10px;
+  /* Khoảng cách giữa 2 button */
 }
 
 .btn-save {
@@ -111,7 +121,8 @@
 }
 
 .user-form button:last-child {
-  margin-right: 0; /* Loại bỏ margin bên phải của button reset */
+  margin-right: 0;
+  /* Loại bỏ margin bên phải của button reset */
 }
 
 /* Cải thiện bảng */
@@ -133,13 +144,16 @@ table td {
   border: 1px solid #ddd;
   text-align: left;
   color: black;
+  
 }
-table th{
+
+table th {
   padding: 12px 15px !important;
   color: white !important;
 
 
 }
+
 table tbody tr:nth-child(even) {
   background-color: #f2f2f2;
 }
@@ -227,21 +241,32 @@ button:focus {
   color: red;
   font-style: italic;
 }
+
 /* Nút Thêm Người Dùng */
 .btn-add-user {
-  background-color: #4CAF50; /* Màu nền xanh */
-  color: white; /* Màu chữ trắng */
-  padding: 12px 24px; /* Khoảng cách xung quanh nội dung */
-  font-size: 16px; /* Cỡ chữ */
-  border: none; /* Bỏ viền */
-  border-radius: 4px; /* Bo tròn góc */
-  cursor: pointer; /* Con trỏ chuột khi hover */
-  transition: background-color 0.3s ease, transform 0.2s ease; /* Hiệu ứng khi hover */
+  background-color: #4CAF50;
+  /* Màu nền xanh */
+  color: white;
+  /* Màu chữ trắng */
+  padding: 12px 24px;
+  /* Khoảng cách xung quanh nội dung */
+  font-size: 16px;
+  /* Cỡ chữ */
+  border: none;
+  /* Bỏ viền */
+  border-radius: 4px;
+  /* Bo tròn góc */
+  cursor: pointer;
+  /* Con trỏ chuột khi hover */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  /* Hiệu ứng khi hover */
 }
 
 .btn-add-user:hover {
-  background-color: #45a049; /* Màu nền khi hover */
-  transform: translateY(-2px); /* Hiệu ứng nổi lên */
+  background-color: #45a049;
+  /* Màu nền khi hover */
+  transform: translateY(-2px);
+  /* Hiệu ứng nổi lên */
 }
 
 /* Hiệu ứng khi nhấn nút */
@@ -251,7 +276,8 @@ button:focus {
 
 
 .btn-add-user i {
-  margin-right: 8px; /* Khoảng cách giữa icon và text */
+  margin-right: 8px;
+  /* Khoảng cách giữa icon và text */
 }
 
 /* Đảm bảo nút không bị lệch khi hiển thị icon */
@@ -263,7 +289,8 @@ button:focus {
 /* Icon Phê Duyệt */
 .fa-regular {
   font-size: 24px;
-  color: #28a745;  /* Màu xanh cho Phê Duyệt */
+  color: #28a745;
+  /* Màu xanh cho Phê Duyệt */
   cursor: pointer;
   margin-right: 10px;
   transition: color 0.3s ease;
@@ -323,7 +350,7 @@ button:focus {
   cursor: default;
 }
 
-.btn-search{
+.btn-search {
   background-color: #007bff;
   color: white;
   padding: 10px 20px;
@@ -333,7 +360,8 @@ button:focus {
   cursor: pointer;
   transition: background-color 0.3s
 }
-.btn-search:hover{
+
+.btn-search:hover {
   background-color: #0056b3;
   transform: scale(1.05);
 }

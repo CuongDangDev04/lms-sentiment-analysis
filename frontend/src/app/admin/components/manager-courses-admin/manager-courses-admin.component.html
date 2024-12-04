@@ -92,7 +92,7 @@
 
     <div class="form-group">
       <label for="instructor">Giảng viên phụ trách</label>
-      <select id="instructor" [(ngModel)]="course.instructorId" name="instructorId" required>
+      <select id="instructor" [(ngModel)]="course.instructorId" name="instructorId" disabled >
         <option *ngFor="let instructor of instructors" [value]="instructor.id">
           {{ instructor.fullname }}
         </option>

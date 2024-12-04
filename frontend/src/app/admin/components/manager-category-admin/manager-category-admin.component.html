@@ -24,8 +24,8 @@
       <label for="categoryName">Tên danh mục</label>
       <input id="categoryName" type="text" [(ngModel)]="category.name" name="name" required />
     </div>
-    <button type="submit" class="btn btn-success">Thêm Danh mục</button>
-    <button type="button" class="btn btn-secondary" (click)="toggleAddCategoryForm()">Hủy</button>
+    <button type="submit" class="btn-add">Thêm Danh mục</button>
+    <button type="button" class="btn-canncel" (click)="toggleAddCategoryForm()">Hủy</button>
   </form>
 
   <!-- Form sửa danh mục -->

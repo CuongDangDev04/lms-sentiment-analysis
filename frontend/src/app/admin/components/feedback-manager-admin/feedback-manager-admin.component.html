@@ -9,7 +9,7 @@
     <input type="text" placeholder="Tên sinh viên" [(ngModel)]="studentNameFilter" class="filter-input" />
     <input type="date" [(ngModel)]="dateFilter" class="filter-input" />
     <input type="text" placeholder="Tên khóa học" [(ngModel)]="courseNameFilter" class="filter-input" />
-    <button (click)="applyFilters()">Lọc</button>
+    <button (click)="applyFilters()">Tìm kiếm</button>
   </div>
 
   <!-- Bảng dữ liệu phản hồi -->
@@ -29,7 +29,7 @@
         <td>{{ i + 1 }}</td> <!-- Hiển thị số thứ tự -->
         <td>{{ item.course.name }}</td>
         <td>{{ item.reviewStudent.fullname }}</td>
-        <td>{{ item.updatedAt | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ item.updatedAt | date: 'short' }}</td>
         <td class="clickable" (click)="showSentimentDetails(item.sentimentAnalysis)">
           {{ item.sentimentAnalysis.sentimentLabel }}
         </td>

@@ -35,7 +35,6 @@ exports.createStudent = async (req, res) => {
       fullname,
       email,
       avt: "assets/user.png",
-      birthdate,
       phone,
       role: "student", // Role mặc định là student
       isApproved: true, // Sinh viên mặc định được phê duyệt
