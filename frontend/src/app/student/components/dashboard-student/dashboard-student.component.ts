@@ -137,7 +137,9 @@ export class DashboardStudentComponent implements OnInit {
 
   showSentimentAnalysis(courseId: any) {
     const findReview: any = this.reviews.find(
-      (review) => review.courseId === Number(courseId)
+      (review) =>
+        review.courseId === Number(courseId) &&
+        review.studentId === this.studentLogin.id
     );
     this.sentimentAnalysis = findReview.sentimentAnalysis;
     if (findReview.isAnalyzed) {
