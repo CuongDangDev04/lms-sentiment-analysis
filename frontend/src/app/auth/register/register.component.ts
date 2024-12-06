@@ -18,7 +18,7 @@ export class RegisterComponent {
   id: string = '';
   password: string = '';
   confirmPassword: string = '';
-  role: string = 'admin'; // Thêm biến role để lưu vai trò
+  role: string = ''; // Thêm biến role để lưu vai trò
   email: string = ''; // Thêm biến email
   errorMessage: string = ''; // Biến chứa thông báo lỗi
 
