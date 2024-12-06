@@ -49,6 +49,7 @@ export class HomeStudentComponent implements OnInit {
       categories: this.categoryService.getAllCategory(),
     }).subscribe(
       ({ categories, course }) => {
+        this.popularCourses = course.slice(0, 3);
         // Xử lý cho category_top1
         this.categoryService
           .getCourseOfCategory(categories[0].id)
