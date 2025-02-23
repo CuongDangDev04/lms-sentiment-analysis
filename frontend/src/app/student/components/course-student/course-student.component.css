@@ -79,3 +79,20 @@ th {
   color: #fff;
   border-color: #0056b3;
 }
+
+.course-image-container {
+  width: 100%; /* Đặt chiều rộng cố định */
+  height: 250px; /* Đặt chiều cao cố định */
+  overflow: hidden; /* Đảm bảo ảnh không vượt ra ngoài khung */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px; /* Tùy chỉnh góc bo tròn nếu cần */
+  background-color: #f0f0f0; /* Màu nền nếu ảnh chưa tải */
+}
+
+.course-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Giữ tỷ lệ ảnh và cắt phần dư */
+}

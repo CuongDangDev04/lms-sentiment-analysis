@@ -4,12 +4,15 @@ import { map, Observable } from 'rxjs';
 import { Category, Course } from '../interfaces/Course'; // Đường dẫn đến interface Course
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CourseService {
   private readonly API_URL = 'http://localhost:5000/api/course';
   private readonly CATEGORY_API_URL = 'http://localhost:5000/api/category';
-  constructor(private http: HttpClient) { }
+
+  private uploadImg_apiKey = '6e1b2c19fe7d7a35679d2729675b0a3b';
+  private uploadUrl = `https://api.imgbb.com/1/upload?key=${this.uploadImg_apiKey}`;
+  constructor(private http: HttpClient) {}
   // Phương thức để đếm số lượng khóa học
   getCourseCount(): Observable<number> {
     return this.getAllCourses().pipe(
@@ -45,8 +48,6 @@ export class CourseService {
     return this.http.delete<void>(`${this.API_URL}/${id}`);
   }
 
-
-
   getCategoryById(id: number): Observable<Category> {
     return this.http.get<Category>(`${this.CATEGORY_API_URL}/${id}`);
   }
@@ -55,7 +56,10 @@ export class CourseService {
     return this.http.post<Category>(this.CATEGORY_API_URL, category);
   }
 
-  updateCategory(id: number, category: Partial<Category>): Observable<Category> {
+  updateCategory(
+    id: number,
+    category: Partial<Category>
+  ): Observable<Category> {
     return this.http.put<Category>(`${this.CATEGORY_API_URL}/${id}`, category);
   }
 
@@ -63,4 +67,9 @@ export class CourseService {
     return this.http.delete<void>(`${this.CATEGORY_API_URL}/${id}`);
   }
 
+  uploadImage(file: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('image', file);
+    return this.http.post<any>(this.uploadUrl, formData);
+  }
 }
