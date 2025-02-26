@@ -107,139 +107,139 @@ const { spawn } = require("child_process");
 
 // Worker xử lý phân tích cảm xúc
 
-exports.analyzeUserCourseReviews = async (req, res) => {
-  try {
-    const { userId, courseId } = req.params;
+// exports.analyzeUserCourseReviews = async (req, res) => {
+//   try {
+//     const { userId, courseId } = req.params;
 
-    // Kiểm tra xem đã có phân tích cảm xúc cho userId và courseId này chưa
-    const existingAnalysis = await SentimentAnalysis.findOne({
-      where: { userId, courseId },
-    });
-    if (existingAnalysis) {
-      return res.status(400).send({
-        message: "Sentiment analysis already exists for this user and course.",
-      });
-    }
+//     // Kiểm tra xem đã có phân tích cảm xúc cho userId và courseId này chưa
+//     const existingAnalysis = await SentimentAnalysis.findOne({
+//       where: { userId, courseId },
+//     });
+//     if (existingAnalysis) {
+//       return res.status(400).send({
+//         message: "Sentiment analysis already exists for this user and course.",
+//       });
+//     }
 
-    // Lấy các review từ cơ sở dữ liệu theo userId và courseId
-    const reviews = await Review.findAll({
-      where: { courseId, studentId: userId },
-      include: [
-        {
-          model: User,
-          as: "reviewStudent",
-        },
-      ],
-    });
+//     // Lấy các review từ cơ sở dữ liệu theo userId và courseId
+//     const reviews = await Review.findAll({
+//       where: { courseId, studentId: userId },
+//       include: [
+//         {
+//           model: User,
+//           as: "reviewStudent",
+//         },
+//       ],
+//     });
 
-    // Nếu không có review, trả về lỗi
-    if (!reviews.length) {
-      console.log(
-        `No reviews found for courseId: ${courseId}, userId: ${userId}`
-      );
-      return res
-        .status(404)
-        .send({ message: "No reviews found for this user and course." });
-    }
+//     // Nếu không có review, trả về lỗi
+//     if (!reviews.length) {
+//       console.log(
+//         `No reviews found for courseId: ${courseId}, userId: ${userId}`
+//       );
+//       return res
+//         .status(404)
+//         .send({ message: "No reviews found for this user and course." });
+//     }
 
-    // Tạo mảng các bình luận từ reviews
-    const reviewTexts = reviews.map((review) => review.comment);
+//     // Tạo mảng các bình luận từ reviews
+//     const reviewTexts = reviews.map((review) => review.comment);
 
-    // Đường dẫn tới script Python
-    const scriptPath = path.join(
-      __dirname,
-      "..",
-      "..",
-      "src",
-      "scriptspy",
-      "sentiment_analysis.py"
-    );
+//     // Đường dẫn tới script Python
+//     const scriptPath = path.join(
+//       __dirname,
+//       "..",
+//       "..",
+//       "src",
+//       "scriptspy",
+//       "sentiment_analysis.py"
+//     );
 
-    // Cấu hình tham số đầu vào cho script Python
-    const pythonProcess = spawn("python", [
-      scriptPath,
-      JSON.stringify(reviewTexts),
-    ]);
+//     // Cấu hình tham số đầu vào cho script Python
+//     const pythonProcess = spawn("python", [
+//       scriptPath,
+//       JSON.stringify(reviewTexts),
+//     ]);
 
-    let scriptOutput = "";
-    let scriptError = "";
+//     let scriptOutput = "";
+//     let scriptError = "";
 
-    // Lắng nghe dữ liệu trả về từ Python
-    pythonProcess.stdout.on("data", (data) => {
-      scriptOutput += data.toString();
-    });
+//     // Lắng nghe dữ liệu trả về từ Python
+//     pythonProcess.stdout.on("data", (data) => {
+//       scriptOutput += data.toString();
+//     });
 
-    // Xử lý lỗi khi chạy Python
-    pythonProcess.stderr.on("data", (data) => {
-      scriptError += data.toString();
-    });
+//     // Xử lý lỗi khi chạy Python
+//     pythonProcess.stderr.on("data", (data) => {
+//       scriptError += data.toString();
+//     });
 
-    // Khi Python script hoàn thành
-    pythonProcess.on("close", async (code) => {
-      if (code !== 0) {
-        console.error(`Python script exited with code ${code}`);
-        console.error("Python script stderr:", scriptError);
-        return res
-          .status(500)
-          .send({ error: "Error in Python script execution" });
-      }
+//     // Khi Python script hoàn thành
+//     pythonProcess.on("close", async (code) => {
+//       if (code !== 0) {
+//         console.error(`Python script exited with code ${code}`);
+//         console.error("Python script stderr:", scriptError);
+//         return res
+//           .status(500)
+//           .send({ error: "Error in Python script execution" });
+//       }
 
-      // Kiểm tra kết quả trả về từ Python
-      if (!scriptOutput || scriptOutput.length === 0) {
-        console.error("No output from Python script");
-        return res.status(500).send({ error: "No output from Python script" });
-      }
+//       // Kiểm tra kết quả trả về từ Python
+//       if (!scriptOutput || scriptOutput.length === 0) {
+//         console.error("No output from Python script");
+//         return res.status(500).send({ error: "No output from Python script" });
+//       }
 
-      try {
-        // Parse kết quả trả về từ Python (dự kiến là JSON)
-        const analysisResults = JSON.parse(scriptOutput);
+//       try {
+//         // Parse kết quả trả về từ Python (dự kiến là JSON)
+//         const analysisResults = JSON.parse(scriptOutput);
 
-        // Tạo các bản ghi sentiment để lưu vào cơ sở dữ liệu
-        const sentimentRecords = reviews.map((review, i) => ({
-          userId: review.studentId,
-          courseId: courseId,
-          sentimentScorePositive: analysisResults[i].positive,
-          sentimentScoreNegative: analysisResults[i].negative,
-          sentimentScoreNeutral: analysisResults[i].neutral,
-          sentimentLabel: analysisResults[i].label,
-          reviewText: review.comment,
-        }));
+//         // Tạo các bản ghi sentiment để lưu vào cơ sở dữ liệu
+//         const sentimentRecords = reviews.map((review, i) => ({
+//           userId: review.studentId,
+//           courseId: courseId,
+//           sentimentScorePositive: analysisResults[i].positive,
+//           sentimentScoreNegative: analysisResults[i].negative,
+//           sentimentScoreNeutral: analysisResults[i].neutral,
+//           sentimentLabel: analysisResults[i].label,
+//           reviewText: review.comment,
+//         }));
 
-        // Lưu các kết quả phân tích vào cơ sở dữ liệu
-        const savedSentimentRecords = await SentimentAnalysis.bulkCreate(
-          sentimentRecords
-        );
-        console.log("Sentiment records saved successfully.");
+//         // Lưu các kết quả phân tích vào cơ sở dữ liệu
+//         const savedSentimentRecords = await SentimentAnalysis.bulkCreate(
+//           sentimentRecords
+//         );
+//         console.log("Sentiment records saved successfully.");
 
-        // Cập nhật bảng Review với `isAnalyzed = true` và `sentimentAnalysisId`
-        await Promise.all(
-          savedSentimentRecords.map(async (sentimentRecord, index) => {
-            const review = reviews[index];
-            await review.update({
-              isAnalyzed: true,
-              sentimentAnalysisId: sentimentRecord.id, // Cập nhật ID phân tích vào review
-            });
-          })
-        );
+//         // Cập nhật bảng Review với `isAnalyzed = true` và `sentimentAnalysisId`
+//         await Promise.all(
+//           savedSentimentRecords.map(async (sentimentRecord, index) => {
+//             const review = reviews[index];
+//             await review.update({
+//               isAnalyzed: true,
+//               sentimentAnalysisId: sentimentRecord.id, // Cập nhật ID phân tích vào review
+//             });
+//           })
+//         );
 
-        return res.status(200).send({
-          message: "Sentiment analysis completed and saved successfully.",
-          sentimentRecords: savedSentimentRecords,
-        });
-      } catch (saveError) {
-        console.error("Error saving sentiment records:", saveError);
-        return res
-          .status(500)
-          .send({ error: "Error saving sentiment records" });
-      }
-    });
-  } catch (err) {
-    console.error("Error in analyzeUserCourseReviews:", err);
-    return res
-      .status(500)
-      .send({ error: "An error occurred while processing the reviews." });
-  }
-};
+//         return res.status(200).send({
+//           message: "Sentiment analysis completed and saved successfully.",
+//           sentimentRecords: savedSentimentRecords,
+//         });
+//       } catch (saveError) {
+//         console.error("Error saving sentiment records:", saveError);
+//         return res
+//           .status(500)
+//           .send({ error: "Error saving sentiment records" });
+//       }
+//     });
+//   } catch (err) {
+//     console.error("Error in analyzeUserCourseReviews:", err);
+//     return res
+//       .status(500)
+//       .send({ error: "An error occurred while processing the reviews." });
+//   }
+// };
 //phân tích comment không tạo record trong bảng SentimentAnalysis
 
 // lấy kq phân tích theo courseId và userId
