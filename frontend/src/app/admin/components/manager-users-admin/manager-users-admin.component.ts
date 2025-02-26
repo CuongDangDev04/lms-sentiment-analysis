@@ -343,9 +343,26 @@ loadUsers() {
   }
 
   approveInstructor(userId: number, action: string) {
+    const adminId = JSON.parse(localStorage.getItem('user') || '{}').id; // Lấy adminId từ localStorage
+  
+    if (!adminId) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Lỗi!',
+        text: 'Không tìm thấy Admin ID. Vui lòng đăng nhập lại.',
+        confirmButtonText: 'OK',
+        customClass: {
+          confirmButton: 'btn btn-danger',
+        },
+      });
+      return;
+    }
+  
     Swal.fire({
       title: 'Xác nhận hành động',
-      text: action === 'approve' ? 'Bạn chắc chắn muốn phê duyệt giảng viên này?' : 'Bạn chắc chắn muốn từ chối giảng viên này và xóa tài khoản của họ?',
+      text: action === 'approve'
+        ? 'Bạn chắc chắn muốn phê duyệt giảng viên này?'
+        : 'Bạn chắc chắn muốn từ chối giảng viên này?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Đồng ý',
@@ -356,19 +373,21 @@ loadUsers() {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        // Tiến hành phê duyệt hoặc từ chối nếu người dùng xác nhận
-        this.userService.approveInstructor(userId, action).subscribe(
+        // Gọi API với adminId
+        this.userService.approveInstructor(userId, action, adminId).subscribe(
           (response) => {
             Swal.fire({
               icon: 'success',
               title: action === 'approve' ? 'Phê duyệt thành công!' : 'Từ chối thành công!',
-              text: action === 'approve' ? 'Giảng viên đã được phê duyệt.' : 'Giảng viên đã bị từ chối và tài khoản đã bị xóa.',
+              text: action === 'approve'
+                ? 'Giảng viên đã được phê duyệt.'
+                : 'Giảng viên đã bị từ chối.',
               confirmButtonText: 'OK',
               customClass: {
                 confirmButton: 'btn btn-success',
               },
             });
-            // Tải lại danh sách người dùng sau khi phê duyệt hoặc từ chối
+            // Tải lại danh sách người dùng sau khi cập nhật trạng thái
             this.loadUsers();
           },
           (error) => {
@@ -386,6 +405,7 @@ loadUsers() {
       }
     });
   }
+  
 
 
 

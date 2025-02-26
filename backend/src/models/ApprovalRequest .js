@@ -20,7 +20,7 @@ const ApprovalRequest = sequelize.define("ApprovalRequest", {
   },
   adminId: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: null,
     references: {
       model: User, // Tham chiếu đến mô hình User
       key: 'id',
