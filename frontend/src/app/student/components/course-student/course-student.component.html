@@ -47,7 +47,7 @@
         class="course-item bg-light wow fadeInUp"
         [attr.data-wow-delay]="0.1 + i * 0.2 + 's'"
       >
-        <div class="position-relative overflow-hidden">
+        <div class="position-relative overflow-hidden course-image-container">
           <img
             class="img-fluid"
             [src]="course.imageUrl"
@@ -60,8 +60,9 @@
               [routerLink]="['/student/courses', course.id]"
               class="flex-shrink-0 btn btn-sm btn-primary px-3"
               style="border-radius: 30px"
-              >Chi tiết</a
             >
+              Chi tiết
+            </a>
           </div>
         </div>
         <div class="text-center p-4 pb-0">

@@ -11,7 +11,7 @@ import { UserService } from '../../services/user.service';
   standalone: true,
   imports: [FormsModule, NgFor, NgIf],
   templateUrl: './manager-courses-admin.component.html',
-  styleUrls: ['./manager-courses-admin.component.css']
+  styleUrls: ['./manager-courses-admin.component.css'],
 })
 export class ManagerCoursesAdminComponent implements OnInit {
   currentPage: number = 1; // Trang hiện tại
@@ -30,7 +30,12 @@ export class ManagerCoursesAdminComponent implements OnInit {
   selectedInstructor: string = ''; // Giảng viên đã chọn
   selectedCategory: string = ''; // Danh mục đã chọn
 
-  constructor(private courseService: CourseService, private userService: UserService) {}
+  imageUrl: string = '';
+
+  constructor(
+    private courseService: CourseService,
+    private userService: UserService
+  ) {}
 
   ngOnInit(): void {
     this.loadCourses(); // Gọi API lấy danh sách khóa học
@@ -40,7 +45,9 @@ export class ManagerCoursesAdminComponent implements OnInit {
 
   // Hàm tính tổng số trang
   calculateTotalPages(): void {
-    this.totalPages = Math.ceil(this.filteredCourses.length / this.itemsPerPage);
+    this.totalPages = Math.ceil(
+      this.filteredCourses.length / this.itemsPerPage
+    );
   }
 
   // Phương thức trả về các trang cho phân trang
@@ -109,8 +116,10 @@ export class ManagerCoursesAdminComponent implements OnInit {
   }
 
   applySearch(): void {
-    this.filteredCourses = this.courses.filter(course => {
-      const matchesName = course.name.toLowerCase().includes(this.searchCourseName.toLowerCase());
+    this.filteredCourses = this.courses.filter((course) => {
+      const matchesName = course.name
+        .toLowerCase()
+        .includes(this.searchCourseName.toLowerCase());
       const matchesInstructor = this.selectedInstructor
         ? course.instructorId === Number(this.selectedInstructor)
         : true;
@@ -140,12 +149,20 @@ export class ManagerCoursesAdminComponent implements OnInit {
       // Cập nhật khóa học
       this.courseService.updateCourse(this.course.id, this.course).subscribe({
         next: () => {
-          Swal.fire('Cập nhật thành công', 'Khóa học đã được cập nhật.', 'success');
+          Swal.fire(
+            'Cập nhật thành công',
+            'Khóa học đã được cập nhật.',
+            'success'
+          );
           this.loadCourses();
           this.resetForm();
         },
         error: () => {
-          Swal.fire('Cập nhật thất bại', 'Không thể cập nhật khóa học.', 'error');
+          Swal.fire(
+            'Cập nhật thất bại',
+            'Không thể cập nhật khóa học.',
+            'error'
+          );
         },
       });
     } else {
@@ -167,6 +184,7 @@ export class ManagerCoursesAdminComponent implements OnInit {
   resetForm(): void {
     this.course = {};
     this.isEditing = false;
+    this.imageUrl = '';
   }
 
   // Xóa khóa học
@@ -212,5 +230,20 @@ export class ManagerCoursesAdminComponent implements OnInit {
     const endIndex = startIndex + this.itemsPerPage;
     return this.filteredCourses.slice(startIndex, endIndex);
   }
-  
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.courseService.uploadImage(file).subscribe(
+        (res: any) => {
+          this.imageUrl = res.data.url;
+          this.course.imageUrl = this.imageUrl;
+          console.log('Đường dẫn ảnh:', this.imageUrl);
+        },
+        (err) => {
+          console.error('Lỗi upload ảnh:', err);
+        }
+      );
+    }
+  }
 }

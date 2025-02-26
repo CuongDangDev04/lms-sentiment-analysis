@@ -49,7 +49,7 @@ exports.createCourse = async (req, res) => {
       number_of_students,
       rating,
       duration,
-      imageUrl: "assets/student/img/course-1.jpg",
+      imageUrl,
       categoryId,
     });
 
