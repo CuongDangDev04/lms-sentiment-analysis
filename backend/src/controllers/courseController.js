@@ -6,8 +6,8 @@ const Review = require("../models/review");
 const { SentimentAnalysis } = require("../models");
 const { Sequelize } = require("sequelize");
 const { analyzeUserCourseReviews } = require("./sentimentController");
-const { commentAnalysisQueue } = require("../jobs/sentimentAnalysis");
-const { addCommentToQueue } = require("./commentQueueController");
+require("dotenv").config();
+const axios = require("axios");
 // Tạo mới khóa học
 exports.createCourse = async (req, res) => {
   try {
@@ -253,6 +253,8 @@ exports.getReviewOfCourse = async (req, res) => {
   }
 };
 
+const FLASK_API_URL = process.env.FLASK_API_URL;
+
 exports.addComment = async (req, res) => {
   const { studentId, courseId, rating, comment } = req.body;
 
@@ -261,30 +263,49 @@ exports.addComment = async (req, res) => {
       return res.status(400).json({ message: "Thiếu thông tin cần thiết" });
     }
 
-    // Kiểm tra review đã tồn tại chưa
-    const existingReview = await Review.findOne({
-      where: { studentId, courseId },
+    // Gửi comment đến Flask API để phân tích cảm xúc
+    const sentimentResponse = await axios.post(FLASK_API_URL, {
+      text: comment,
     });
+
+    const sentimentData = sentimentResponse.data; // Nhận kết quả từ Flask
+    console.log("Sentiment Analysis Result:", sentimentData);
+
+    // Lưu hoặc cập nhật bảng SentimentAnalysis
+    const [sentimentRecord, created] = await SentimentAnalysis.upsert({
+      userId: studentId,
+      courseId: courseId,
+      sentimentScorePositive: sentimentData.positive,
+      sentimentScoreNegative: sentimentData.negative,
+      sentimentScoreNeutral: sentimentData.neutral,
+      sentimentLabel: sentimentData.label, // "positive", "negative", "neutral"
+      reviewText: comment,
+    }, {
+      returning: true
+    });
+
+    // Kiểm tra review đã tồn tại chưa
+    const existingReview = await Review.findOne({ where: { studentId, courseId } });
+
     let review;
     if (existingReview) {
-      // Cập nhật review cũ
+      // Cập nhật review nếu đã tồn tại
       existingReview.rating = rating;
       existingReview.comment = comment;
-      existingReview.isAnalyzed = false;
+      existingReview.sentimentAnalysisId = sentimentRecord.id; // Liên kết với SentimentAnalysis
+      existingReview.isAnalyzed = true;
       await existingReview.save();
-      review = existingReview;
-      await addCommentToQueue(studentId, courseId, comment);
       return res.status(200).json(existingReview);
     } else {
-      // Tạo mới review
+      // Tạo mới review nếu chưa có
       review = await Review.create({
         courseId,
         rating,
         comment,
         studentId,
+        sentimentAnalysisId: sentimentRecord.id, // Liên kết với SentimentAnalysis
+        isAnalyzed: true,
       });
-
-      await addCommentToQueue(studentId, courseId, comment);
       return res.status(201).json(review);
     }
   } catch (error) {
@@ -320,25 +341,53 @@ exports.deleteComment = async (req, res) => {
   }
 };
 exports.updateComment = async (req, res) => {
-  const { courseId, studentId } = req.params; // Đổi courseId thành id
+  const { courseId, studentId } = req.params;
   const { comment, rating } = req.body;
 
   try {
+    // Tìm review hiện có
     const review = await Review.findOne({
-      where: { courseId: courseId, studentId: studentId },
+      where: { courseId, studentId },
     });
+
+    if (!review) {
+      return res.status(404).json({ message: "Không tìm thấy review" });
+    }
+
+    // Nếu có comment mới thì gửi đến Flask API để phân tích
+    const sentimentResponse = await axios.post(FLASK_API_URL, {
+      text: comment || review.comment, // Nếu không cập nhật comment thì lấy comment cũ
+    });
+
+    const sentimentData = sentimentResponse.data; // Nhận kết quả từ Flask
+
+    // Cập nhật hoặc tạo mới dữ liệu trong bảng SentimentAnalysis
+    const [sentimentRecord, created] = await SentimentAnalysis.upsert({
+      userId: studentId,
+      courseId: courseId,
+      sentimentScorePositive: sentimentData.positive,
+      sentimentScoreNegative: sentimentData.negative,
+      sentimentScoreNeutral: sentimentData.neutral,
+      sentimentLabel: sentimentData.label,
+      reviewText: comment || review.comment,
+    }, {
+      returning: true
+    });
+
+    // Cập nhật review với dữ liệu mới
     review.comment = comment || review.comment;
     review.rating = rating || review.rating;
-
-    await addCommentToQueue(studentId, courseId, comment);
-    review.isAnalyzed = false;
+    review.sentimentAnalysisId = sentimentRecord.id; // Liên kết với SentimentAnalysis
+    review.isAnalyzed = true;
     await review.save();
 
     res.status(200).json(review);
   } catch (err) {
+    console.error("Lỗi khi cập nhật comment:", err);
     res.status(500).json({ error: err.message });
   }
 };
+
 // Cập nhật khóa học
 exports.updateCourse = async (req, res) => {
   const { id } = req.params; // Đổi courseId thành id

@@ -37,12 +37,18 @@ export class UserService {
   getAllInstructors(): Observable<User[]> {
     return this.http.get<User[]>(this.instructorUrl);
   }
-  // Phê duyệt giảng viên
-  approveInstructor(userId: number, action: string): Observable<any> {
-    const token = localStorage.getItem('token');  // Lấy token từ localStorage
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);  // Thêm token vào header
-    return this.http.put(`${this.approvalUrl}/${userId}`, { action }, { headers });
-  }
+ // Phê duyệt giảng viên
+approveInstructor(userId: number, action: string, adminId: number): Observable<any> {
+  const token = localStorage.getItem('token');  // Lấy token từ localStorage
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);  // Thêm token vào header
+
+  return this.http.put(
+    `${this.approvalUrl}/${userId}`,
+    { action, adminId }, // Gửi thêm adminId
+    { headers }
+  );
+}
+
 
   // Lấy học sinh theo ID
   getStudentById(id: number): Observable<User> {

@@ -6,10 +6,10 @@ const sentimentController = require("../controllers/sentimentController");
 // router.post("/analyze/:courseId", sentimentController.analyzeCourseReviews);
 
 //pttc theo userid và courseId
-router.post(
-  "/analyze/:courseId/:userId",
-  sentimentController.analyzeUserCourseReviews
-);
+  // router.post(
+  //   "/analyze/:courseId/:userId",
+  //   sentimentController.analyzeUserCourseReviews
+  // );
 
 // API để lấy sentiment analysis theo courseId và userId
 router.get(

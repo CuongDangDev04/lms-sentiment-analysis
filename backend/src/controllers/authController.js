@@ -2,9 +2,9 @@ const { User } = require("../models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const ApprovalRequest = require("../models/ApprovalRequest ");
-const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+
 exports.register = async (req, res) => {
   const { id, username, password, fullname, role, email } = req.body;
 
@@ -24,8 +24,6 @@ exports.register = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Gán giá trị mặc định cho `isApproved` tùy theo role
     const isApproved = role === "instructor" ? false : true;
 
     const user = await User.create({
@@ -40,11 +38,11 @@ exports.register = async (req, res) => {
     });
 
     if (role === "instructor") {
-      // Tạo yêu cầu phê duyệt cho instructor
+      // Tạo yêu cầu phê duyệt, adminId để null
       await ApprovalRequest.create({
         instructorId: user.id,
-        adminId: 0, // Chưa có admin xử lý yêu cầu
-        status: "pending", // Yêu cầu đang chờ
+        adminId: null, // Chưa có admin nào xử lý
+        status: "pending",
       });
     }
 
@@ -54,23 +52,30 @@ exports.register = async (req, res) => {
     res.status(500).json({ error: "User registration failed!" });
   }
 };
+
 exports.approveInstructor = async (req, res) => {
-  const { userId } = req.params; // Lấy userId từ URL params
-  const { action } = req.body; // Lấy hành động từ request body (approve hoặc reject)
+  const { userId } = req.params;
+  const { action, adminId } = req.body; // Nhận adminId từ request
+
+  if (!adminId) {
+    return res
+      .status(400)
+      .json({ message: "Admin ID is required for approval!" });
+  }
 
   try {
-    // Tìm yêu cầu phê duyệt theo userId
     const approvalRequest = await ApprovalRequest.findOne({
       where: { instructorId: userId, status: "pending" },
     });
 
     if (!approvalRequest) {
-      return res.status(404).json({ message: "Approval request not found!" });
+      return res
+        .status(404)
+        .json({ message: "Approval request not found or already processed!" });
     }
 
-    // Lấy thông tin giảng viên (instructor) liên quan đến yêu cầu phê duyệt
     const instructor = await User.findByPk(userId, {
-      attributes: { exclude: ["password"] }, // Loại bỏ mật khẩu
+      attributes: { exclude: ["password"] },
     });
 
     if (!instructor) {
@@ -78,12 +83,11 @@ exports.approveInstructor = async (req, res) => {
     }
 
     if (action === "approve") {
-      // Phê duyệt giảng viên
       instructor.isApproved = true;
       await instructor.save();
 
-      // Cập nhật trạng thái yêu cầu phê duyệt thành approved
       approvalRequest.status = "approved";
+      approvalRequest.adminId = adminId; // Lưu admin đã duyệt
       await approvalRequest.save();
 
       return res.status(200).json({
@@ -92,15 +96,13 @@ exports.approveInstructor = async (req, res) => {
         instructor,
       });
     } else if (action === "reject") {
-      // Từ chối giảng viên và xóa tài khoản
       approvalRequest.status = "rejected";
+      approvalRequest.adminId = adminId;
       await approvalRequest.save();
 
-      // Xóa tài khoản giảng viên
-      await instructor.destroy();
-
       return res.status(200).json({
-        message: "Instructor rejected and account deleted successfully.",
+        message:
+          "Instructor rejected, but account is not deleted automatically.",
       });
     } else {
       return res.status(400).json({ message: "Invalid action!" });
@@ -183,7 +185,7 @@ exports.getUser = async (req, res) => {
         avt: user.avt,
         phone: user.phone,
         birthdate: user.birthdate,
-        email: user.email
+        email: user.email,
       },
     });
   } catch (error) {
