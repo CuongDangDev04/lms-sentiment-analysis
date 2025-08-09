@@ -1,5 +1,12 @@
 # lms sentiment analysis 
 
+Hệ thống **lms sentiment analysis** là một giải pháp phân tích cảm xúc cho các nền tảng quản lý học tập (LMS). Dự án này gồm 3 thành phần:
+- **Frontend** (Angular): Giao diện người dùng cho phép tham gia khoá học và đánh giá khoá học thông qua bình luận và hiển thị kết quả phân tích cảm xúc.
+- **Backend** (NodeJS/Express): Trung gian nhận request từ frontend, chuyển tiếp đến API phân tích cảm xúc, xử lý và trả kết quả về frontend.
+- **Sentiment Analysis API** (Flask/Python): Api để triển khai model [mr4/phobert-base-vi-sentiment-analysis](https://huggingface.co/mr4/phobert-base-vi-sentiment-analysis) để phân tích cảm xúc từ văn bản tiếng việt.
+
+Mục tiêu của hệ thống là giúp các tổ chức giáo dục, giảng viên hoặc quản trị viên LMS hiểu rõ hơn về cảm xúc, thái độ của học viên thông qua các phản hồi, bình luận hoặc nội dung trao đổi trên hệ thống.
+
 ## Cấu trúc thư mục
 
 ```
