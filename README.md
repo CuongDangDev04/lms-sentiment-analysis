@@ -6,7 +6,6 @@
 /frontend                   # Frontend Angular
 /backend                   # Backend NodeJS (Express)
 /sentiment_analysis_api   # API Model Flask (Python)
-package.json              # Script tổng chạy FE và BE
 README.md
 ```
 
